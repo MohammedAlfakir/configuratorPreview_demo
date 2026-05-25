@@ -1836,6 +1836,13 @@
                             "type": {
                               "name": "STRING"
                             }
+                          },
+                          {
+                            "name": "ZONENAME.TEST",
+                            "path": ".",
+                            "type": {
+                              "name": "STRING"
+                            }
                           }
                         ],
                         "filters": [
@@ -23749,11 +23756,7 @@
         "data": {
           "front_prefix": "FA_01",
           "image": "oaksome/front/FA_01.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"],
           "door_name": "DOOR_01",
           "have_pull": "Yes"
         }
@@ -23764,11 +23767,7 @@
         "data": {
           "front_prefix": "FA_01",
           "image": "oaksome/front/FA_01.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"],
           "door_name": "DOOR_01",
           "have_pull": "Yes"
         }
@@ -23779,11 +23778,7 @@
         "data": {
           "front_prefix": "FA_01",
           "image": "oaksome/front/FA_01.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"],
           "door_name": "DOOR_01",
           "have_pull": "Yes"
         }
@@ -23794,11 +23789,7 @@
         "data": {
           "front_prefix": "FA_03",
           "image": "oaksome/front/FA_03.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"],
           "door_name": "DOOR_03",
           "have_pull": "No"
         }
@@ -23809,11 +23800,7 @@
         "data": {
           "front_prefix": "FA_04",
           "image": "oaksome/front/FA_04.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"],
           "door_name": "DOOR_04",
           "have_pull": "No"
         }
@@ -23824,10 +23811,7 @@
         "data": {
           "front_prefix": "FA_05",
           "image": "oaksome/front/FA_05.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_03"],
           "door_name": "DOOR_05",
           "have_pull": "No"
         }
@@ -23838,10 +23822,7 @@
         "data": {
           "front_prefix": "FA_06",
           "image": "oaksome/front/FA_06.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_03"],
           "door_name": "DOOR_06",
           "have_pull": "No"
         }
@@ -23852,11 +23833,7 @@
         "data": {
           "front_prefix": "FA_07",
           "image": "oaksome/front/FA_07.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_03", "COLLECTION_04"],
           "door_name": "DOOR_07",
           "have_pull": "Yes"
         }
@@ -23867,10 +23844,7 @@
         "data": {
           "front_prefix": "FA_08",
           "image": "oaksome/front/FA_08.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_03"],
           "door_name": "DOOR_08",
           "have_pull": "Yes"
         }
@@ -23881,10 +23855,7 @@
         "data": {
           "front_prefix": "FA_09",
           "image": "oaksome/front/FA_09.svg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_01", "COLLECTION_03"],
           "door_name": "DOOR_09",
           "have_pull": "Yes"
         }
@@ -23895,10 +23866,7 @@
         "data": {
           "front_prefix": "FA_02",
           "image": "oaksome/front/FA_02.svg/public",
-          "filter": [
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_02", "COLLECTION_03"],
           "door_name": "DOOR_02",
           "have_pull": "No"
         }
@@ -23942,10 +23910,7 @@
         "data": {
           "front_prefix": "FA_06",
           "image": "oaksome/front/FA_06.svg/public",
-          "filter": [
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ],
+          "filter": ["COLLECTION_02", "COLLECTION_03"],
           "door_name": "DOOR_06",
           "have_pull": "No"
         }
@@ -24066,10 +24031,7 @@
         "data": {
           "front_prefix": "FA_10",
           "image": "oaksome/front/FA_10.svg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ],
+          "filter": ["COLLECTION_03", "COLLECTION_04"],
           "door_name": "DOOR_10",
           "have_pull": "Yes"
         }
@@ -24080,10 +24042,7 @@
         "data": {
           "front_prefix": "FA_10",
           "image": "oaksome/front/FA_10.svg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ],
+          "filter": ["COLLECTION_03", "COLLECTION_04"],
           "door_name": "DOOR_10",
           "have_pull": "Yes"
         }
@@ -24094,10 +24053,7 @@
         "data": {
           "front_prefix": "FA_11",
           "image": "oaksome/front/FA_11.svg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ],
+          "filter": ["COLLECTION_03", "COLLECTION_04"],
           "door_name": "DOOR_11",
           "have_pull": "Yes"
         }
@@ -24119,10 +24075,7 @@
         "data": {
           "front_prefix": "FA_11",
           "image": "oaksome/front/FA_11.svg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ],
+          "filter": ["COLLECTION_03", "COLLECTION_04"],
           "door_name": "DOOR_11",
           "have_pull": "Yes"
         }
@@ -24133,10 +24086,7 @@
         "data": {
           "front_prefix": "FA_12",
           "image": "oaksome/front/FA_12.svg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ],
+          "filter": ["COLLECTION_03", "COLLECTION_04"],
           "door_name": "DOOR_12",
           "have_pull": "Yes"
         }
@@ -24147,10 +24097,7 @@
         "data": {
           "front_prefix": "FA_13",
           "image": "oaksome/front/FA_13.svg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ],
+          "filter": ["COLLECTION_03", "COLLECTION_04"],
           "door_name": "DOOR_13",
           "have_pull": "Yes"
         }
@@ -24161,10 +24108,7 @@
         "data": {
           "front_prefix": "FA_14",
           "image": "oaksome/front/FA_14.svg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ],
+          "filter": ["COLLECTION_03", "COLLECTION_04"],
           "door_name": "DOOR_14",
           "have_pull": "No"
         }
@@ -32076,18 +32020,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_CHENE_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_02",
-            "WC_VNR_DLV_S4_02"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_02",
-            "WC_VNR_DLV_S4_02"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_02", "WC_VNR_DLV_S4_02"],
+          "srf_2_bot": ["COAT_WF_S4_02", "WC_VNR_DLV_S4_02"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_02_1"
         }
       },
@@ -32110,18 +32045,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_CHENE_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_01",
-            "WC_VNR_DLV_S4_01"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_01",
-            "WC_VNR_DLV_S4_01"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_01", "WC_VNR_DLV_S4_01"],
+          "srf_2_bot": ["COAT_WF_S4_01", "WC_VNR_DLV_S4_01"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_01_1"
         }
       },
@@ -32144,18 +32070,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_CHENE_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_06",
-            "WC_VNR_DLV_S4_04"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_06",
-            "WC_VNR_DLV_S4_04"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_06", "WC_VNR_DLV_S4_04"],
+          "srf_2_bot": ["COAT_WF_S4_06", "WC_VNR_DLV_S4_04"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_04_1"
         }
       },
@@ -32178,18 +32095,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_CHENE_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_05",
-            "WC_VNR_DLV_S4_05"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_05",
-            "WC_VNR_DLV_S4_05"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_05", "WC_VNR_DLV_S4_05"],
+          "srf_2_bot": ["COAT_WF_S4_05", "WC_VNR_DLV_S4_05"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_05_1"
         }
       },
@@ -32212,18 +32120,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_CHENE_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_06",
-            "WC_VNR_DLV_S4_06"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_06",
-            "WC_VNR_DLV_S4_06"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_06", "WC_VNR_DLV_S4_06"],
+          "srf_2_bot": ["COAT_WF_S4_06", "WC_VNR_DLV_S4_06"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_06_1"
         }
       },
@@ -32246,18 +32145,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_CHENE_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_09",
-            "WC_VNR_DLV_S4_09"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_09",
-            "WC_VNR_DLV_S4_09"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_09", "WC_VNR_DLV_S4_09"],
+          "srf_2_bot": ["COAT_WF_S4_09", "WC_VNR_DLV_S4_09"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_09_1"
         }
       },
@@ -32280,18 +32170,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_CHENE_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_08",
-            "WC_VNR_DLV_S4_08"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_08",
-            "WC_VNR_DLV_S4_08"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_08", "WC_VNR_DLV_S4_08"],
+          "srf_2_bot": ["COAT_WF_S4_08", "WC_VNR_DLV_S4_08"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_08_1"
         }
       },
@@ -32314,18 +32195,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_NOYER_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_07",
-            "WC_VNR_DLV_S4_07"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_07",
-            "WC_VNR_DLV_S4_07"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_07", "WC_VNR_DLV_S4_07"],
+          "srf_2_bot": ["COAT_WF_S4_07", "WC_VNR_DLV_S4_07"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_07_1"
         }
       },
@@ -32348,18 +32220,9 @@
           "srf_1_thk": "0.6",
           "mat_fr_2": "SW_NOYER_06",
           "mat_fr_2_thk": "6",
-          "srf_2_top": [
-            "COAT_WF_S4_14",
-            "WC_VNR_DLV_S4_14"
-          ],
-          "srf_2_bot": [
-            "COAT_WF_S4_14",
-            "WC_VNR_DLV_S4_14"
-          ],
-          "srf_2_thk": [
-            "0.1",
-            "0.6"
-          ],
+          "srf_2_top": ["COAT_WF_S4_14", "WC_VNR_DLV_S4_14"],
+          "srf_2_bot": ["COAT_WF_S4_14", "WC_VNR_DLV_S4_14"],
+          "srf_2_thk": ["0.1", "0.6"],
           "prf_fr": "WC_S4_14_1"
         }
       },
@@ -71256,10 +71119,7 @@
         "value": "OP_DR",
         "label": "OP_DR",
         "data": {
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "image": "oaksome/zone_type/OP_DR.svg/public"
         }
       },
@@ -71267,10 +71127,7 @@
         "value": "AS",
         "label": "AS",
         "data": {
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "image": "oaksome/zone_type/AS.svg/public"
         }
       },
@@ -71278,10 +71135,7 @@
         "value": "HC",
         "label": "HC",
         "data": {
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "image": "oaksome/zone_type/HC.svg/public"
         }
       }
@@ -71291,10 +71145,7 @@
         "value": "4IDR",
         "label": "4IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
+          "zone_count": ["1", "2"],
           "layout": [
             "WACA_LY_D",
             "WACA_LY_DB_D",
@@ -71302,10 +71153,7 @@
             "WACA_LY_D_DW"
           ],
           "layout_type": "MD",
-          "sub_type": [
-            "DR",
-            "X"
-          ],
+          "sub_type": ["DR", "X"],
           "image": "oaksome/tc_sub_art/4IDR.svg/public"
         }
       },
@@ -71313,10 +71161,7 @@
         "value": "IOP_2IDR",
         "label": "IOP_2IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
+          "zone_count": ["1", "2"],
           "layout": [
             "WACA_LY_D",
             "WACA_LY_DB_D",
@@ -71324,10 +71169,7 @@
             "WACA_LY_D_DW"
           ],
           "layout_type": "MD",
-          "sub_type": [
-            "OP_DR",
-            "X"
-          ],
+          "sub_type": ["OP_DR", "X"],
           "image": "oaksome/tc_sub_art/IOP_2IDR.svg/public"
         }
       },
@@ -71335,10 +71177,7 @@
         "value": "IOP_1IDR",
         "label": "IOP_1IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
+          "zone_count": ["1", "2"],
           "layout": [
             "WACA_LY_D",
             "WACA_LY_DB_D",
@@ -71346,10 +71185,7 @@
             "WACA_LY_D_DW"
           ],
           "layout_type": "MD",
-          "sub_type": [
-            "OP_DR",
-            "X"
-          ],
+          "sub_type": ["OP_DR", "X"],
           "image": "oaksome/tc_sub_art/IOP_1IDR.svg/public"
         }
       },
@@ -71357,10 +71193,7 @@
         "value": "IAS",
         "label": "IAS",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
+          "zone_count": ["1", "2"],
           "layout": [
             "WACACL_LY_D",
             "WACACL_LY_D1",
@@ -71373,15 +71206,8 @@
             "WACA_LY_DB_D_DW",
             "WACA_LY_D_DW"
           ],
-          "layout_type": [
-            "CL",
-            "CR",
-            "MD"
-          ],
-          "sub_type": [
-            "AS",
-            "X"
-          ],
+          "layout_type": ["CL", "CR", "MD"],
+          "sub_type": ["AS", "X"],
           "image": "oaksome/tc_sub_art/IAS.svg/public"
         }
       },
@@ -71389,14 +71215,8 @@
         "value": "6IDR",
         "label": "6IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/6IDR.svg/public"
@@ -71406,14 +71226,8 @@
         "value": "5IDR",
         "label": "5IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/5IDR.svg/public"
@@ -71423,14 +71237,8 @@
         "value": "3IDR",
         "label": "3IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/3IDR.svg/public"
@@ -71440,14 +71248,8 @@
         "value": "2IDR",
         "label": "2IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/2IDR.svg/public"
@@ -71457,14 +71259,8 @@
         "value": "1IDR",
         "label": "1IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/1IDR.svg/public"
@@ -71474,14 +71270,8 @@
         "value": "IOP_3IDR",
         "label": "IOP_3IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "layout_type": "MD",
           "sub_type": "OP_DR",
           "image": "oaksome/tc_sub_art/IOP_3IDR.svg/public"
@@ -71491,14 +71281,8 @@
         "value": "IOP_4IDR",
         "label": "IOP_4IDR",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
           "layout_type": "MD",
           "sub_type": "OP_DR",
           "image": "oaksome/tc_sub_art/IOP_4IDR.svg/public"
@@ -71508,10 +71292,7 @@
         "value": "IHC",
         "label": "IHC",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
+          "zone_count": ["1", "2"],
           "layout": [
             "WACACL_LY_D",
             "WACACL_LY_D1",
@@ -71522,15 +71303,8 @@
             "WACA_LY_D1_DW",
             "WACA_LY_D_DW"
           ],
-          "layout_type": [
-            "CL",
-            "CR",
-            "MD"
-          ],
-          "sub_type": [
-            "HC",
-            "X"
-          ],
+          "layout_type": ["CL", "CR", "MD"],
+          "sub_type": ["HC", "X"],
           "image": "oaksome/tc_sub_art/IHC.svg/public"
         }
       },
@@ -71538,14 +71312,8 @@
         "value": "2DR1_DR2",
         "label": "2DR1_DR2",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/2DR1_DR2.svg/public"
@@ -71556,14 +71324,8 @@
         "label": "DR2_2DR1",
         "data": {
           "TC_SUB_ART_1_ITEMS": "DR_BL_RUN_SYS_THIN_INT",
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/DR2_2DR1.svg/public"
@@ -71573,14 +71335,8 @@
         "value": "DR1_DR2_DR1",
         "label": "DR1_DR2_DR1",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/DR1_DR2_DR1.svg/public"
@@ -71590,14 +71346,8 @@
         "value": "2DR2",
         "label": "2DR2",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/2DR2.svg/public"
@@ -71607,14 +71357,8 @@
         "value": "4DR1",
         "label": "4DR1",
         "data": {
-          "zone_count": [
-            "1",
-            "2"
-          ],
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
+          "zone_count": ["1", "2"],
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
           "layout_type": "MD",
           "sub_type": "DR",
           "image": "oaksome/tc_sub_art/4DR1.svg/public"
@@ -71742,10 +71486,7 @@
         "value": "NONE",
         "label": "NONE",
         "data": {
-          "allowed_door_type": [
-            "DD",
-            "SD"
-          ],
+          "allowed_door_type": ["DD", "SD"],
           "door_type": "NONE",
           "hinge_side_nbr": "-1"
         }
