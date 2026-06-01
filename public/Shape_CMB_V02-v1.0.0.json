@@ -929,7 +929,7 @@
                     "name": "Z10_CNT",
                     "type": "FIELD",
                     "itemTypeName": "Input",
-                    "comment": null,
+                    "comment": "",
                     "attributes": {
                       "comboType": "slider",
                       "label": "Number of articles",
@@ -1513,7 +1513,7 @@
                     "name": "Z10_MODULE",
                     "type": "FIELD",
                     "itemTypeName": "Combo",
-                    "comment": null,
+                    "comment": "",
                     "attributes": {
                       "comboType": "SWITCH",
                       "label": "Column",
