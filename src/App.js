@@ -5,6 +5,10 @@ const CONFIGS = [
   { label: "Shape U", value: "/shapeU-v1.0.0.json" },
   { label: "Shape CMB", value: "/shapeCMB-v1.0.0.json" },
   { label: "Configurator", value: "/configurator-v1.0.0.json" },
+  {
+    label: "Shape CMB V02",
+    value: "/Shape_CMB_V02-v1.0.0.json",
+  },
 ];
 
 function App() {
@@ -12,21 +16,30 @@ function App() {
 
   return (
     <>
-      <div style={{
-        position: "fixed",
-        bottom: 16,
-        right: 16,
-        zIndex: 9999,
-        display: "flex",
-        gap: 8,
-        background: "rgba(255,255,255,0.95)",
-        border: "1px solid #e2e8f0",
-        borderRadius: 10,
-        padding: "8px 12px",
-        boxShadow: "0 2px 12px rgba(0,0,0,0.12)",
-        alignItems: "center",
-      }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: "#64748b", marginRight: 4 }}>
+      <div
+        style={{
+          position: "fixed",
+          bottom: 16,
+          right: 16,
+          zIndex: 9999,
+          display: "flex",
+          gap: 8,
+          background: "rgba(255,255,255,0.95)",
+          border: "1px solid #e2e8f0",
+          borderRadius: 10,
+          padding: "8px 12px",
+          boxShadow: "0 2px 12px rgba(0,0,0,0.12)",
+          alignItems: "center",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            color: "#64748b",
+            marginRight: 4,
+          }}
+        >
           Configurator
         </span>
         {CONFIGS.map(cfg => (
