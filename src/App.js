@@ -2,13 +2,13 @@ import { useState } from "react";
 import { ConfiguratorPreviewDialog } from "@oak-some/configurator-previewer";
 
 const CONFIGS = [
-  { label: "Shape U", value: "/shapeU-v1.0.0.json" },
-  { label: "Shape CMB", value: "/shapeCMB-v1.0.0.json" },
-  { label: "Configurator", value: "/configurator-v1.0.0.json" },
   {
     label: "Shape CMB V02",
     value: "/Shape_CMB_V02-v1.0.0.json",
   },
+  { label: "Shape U", value: "/shapeU-v1.0.0.json" },
+  { label: "Shape CMB", value: "/shapeCMB-v1.0.0.json" },
+  { label: "Configurator", value: "/configurator-v1.0.0.json" },
 ];
 
 function App() {
