@@ -1,7 +1,7 @@
 /* ── Tokens ──────────────────────────────────────────────────── */
 :root {
-  --p-primary: #7367f0;
-  --p-primary-dk: #675dd8;
+  --p-primary: #000000;
+  --p-primary-dk: #000000;
   --p-divider: rgba(47, 43, 61, 0.12);
   --p-bg: #ffffff;
   --p-bg-page: #f8f7fa;
@@ -227,7 +227,3 @@
   object-fit: contain;
   border-radius: 2px;
 }
-
-/* .firstSection {
-  background: red;
-} */
