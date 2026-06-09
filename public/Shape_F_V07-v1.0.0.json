@@ -82,12 +82,12 @@
                 "name": "ZF_HEIGHT",
                 "type": "FIELD",
                 "itemTypeName": "Input",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "comboType": "slider",
                   "label": "Height",
                   "max": "3000",
-                  "min": "1800",
+                  "min": "round(2200 + @FILLER_TOP + @FILLER_BOTTOM)",
                   "defaultValue": "2500",
                   "className": ""
                 },
@@ -1095,7 +1095,7 @@
                 "itemTypeName": "Combo",
                 "comment": "",
                 "attributes": {
-                  "comboType": "",
+                  "comboType": "SWITCH",
                   "label": "Column",
                   "source": "SR-64600860",
                   "defaultValue": "",
@@ -1214,7 +1214,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT)"
                               }
                             ]
                           }
@@ -1677,7 +1677,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT -  ($ZF_CNT_01))"
                               }
                             ]
                           }
@@ -2140,7 +2140,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02))"
                               }
                             ]
                           }
@@ -2603,7 +2603,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT -  ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03))"
                               }
                             ]
                           }
@@ -3066,7 +3066,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04))"
                               }
                             ]
                           }
@@ -3529,7 +3529,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT -  ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05))"
                               }
                             ]
                           }
@@ -3992,7 +3992,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06))"
                               }
                             ]
                           }
@@ -4455,7 +4455,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07))"
                               }
                             ]
                           }
@@ -4918,7 +4918,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07 + $ZF_CNT_08))"
                               }
                             ]
                           }
@@ -5381,7 +5381,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07 + $ZF_CNT_08 + $ZF_CNT_09))"
                               }
                             ]
                           }
@@ -5844,7 +5844,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07 + $ZF_CNT_08 + $ZF_CNT_09 + $ZF_CNT_10))"
                               }
                             ]
                           }
@@ -6307,7 +6307,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT -  ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07 + $ZF_CNT_08 + $ZF_CNT_09 + $ZF_CNT_10 + $ZF_CNT_11))"
                               }
                             ]
                           }
@@ -6770,7 +6770,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07 + $ZF_CNT_08 + $ZF_CNT_09 + $ZF_CNT_10 + $ZF_CNT_11 + $ZF_CNT_12))"
                               }
                             ]
                           }
@@ -7233,7 +7233,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT -  ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07 + $ZF_CNT_08 + $ZF_CNT_09 + $ZF_CNT_10 + $ZF_CNT_11 + $ZF_CNT_12 + $ZF_CNT_13))"
                               }
                             ]
                           }
@@ -7696,7 +7696,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07 + $ZF_CNT_08 + $ZF_CNT_09 + $ZF_CNT_10 + $ZF_CNT_11 + $ZF_CNT_12 + $ZF_CNT_13 + $ZF_CNT_14))"
                               }
                             ]
                           }
@@ -8159,7 +8159,7 @@
                               {
                                 "leftValue": ".data.zone_count",
                                 "comparisonType": "<=",
-                                "rightValue": "&(@ZF_CNT - @ZF_MODULE.data.accumulator + 1)"
+                                "rightValue": "&(@ZF_CNT - ($ZF_CNT_01 + $ZF_CNT_02 + $ZF_CNT_03 + $ZF_CNT_04 + $ZF_CNT_05 + $ZF_CNT_06 + $ZF_CNT_07 + $ZF_CNT_08 + $ZF_CNT_09 + $ZF_CNT_10 + $ZF_CNT_11 + $ZF_CNT_12 + $ZF_CNT_13 + $ZF_CNT_14 + $ZF_CNT_15))"
                               }
                             ]
                           }
@@ -8624,11 +8624,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0",
           "image": "oaksome/front/FR_01_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"]
         }
       },
       {
@@ -8640,11 +8636,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_01_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"]
         }
       },
       {
@@ -8656,11 +8648,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_01_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"]
         }
       },
       {
@@ -8672,10 +8660,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_02_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_02", "COLLECTION_03"]
         }
       },
       {
@@ -8687,9 +8672,7 @@
           "mat_hn_thk": "22",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_02_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -8701,11 +8684,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_03_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"]
         }
       },
       {
@@ -8717,9 +8696,7 @@
           "mat_hn_thk": "22",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_03_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -8731,11 +8708,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_04_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_02", "COLLECTION_03"]
         }
       },
       {
@@ -8747,9 +8720,7 @@
           "mat_hn_thk": "22",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_04_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -8761,10 +8732,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_05_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_03"]
         }
       },
       {
@@ -8776,9 +8744,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_05_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_03"]
         }
       },
       {
@@ -8790,10 +8756,7 @@
           "mat_hn_thk": "18",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_06_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_03"]
         }
       },
       {
@@ -8805,10 +8768,7 @@
           "mat_hn_thk": "18",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_06_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_02", "COLLECTION_03"]
         }
       },
       {
@@ -8820,11 +8780,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_07_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_03", "COLLECTION_04"]
         }
       },
       {
@@ -8836,9 +8792,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_07_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_04"]
         }
       },
       {
@@ -8850,10 +8804,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_08_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_03"]
         }
       },
       {
@@ -8865,9 +8816,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_08_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -8879,10 +8828,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_09_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01",
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_01", "COLLECTION_03"]
         }
       },
       {
@@ -8894,9 +8840,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_09_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -8908,10 +8852,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.7",
           "image": "oaksome/front/FR_10_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_03", "COLLECTION_04"]
         }
       },
       {
@@ -8923,9 +8864,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_10_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_03"]
         }
       },
       {
@@ -8937,10 +8876,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_10_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_03", "COLLECTION_04"]
         }
       },
       {
@@ -8952,9 +8888,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.7",
           "image": "oaksome/front/FR_11_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_03"
-          ]
+          "filter": ["COLLECTION_03"]
         }
       },
       {
@@ -8966,10 +8900,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_11_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_03", "COLLECTION_04"]
         }
       },
       {
@@ -8981,10 +8912,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_11_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_03", "COLLECTION_04"]
         }
       },
       {
@@ -8996,9 +8924,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.7",
           "image": "oaksome/front/FR_12_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -9010,10 +8936,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_12_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_03", "COLLECTION_04"]
         }
       },
       {
@@ -9025,9 +8948,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_12_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -9039,9 +8960,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.7",
           "image": "oaksome/front/FR_13_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -9053,10 +8972,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_13_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_03", "COLLECTION_04"]
         }
       },
       {
@@ -9068,9 +8984,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_13_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -9082,9 +8996,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.7",
           "image": "oaksome/front/FR_14_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       },
       {
@@ -9096,10 +9008,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.1",
           "image": "oaksome/front/FR_14_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03",
-            "COLLECTION_04"
-          ]
+          "filter": ["COLLECTION_03", "COLLECTION_04"]
         }
       },
       {
@@ -9111,9 +9020,7 @@
           "mat_hn_thk": "0",
           "srf_1_thk": "0.6",
           "image": "oaksome/front/FR_14_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02"
-          ]
+          "filter": ["COLLECTION_02"]
         }
       }
     ],
@@ -9159,10 +9066,7 @@
         "value": "FR_02_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_02_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_02_LAQ",
-            "COLLECTION_03FR_02_LAQ"
-          ]
+          "filter": ["COLLECTION_02FR_02_LAQ", "COLLECTION_03FR_02_LAQ"]
         }
       },
       {
@@ -9170,9 +9074,7 @@
         "value": "FR_02_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_02_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_02_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_02_VRN"]
         }
       },
       {
@@ -9192,9 +9094,7 @@
         "value": "FR_03_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_03_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_03_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_03_VRN"]
         }
       },
       {
@@ -9214,9 +9114,7 @@
         "value": "FR_04_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_04_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_04_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_04_VRN"]
         }
       },
       {
@@ -9224,10 +9122,7 @@
         "value": "FR_05_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_05_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_05_LAQ",
-            "COLLECTION_03FR_05_LAQ"
-          ]
+          "filter": ["COLLECTION_01FR_05_LAQ", "COLLECTION_03FR_05_LAQ"]
         }
       },
       {
@@ -9235,9 +9130,7 @@
         "value": "FR_05_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_05_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_05_VRN"
-          ]
+          "filter": ["COLLECTION_03FR_05_VRN"]
         }
       },
       {
@@ -9245,10 +9138,7 @@
         "value": "FR_06_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_06_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_06_LAQ",
-            "COLLECTION_03FR_06_LAQ"
-          ]
+          "filter": ["COLLECTION_01FR_06_LAQ", "COLLECTION_03FR_06_LAQ"]
         }
       },
       {
@@ -9256,10 +9146,7 @@
         "value": "FR_06_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_06_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_06_VRN",
-            "COLLECTION_03FR_06_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_06_VRN", "COLLECTION_03FR_06_VRN"]
         }
       },
       {
@@ -9279,9 +9166,7 @@
         "value": "FR_07_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_07_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_07_VRN"
-          ]
+          "filter": ["COLLECTION_04FR_07_VRN"]
         }
       },
       {
@@ -9289,10 +9174,7 @@
         "value": "FR_08_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_08_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_08_LAQ",
-            "COLLECTION_03FR_08_LAQ"
-          ]
+          "filter": ["COLLECTION_01FR_08_LAQ", "COLLECTION_03FR_08_LAQ"]
         }
       },
       {
@@ -9300,9 +9182,7 @@
         "value": "FR_08_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_08_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_08_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_08_VRN"]
         }
       },
       {
@@ -9310,10 +9190,7 @@
         "value": "FR_09_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_09_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_09_LAQ",
-            "COLLECTION_03FR_09_LAQ"
-          ]
+          "filter": ["COLLECTION_01FR_09_LAQ", "COLLECTION_03FR_09_LAQ"]
         }
       },
       {
@@ -9321,9 +9198,7 @@
         "value": "FR_09_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_09_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_09_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_09_VRN"]
         }
       },
       {
@@ -9331,10 +9206,7 @@
         "value": "FR_10_LAM",
         "data": {
           "image": "oaksome/cat_color/FR_10_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_10_LAM",
-            "COLLECTION_04FR_10_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_10_LAM", "COLLECTION_04FR_10_LAM"]
         }
       },
       {
@@ -9342,9 +9214,7 @@
         "value": "FR_10_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_10_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_10_LAQ"
-          ]
+          "filter": ["COLLECTION_03FR_10_LAQ"]
         }
       },
       {
@@ -9352,10 +9222,7 @@
         "value": "FR_10_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_10_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_10_VRN",
-            "COLLECTION_04FR_10_VRN"
-          ]
+          "filter": ["COLLECTION_03FR_10_VRN", "COLLECTION_04FR_10_VRN"]
         }
       },
       {
@@ -9363,9 +9230,7 @@
         "value": "FR_11_LAM",
         "data": {
           "image": "oaksome/cat_color/FR_11_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_11_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_11_LAM"]
         }
       },
       {
@@ -9373,10 +9238,7 @@
         "value": "FR_11_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_11_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_11_LAQ",
-            "COLLECTION_04FR_11_LAQ"
-          ]
+          "filter": ["COLLECTION_03FR_11_LAQ", "COLLECTION_04FR_11_LAQ"]
         }
       },
       {
@@ -9384,10 +9246,7 @@
         "value": "FR_11_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_11_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_11_VRN",
-            "COLLECTION_04FR_11_VRN"
-          ]
+          "filter": ["COLLECTION_03FR_11_VRN", "COLLECTION_04FR_11_VRN"]
         }
       },
       {
@@ -9395,9 +9254,7 @@
         "value": "FR_12_LAM",
         "data": {
           "image": "oaksome/cat_color/FR_12_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_12_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_12_LAM"]
         }
       },
       {
@@ -9405,10 +9262,7 @@
         "value": "FR_12_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_12_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_12_LAQ",
-            "COLLECTION_04FR_12_LAQ"
-          ]
+          "filter": ["COLLECTION_03FR_12_LAQ", "COLLECTION_04FR_12_LAQ"]
         }
       },
       {
@@ -9416,9 +9270,7 @@
         "value": "FR_12_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_12_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_12_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_12_VRN"]
         }
       },
       {
@@ -9426,9 +9278,7 @@
         "value": "FR_13_LAM",
         "data": {
           "image": "oaksome/cat_color/FR_13_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_13_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_13_LAM"]
         }
       },
       {
@@ -9436,10 +9286,7 @@
         "value": "FR_13_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_13_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_13_LAQ",
-            "COLLECTION_04FR_13_LAQ"
-          ]
+          "filter": ["COLLECTION_03FR_13_LAQ", "COLLECTION_04FR_13_LAQ"]
         }
       },
       {
@@ -9447,9 +9294,7 @@
         "value": "FR_13_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_13_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_13_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_13_VRN"]
         }
       },
       {
@@ -9457,9 +9302,7 @@
         "value": "FR_14_LAM",
         "data": {
           "image": "oaksome/cat_color/FR_14_LAM.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAM"]
         }
       },
       {
@@ -9467,10 +9310,7 @@
         "value": "FR_14_LAQ",
         "data": {
           "image": "oaksome/cat_color/FR_14_LAQ.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_14_LAQ",
-            "COLLECTION_04FR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_03FR_14_LAQ", "COLLECTION_04FR_14_LAQ"]
         }
       },
       {
@@ -9478,9 +9318,7 @@
         "value": "FR_14_VRN",
         "data": {
           "image": "oaksome/cat_color/FR_14_VRN.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRN"]
         }
       }
     ],
@@ -9511,9 +9349,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_00025_CST_0_7",
           "image": "oaksome/ivis/00025_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -9526,9 +9362,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/00113_MST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9541,9 +9375,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/00113_W06.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9556,9 +9388,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/00551_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9571,9 +9401,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_00551_CST_0_7",
           "image": "oaksome/ivis/00551_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -9586,9 +9414,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/00625_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9601,9 +9427,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_00625_CST_0_7",
           "image": "oaksome/ivis/00625_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -9616,9 +9440,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H251_W06.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9648,9 +9470,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H251_W06_0_7",
           "image": "oaksome/ivis/0H251_W06.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -9663,9 +9483,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H362_BST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9678,9 +9496,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0H362_BST_0_7",
           "image": "oaksome/ivis/0H362_BST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -9726,9 +9542,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H591_W07_0_7",
           "image": "oaksome/ivis/0H591_W07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -9774,9 +9588,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H593_W07_0_7",
           "image": "oaksome/ivis/0H593_W07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -9789,9 +9601,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H594_W07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9821,9 +9631,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H594_W07_0_7",
           "image": "oaksome/ivis/0H594_W07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -9872,9 +9680,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H596_W07_0_7",
           "image": "oaksome/ivis/0H596_W07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -9920,9 +9726,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H597_W07_0_7",
           "image": "oaksome/ivis/0H597_W07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -9935,9 +9739,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H598_W07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9967,9 +9769,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H598_W07_0_7",
           "image": "oaksome/ivis/0H598_W07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -9982,9 +9782,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H720_BST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -9997,9 +9795,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0H720_BST_0_7",
           "image": "oaksome/ivis/0H720_BST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -10012,9 +9808,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H912_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10044,9 +9838,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H912_V2A_0_7",
           "image": "oaksome/ivis/0H912_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -10059,9 +9851,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H914_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10091,9 +9881,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H914_V2A_0_7",
           "image": "oaksome/ivis/0H914_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -10142,9 +9930,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H915_V2A_0_7",
           "image": "oaksome/ivis/0H915_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -10193,9 +9979,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H922_V2A_0_7",
           "image": "oaksome/ivis/0H922_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -10208,9 +9992,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H925_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10240,9 +10022,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H925_V2A_0_7",
           "image": "oaksome/ivis/0H925_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -10255,9 +10035,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0H926_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10287,9 +10065,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H926_V2A_0_7",
           "image": "oaksome/ivis/0H926_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -10338,9 +10114,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "UN_HPL_HGP_0H927_V2A_0_7",
           "image": "oaksome/ivis/0H927_V2A.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_LAMFR_14_LAM"
-          ]
+          "filter": ["COLLECTION_02FR_14_LAMFR_14_LAM"]
         }
       },
       {
@@ -10369,9 +10143,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U115_CST_0_7",
           "image": "oaksome/ivis/0U115_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -10400,9 +10172,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U127_CST_0_7",
           "image": "oaksome/ivis/0U127_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -10415,9 +10185,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U139_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10447,9 +10215,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U141_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10479,9 +10245,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U146_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10494,9 +10258,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U147_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10509,9 +10271,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U147_MST_0_7",
           "image": "oaksome/ivis/0U147_MST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -10540,9 +10300,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U150_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10571,9 +10329,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U172_CST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10618,9 +10374,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U222_CST_0_7",
           "image": "oaksome/ivis/0U222_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -10633,9 +10387,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U271_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10648,9 +10400,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U271_CST_0_7",
           "image": "oaksome/ivis/0U271_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -10663,9 +10413,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U284_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10678,9 +10426,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U284_CST_0_7",
           "image": "oaksome/ivis/0U284_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -10709,9 +10455,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U287_CST_0_7",
           "image": "oaksome/ivis/0U287_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -10724,9 +10468,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U292_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10739,9 +10481,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U310_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10771,9 +10511,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U311_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10803,9 +10541,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U312_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10835,9 +10571,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U313_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10866,9 +10600,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U641_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10898,9 +10630,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U642_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10929,9 +10659,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U643_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10961,9 +10689,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U645_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -10993,9 +10719,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U646_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11024,9 +10748,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U647_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11055,9 +10777,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U648_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11087,9 +10807,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U651_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11119,9 +10837,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U653_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11167,9 +10883,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U655_CST_0_7",
           "image": "oaksome/ivis/0U655_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -11182,9 +10896,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U656_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11214,9 +10926,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U813_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11246,9 +10956,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U814_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11277,9 +10985,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U815_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11309,9 +11015,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U817_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11340,9 +11044,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U818_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11372,9 +11074,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U820_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11404,9 +11104,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U821_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11436,9 +11134,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U822_BST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11451,9 +11147,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U823_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11466,9 +11160,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0U823_CST_0_7",
           "image": "oaksome/ivis/0U823_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -11481,9 +11173,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U826_MST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11512,9 +11202,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U828_MST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11543,9 +11231,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U829_MST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11574,9 +11260,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0U830_MST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11605,9 +11289,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0UD59_BST.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_03FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11637,9 +11319,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0UD81_MST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11652,9 +11332,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0WE26_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11667,9 +11345,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0WE26_CST_0_7",
           "image": "oaksome/ivis/0WE26_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -11682,9 +11358,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0WE28_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11697,9 +11371,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0WE28_CST_0_7",
           "image": "oaksome/ivis/0WE28_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -11712,9 +11384,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0WE28_MST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11727,9 +11397,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0WE28_W07.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11742,9 +11410,7 @@
           "mat_fr_2": "NULL",
           "srf_2_top": "NULL",
           "image": "oaksome/ivis/0WE31_CST.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAMFR_01_LAM"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAMFR_01_LAM"]
         }
       },
       {
@@ -11757,9 +11423,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_12",
           "srf_2_top": "UN_HPL_HGP_0WE31_CST_0_7",
           "image": "oaksome/ivis/0WE31_CST.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_10_LAMFR_10_LAM"
-          ]
+          "filter": ["COLLECTION_04FR_10_LAMFR_10_LAM"]
         }
       },
       {
@@ -11841,9 +11505,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "COAT_WD_193954_TPG_BOM",
           "image": "oaksome/ivis/193954_TPG.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_03FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -12374,9 +12036,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_BT_1230_BOM",
           "image": "oaksome/ivis/BT_1230.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -12457,9 +12117,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_BT_1231_BOM",
           "image": "oaksome/ivis/BT_1231.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -12540,9 +12198,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "COAT_WD_9004_MAT_BOM",
           "image": "oaksome/ivis/RAL_9004.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -12632,9 +12288,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "COAT_WD_9010_MAT_BOM",
           "image": "oaksome/ivis/RAL_9010.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -12715,9 +12369,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "COAT_WD_9016_MAT_BOM",
           "image": "oaksome/ivis/RAL_9016.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -12784,9 +12436,7 @@
           "mat_fr_2": "SW_CHENE_06",
           "srf_2_top": "WC_VNR_DLV_S4_01",
           "image": "oaksome/ivis/S4_01.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -12873,9 +12523,7 @@
           "mat_fr_2": "SW_CHENE_06",
           "srf_2_top": "WC_VNR_DLV_S4_02",
           "image": "oaksome/ivis/S4_02.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -12958,9 +12606,7 @@
           "mat_fr_2": "SW_CHENE_06",
           "srf_2_top": "WC_VNR_DLV_S4_04",
           "image": "oaksome/ivis/S4_04.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -13045,9 +12691,7 @@
           "mat_fr_2": "SW_CHENE_06",
           "srf_2_top": "WC_VNR_DLV_S4_05",
           "image": "oaksome/ivis/S4_05.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -13134,9 +12778,7 @@
           "mat_fr_2": "SW_CHENE_06",
           "srf_2_top": "WC_VNR_DLV_S4_06",
           "image": "oaksome/ivis/S4_06.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -13220,9 +12862,7 @@
           "mat_fr_2": "SW_NOYER_06",
           "srf_2_top": "WC_VNR_DLV_S4_07",
           "image": "oaksome/ivis/S4_07.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -13303,9 +12943,7 @@
           "mat_fr_2": "SW_CHENE_06",
           "srf_2_top": "WC_VNR_DLV_S4_08",
           "image": "oaksome/ivis/S4_08.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -13387,9 +13025,7 @@
           "mat_fr_2": "SW_CHENE_06",
           "srf_2_top": "WC_VNR_DLV_S4_09",
           "image": "oaksome/ivis/S4_09.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -13470,9 +13106,7 @@
           "mat_fr_2": "SW_NOYER_06",
           "srf_2_top": "WC_VNR_DLV_S4_14",
           "image": "oaksome/ivis/S4_14.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_14_VRNFR_14_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_14_VRNFR_14_VRN"]
         }
       },
       {
@@ -14283,9 +13917,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_TC_31_BOM",
           "image": "oaksome/ivis/TC_31.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -14371,9 +14003,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_TC_32_BOM",
           "image": "oaksome/ivis/TC_32.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -14992,9 +14622,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_TC_53_BOM",
           "image": "oaksome/ivis/TC_53.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -15084,9 +14712,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_TC_54_BOM",
           "image": "oaksome/ivis/TC_54.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -15350,9 +14976,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_TC_6_BOM",
           "image": "oaksome/ivis/TC_6.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -15522,9 +15146,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_TC_7_BOM",
           "image": "oaksome/ivis/TC_7.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -16584,9 +16206,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_TC_88_BOM",
           "image": "oaksome/ivis/TC_88.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -17833,9 +17453,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_181_BOM",
           "image": "oaksome/ivis/WE_181.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -17916,9 +17534,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_M14_BOM",
           "image": "oaksome/ivis/WE_M14.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -18270,9 +17886,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_M205_BOM",
           "image": "oaksome/ivis/WE_M205.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -18442,9 +18056,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_M226_BOM",
           "image": "oaksome/ivis/WE_M226.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -18614,9 +18226,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_Y64_BOM",
           "image": "oaksome/ivis/WE_Y64.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -18964,9 +18574,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_Y77_BOM",
           "image": "oaksome/ivis/WE_Y77.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -19047,9 +18655,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_Y78_BOM",
           "image": "oaksome/ivis/WE_Y78.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -19130,9 +18736,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_Y79_BOM",
           "image": "oaksome/ivis/WE_Y79.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -19217,9 +18821,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_Y85_BOM",
           "image": "oaksome/ivis/WE_Y85.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -19304,9 +18906,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_Y86_BOM",
           "image": "oaksome/ivis/WE_Y86.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -19391,9 +18991,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_Y87_BOM",
           "image": "oaksome/ivis/WE_Y87.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       },
       {
@@ -19474,9 +19072,7 @@
           "mat_fr_2": "UN_RW_HGS_MDFFB_16",
           "srf_2_top": "BO_COAT_WD_WE_Z116_BOM",
           "image": "oaksome/ivis/WE_Z116.jpg/public",
-          "filter": [
-            "COLLECTION_04FR_14_LAQFR_14_LAQ"
-          ]
+          "filter": ["COLLECTION_04FR_14_LAQFR_14_LAQ"]
         }
       }
     ],
@@ -19486,10 +19082,7 @@
         "value": "NA_A2984_1004",
         "data": {
           "image": "oaksome/ivis/NA_A2984_1004.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_08_VRN",
-            "COLLECTION_02FR_10_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_08_VRN", "COLLECTION_02FR_10_VRN"]
         }
       },
       {
@@ -19497,10 +19090,7 @@
         "value": "NA_A2984_1004",
         "data": {
           "image": "oaksome/ivis/NA_A2984_1004.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_09_VRN",
-            "COLLECTION_02FR_11_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_09_VRN", "COLLECTION_02FR_11_VRN"]
         }
       },
       {
@@ -19508,9 +19098,7 @@
         "value": "NA_A2984_1004",
         "data": {
           "image": "oaksome/ivis/NA_A2984_1004.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_12_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_12_VRN"]
         }
       },
       {
@@ -19518,9 +19106,7 @@
         "value": "NA_A2984_1004",
         "data": {
           "image": "oaksome/ivis/NA_A2984_1004.jpg/public",
-          "filter": [
-            "COLLECTION_02FR_13_VRN"
-          ]
+          "filter": ["COLLECTION_02FR_13_VRN"]
         }
       },
       {
@@ -19528,10 +19114,7 @@
         "value": "NA_A2984_1004",
         "data": {
           "image": "oaksome/ivis/NA_A2984_1004.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_08_VRN",
-            "COLLECTION_03FR_10_VRN"
-          ]
+          "filter": ["COLLECTION_03FR_08_VRN", "COLLECTION_03FR_10_VRN"]
         }
       },
       {
@@ -19539,10 +19122,7 @@
         "value": "NA_A2984_1004",
         "data": {
           "image": "oaksome/ivis/NA_A2984_1004.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_09_VRN",
-            "COLLECTION_03FR_11_VRN"
-          ]
+          "filter": ["COLLECTION_03FR_09_VRN", "COLLECTION_03FR_11_VRN"]
         }
       },
       {
@@ -19550,9 +19130,7 @@
         "value": "NA_A2984_1004",
         "data": {
           "image": "oaksome/ivis/NA_A2984_1004.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_12_VRN"
-          ]
+          "filter": ["COLLECTION_03FR_12_VRN"]
         }
       },
       {
@@ -19560,9 +19138,7 @@
         "value": "NA_A2984_1004",
         "data": {
           "image": "oaksome/ivis/NA_A2984_1004.jpg/public",
-          "filter": [
-            "COLLECTION_03FR_13_VRN"
-          ]
+          "filter": ["COLLECTION_03FR_13_VRN"]
         }
       },
       {
@@ -19984,9 +19560,7 @@
           "drawer_srf": "UN_HPL_HGP_00113_W06_0_7",
           "prf_1": "UN_00113_W06_1",
           "image": "oaksome/ivis/00113_W06.jpg/public",
-          "filter": [
-            "COLLECTION_01FR_01_LAM00113_W06"
-          ]
+          "filter": ["COLLECTION_01FR_01_LAM00113_W06"]
         }
       },
       {
@@ -51851,10 +51425,7 @@
         "value": "AS",
         "data": {
           "image": "oaksome/sub_art_type/AS.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"]
         }
       },
       {
@@ -51875,10 +51446,7 @@
         "value": "HC",
         "data": {
           "image": "oaksome/sub_art_type/HC.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"]
         }
       },
       {
@@ -51886,10 +51454,7 @@
         "value": "OP_DR",
         "data": {
           "image": "oaksome/sub_art_type/OP_DR.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"]
         }
       },
       {
@@ -51916,13 +51481,8 @@
         "value": "1IDR",
         "data": {
           "image": "oaksome/tc_sub_art/1IDR.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -51930,13 +51490,8 @@
         "value": "2DR1_DR2",
         "data": {
           "image": "oaksome/tc_sub_art/2DR1_DR2.svg",
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -51944,13 +51499,8 @@
         "value": "2DR2",
         "data": {
           "image": "oaksome/tc_sub_art/2DR2.svg",
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -51958,13 +51508,8 @@
         "value": "2IDR",
         "data": {
           "image": "oaksome/tc_sub_art/2IDR.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -51972,13 +51517,8 @@
         "value": "3IDR",
         "data": {
           "image": "oaksome/tc_sub_art/3IDR.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -51986,13 +51526,8 @@
         "value": "4DR1",
         "data": {
           "image": "oaksome/tc_sub_art/4DR1.svg",
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -52006,10 +51541,7 @@
             "WACA_LY_DB_D_DW",
             "WACA_LY_D_DW"
           ],
-          "sub_type": [
-            "DR",
-            "X"
-          ]
+          "sub_type": ["DR", "X"]
         }
       },
       {
@@ -52017,13 +51549,8 @@
         "value": "5IDR",
         "data": {
           "image": "oaksome/tc_sub_art/5IDR.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -52031,13 +51558,8 @@
         "value": "6IDR",
         "data": {
           "image": "oaksome/tc_sub_art/6IDR.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -52045,13 +51567,8 @@
         "value": "DR1_DR2_DR1",
         "data": {
           "image": "oaksome/tc_sub_art/DR1_DR2_DR1.svg",
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -52059,13 +51576,8 @@
         "value": "DR2_2DR1",
         "data": {
           "image": "oaksome/tc_sub_art/DR2_2DR1.svg",
-          "layout": [
-            "WACA_LY_DR_D",
-            "WACA_LY_DR_D_DW"
-          ],
-          "sub_type": [
-            "DR"
-          ]
+          "layout": ["WACA_LY_DR_D", "WACA_LY_DR_D_DW"],
+          "sub_type": ["DR"]
         }
       },
       {
@@ -52085,10 +51597,7 @@
             "WACA_LY_DB_D_DW",
             "WACA_LY_D_DW"
           ],
-          "sub_type": [
-            "AS",
-            "X"
-          ]
+          "sub_type": ["AS", "X"]
         }
       },
       {
@@ -52106,10 +51615,7 @@
             "WACA_LY_D1_DW",
             "WACA_LY_D_DW"
           ],
-          "sub_type": [
-            "HC",
-            "X"
-          ]
+          "sub_type": ["HC", "X"]
         }
       },
       {
@@ -52123,10 +51629,7 @@
             "WACA_LY_DB_D_DW",
             "WACA_LY_D_DW"
           ],
-          "sub_type": [
-            "OP_DR",
-            "X"
-          ]
+          "sub_type": ["OP_DR", "X"]
         }
       },
       {
@@ -52140,10 +51643,7 @@
             "WACA_LY_DB_D_DW",
             "WACA_LY_D_DW"
           ],
-          "sub_type": [
-            "OP_DR",
-            "X"
-          ]
+          "sub_type": ["OP_DR", "X"]
         }
       },
       {
@@ -52151,13 +51651,8 @@
         "value": "IOP_3IDR",
         "data": {
           "image": "oaksome/tc_sub_art/IOP_3IDR.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
-          "sub_type": [
-            "OP_DR"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
+          "sub_type": ["OP_DR"]
         }
       },
       {
@@ -52165,13 +51660,8 @@
         "value": "IOP_4IDR",
         "data": {
           "image": "oaksome/tc_sub_art/IOP_4IDR.svg",
-          "layout": [
-            "WACA_LY_D",
-            "WACA_LY_D_DW"
-          ],
-          "sub_type": [
-            "OP_DR"
-          ]
+          "layout": ["WACA_LY_D", "WACA_LY_D_DW"],
+          "sub_type": ["OP_DR"]
         }
       }
     ],
