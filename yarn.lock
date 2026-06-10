@@ -1783,10 +1783,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oak-some/configurator-previewer@^1.4.2":
-  version "1.4.2"
-  resolved "https://npm.pkg.github.com/download/@oak-some/configurator-previewer/1.4.2/c21f18821bfb27f4878d91e8b0878aefd87e2239"
-  integrity sha512-2rC18ZGpruvzxBpZjZUwzO51XVYtjFVBmbM/UPGaTosBOfimIQvihEPhEefzfulatwCFPGjix3leBtsqZVABOA==
+"@oak-some/configurator-previewer@^1.4.3":
+  version "1.4.3"
+  resolved "https://npm.pkg.github.com/download/@oak-some/configurator-previewer/1.4.3/b50d66ca63a5db5b782ce30fbfd862b47a741e6a"
+  integrity sha512-jmXO3EhqhEfLxtcYmVfVnojWYTg8Yxum1KYPAEl+thnp7KdYYj4h1Fr0OmU7WX5NOFrU7sqJKBS57m7BGj5hYw==
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.17"
