@@ -83,6 +83,7 @@ function App() {
         onGoToZone={zone => {
           console.log("goToZone:", zone);
         }}
+        layout="mobile"
       />
     </>
   );

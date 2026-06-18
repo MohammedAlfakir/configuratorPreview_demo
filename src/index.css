@@ -227,3 +227,97 @@
   object-fit: contain;
   border-radius: 2px;
 }
+
+/* ── Responsive (mobile) ─────────────────────────────────────── */
+/* Active below the breakpoint, or when layout="mobile" is passed.
+   Sections → child sections → fields all become horizontal tab strips;
+   a field tab shows its control (the tab label replaces the field label). */
+
+[data-previewer][data-layout="mobile"] {
+  gap: 12px;
+}
+
+/* ── Scrollable tab strip ────────────────────────────────────── */
+[data-previewer][data-layout="mobile"] [data-tab-bar] {
+  gap: 4px;
+  padding: 4px 0;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -webkit-overflow-scrolling: touch; /* iOS momentum */
+  cursor: grab;
+  border-bottom: none;
+}
+[data-previewer][data-layout="mobile"] [data-tab-bar]::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
+}
+[data-previewer][data-layout="mobile"] [data-tab-bar]:active {
+  cursor: grabbing;
+}
+
+/* ── Tabs (pill style — scrolls cleanly, no underline clipping) ── */
+[data-previewer][data-layout="mobile"] [data-tab] {
+  padding: 6px 14px;
+  font-family: var(--p-font);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--p-text-sec);
+  background: none;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition:
+    color 150ms,
+    background 150ms;
+}
+[data-previewer][data-layout="mobile"] [data-tab]:hover {
+  color: var(--p-text);
+  background: var(--p-hover);
+}
+[data-previewer][data-layout="mobile"] [data-tab][data-active="true"] {
+  color: var(--p-primary);
+  background: var(--p-selected);
+  font-weight: 600;
+}
+
+/* ── Scroll arrows (always visible; dimmed when that side can't scroll) ── */
+[data-previewer][data-layout="mobile"] [data-tab-arrow] {
+  width: 28px;
+  border: none;
+  background: var(--p-bg);
+  color: var(--p-text-sec);
+  cursor: pointer;
+  transition:
+    color 150ms,
+    background 150ms;
+}
+[data-previewer][data-layout="mobile"] [data-tab-arrow="left"] {
+  margin-right: 4px;
+}
+[data-previewer][data-layout="mobile"] [data-tab-arrow="right"] {
+  margin-left: 4px;
+}
+[data-previewer][data-layout="mobile"] [data-tab-arrow]:hover:not(:disabled) {
+  color: var(--p-text);
+  background: var(--p-hover);
+}
+[data-previewer][data-layout="mobile"] [data-tab-arrow]:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ── Tab panel ───────────────────────────────────────────────── */
+[data-previewer][data-layout="mobile"] [data-tab-panel] {
+  padding: 14px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Field tab → control fills the width (label is the tab) ───── */
+[data-previewer][data-layout="mobile"] [data-type="FIELD"] {
+  gap: 0;
+}
+[data-previewer][data-layout="mobile"] [data-field-control] {
+  width: 100%;
+}
