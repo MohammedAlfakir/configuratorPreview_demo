@@ -3,8 +3,8 @@ import { ConfiguratorPreviewDialog } from "@oak-some/configurator-previewer";
 
 const CONFIGS = [
   {
-    label: "Shape_CMB_V03-v1.0.0",
-    value: "/Shape_CMB_V03-v1.0.0.json",
+    label: "Shape_U_V05-v1.0.0",
+    value: "/Shape_U_V05-v1.0.0.json",
   },
   {
     label: "Shape CMB V02",
