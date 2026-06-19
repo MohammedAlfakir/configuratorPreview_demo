@@ -78,7 +78,13 @@ function App() {
         imagePrefix="https://imagedelivery.net/aYYmWUcv7lRhpLdU4ojPsA/"
         imageSuffix="/public"
         onVariableSetChange={vars => {
-          console.log(vars);
+          console.log("impactedVariables:", vars);
+        }}
+        onLabelSetChange={labels => {
+          console.log("labels:", labels);
+        }}
+        onNameSetChange={names => {
+          console.log("names:", names);
         }}
         onGoToZone={zone => {
           console.log("goToZone:", zone);
