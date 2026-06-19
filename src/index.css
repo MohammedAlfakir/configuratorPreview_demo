@@ -1,7 +1,13 @@
-/* ── Tokens ──────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────
+   @oak-some/configurator-previewer — standalone stylesheet
+   No framework required. Re-map the tokens below to your brand.
+───────────────────────────────────────────────────────────────── */
+
+/* ── Tokens ───────────────────────────────────────────────────── */
 :root {
   --p-primary: #000000;
   --p-primary-dk: #000000;
+  --p-primary-contrast: #ffffff;
   --p-divider: rgba(47, 43, 61, 0.12);
   --p-bg: #ffffff;
   --p-bg-page: #f8f7fa;
@@ -9,11 +15,12 @@
   --p-text-sec: rgba(47, 43, 61, 0.7);
   --p-hover: rgba(47, 43, 61, 0.06);
   --p-selected: rgba(47, 43, 61, 0.08);
+  --p-error: #e8512a;
   --p-radius: 6px;
   --p-font: "Public Sans", sans-serif;
 }
 
-/* ── Root ────────────────────────────────────────────────────── */
+/* ── Root ─────────────────────────────────────────────────────── */
 [data-previewer] {
   display: flex;
   flex-direction: column;
@@ -23,109 +30,275 @@
   color: var(--p-text);
 }
 
-/* ── Section card ────────────────────────────────────────────── */
-[data-type="SECTION"] {
-  border: 1px solid var(--p-divider);
+/* ── Section ──────────────────────────────────────────────────── */
+[data-previewer] [data-type="SECTION"] {
   border-radius: var(--p-radius);
-  overflow: hidden;
-  background: var(--p-bg);
 }
 
-/* ── Accordion header ────────────────────────────────────────── */
-[data-section-header] {
+/* Nested section: straight divider line, no rounded corners */
+[data-previewer] [data-type="SECTION"] [data-type="SECTION"] {
+  border-top: 1px solid var(--p-divider);
+  border-radius: 0;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+/* ── Accordion header ─────────────────────────────────────────── */
+[data-previewer] [data-section-header] {
   display: flex;
   align-items: center;
   width: 100%;
   padding: 12px 16px;
   background: var(--p-hover);
   border: none;
+  border-radius: 0;
   font-family: var(--p-font);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--p-text);
   text-align: left;
   cursor: pointer;
   transition: background 150ms;
 }
-[data-section-header]:hover {
+[data-previewer] [data-section-header]:hover {
   background: var(--p-selected);
 }
 
-/* ── Section body ────────────────────────────────────────────── */
-[data-section-body] {
-  padding: 16px;
+[data-previewer] [data-section-body] {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-/* ── Tab bar ─────────────────────────────────────────────────── */
-[data-tab-bar] {
+/* ── Tab bar (scrollable pill tabs with arrows — desktop & mobile) ── */
+[data-previewer] [data-tab-bar] {
   display: flex;
-  gap: 0;
-  padding: 0 8px;
-  border-bottom: 1px solid var(--p-divider);
-  background: var(--p-bg);
+  gap: 6px;
+  padding: 6px 0;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -webkit-overflow-scrolling: touch; /* iOS momentum */
+  cursor: grab;
+}
+[data-previewer] [data-tab-bar]::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
+}
+[data-previewer] [data-tab-bar]:active {
+  cursor: grabbing;
 }
 
-[data-tab] {
-  padding: 10px 16px;
+/* Borderless pill tabs */
+[data-previewer] [data-tab] {
+  padding: 6px 16px;
   font-family: var(--p-font);
   font-size: 0.8125rem;
   font-weight: 500;
+  white-space: nowrap;
   color: var(--p-text-sec);
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-radius: 20px;
   cursor: pointer;
-  margin-bottom: -1px;
   transition:
     color 150ms,
-    border-color 150ms,
     background 150ms;
 }
-[data-tab]:hover {
+[data-previewer] [data-tab]:hover {
   color: var(--p-text);
   background: var(--p-hover);
 }
-[data-tab][data-active="true"] {
+[data-previewer] [data-tab][data-active="true"] {
   color: var(--p-primary);
-  border-bottom-color: var(--p-primary);
+  background: var(--p-selected);
+  font-weight: 600;
 }
 
-/* ── Tab panel ───────────────────────────────────────────────── */
-[data-tab-panel] {
-  padding: 16px;
+/* Tab panel side padding; nested TAB sections bleed back to the edge
+   so their tab strips stay aligned at every nesting level */
+[data-previewer] [data-tab-panel] {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+[data-previewer] [data-tab-panel] > [data-section-type="TAB"] {
+  margin-left: -16px;
+  margin-right: -16px;
+}
+
+/* Scroll arrows on both ends (dimmed when that side can't scroll) */
+[data-previewer] [data-tab-arrow] {
+  width: 28px;
+  border: none;
+  background: var(--p-bg);
+  color: var(--p-text-sec);
+  cursor: pointer;
+  transition:
+    color 150ms,
+    background 150ms;
+}
+[data-previewer] [data-tab-arrow="left"] {
+  margin-right: 4px;
+}
+[data-previewer] [data-tab-arrow="right"] {
+  margin-left: 4px;
+}
+[data-previewer] [data-tab-arrow]:hover:not(:disabled) {
+  color: var(--p-text);
+  background: var(--p-hover);
+}
+[data-previewer] [data-tab-arrow]:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ── Fields ───────────────────────────────────────────────────── */
+[data-previewer] [data-type="FIELD"] {
   display: flex;
   flex-direction: column;
+  gap: 4px;
+}
+
+/* Spacing between consecutive fields / field↔section transitions */
+[data-previewer] [data-type="FIELD"] + [data-type="FIELD"],
+[data-previewer] [data-type="FIELD"] + [data-type="SECTION"],
+[data-previewer] [data-type="SECTION"] + [data-type="FIELD"] {
+  margin-top: 16px;
+}
+
+/* First field inside a section body or tab panel */
+[data-previewer] [data-section-body] [data-type="FIELD"]:first-child,
+[data-previewer] [data-tab-panel] [data-type="FIELD"]:first-child {
+  margin-top: 8px;
+}
+
+/* Slider fields: label beside track, all tracks start at the same x */
+[data-previewer] [data-type="FIELD"]:has([data-slider-wrapper]) {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  align-items: center;
   gap: 12px;
 }
-
-/* ── Field ───────────────────────────────────────────────────── */
-[data-type="FIELD"] {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+[data-previewer]
+  [data-type="FIELD"]:has([data-slider-wrapper])
+  [data-field-label] {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[data-previewer]
+  [data-type="FIELD"]:has([data-slider-wrapper])
+  [data-field-control] {
+  min-width: 0;
 }
 
-[data-field-label] {
+[data-previewer] [data-field-label] {
   font-family: var(--p-font);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--p-text-sec);
   line-height: 1.4;
 }
 
-[data-field-control] {
+[data-previewer] [data-field-control] {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
 }
 
-/* ── Text / range input ──────────────────────────────────────── */
-[data-field-control] input[type="text"],
-[data-field-control] input[type="number"] {
+[data-previewer] [data-no-options] {
+  font-size: 0.75rem;
+  color: var(--p-error);
+}
+
+/* ── Range slider ─────────────────────────────────────────────── */
+/* Wrapper reserves room above for the floating value pill */
+[data-previewer] [data-slider-wrapper] {
+  position: relative;
+  padding-top: 26px;
+}
+
+/* Value pill floats above the track at the thumb position.
+   --_pct (0–1) is set inline by the package. */
+[data-previewer] [data-slider-value] {
+  position: absolute;
+  top: 0;
+  left: calc(var(--_pct) * (100% - 18px) + 9px);
+  transform: translateX(-50%);
+  font-family: var(--p-font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--p-text);
+  background: var(--p-bg);
+  border: 1px solid var(--p-divider);
+  border-radius: 20px;
+  padding: 3px 8px;
+}
+
+/* Min / max labels under the track */
+[data-previewer] [data-slider-range] {
+  margin-top: 8px;
+}
+
+/* The track: filled (primary) left of thumb, divider right of thumb */
+[data-previewer] [data-field-control] input[type="range"] {
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--p-primary) calc(var(--_pct, 0) * (100% - 18px) + 9px),
+    var(--p-divider) calc(var(--_pct, 0) * (100% - 18px) + 9px)
+  );
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  margin: 2px 0;
+}
+[data-previewer]
+  [data-field-control]
+  input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--p-primary);
+  border: 2px solid var(--p-bg);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition:
+    transform 150ms,
+    box-shadow 150ms;
+}
+[data-previewer]
+  [data-field-control]
+  input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+[data-previewer] [data-field-control] input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--p-primary);
+  border: 2px solid var(--p-bg);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+[data-previewer] [data-field-control] input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: var(--p-divider);
+  border-radius: 2px;
+}
+
+/* ── Text / number input ──────────────────────────────────────── */
+[data-previewer] [data-field-control] input[type="text"],
+[data-previewer] [data-field-control] input[type="number"],
+[data-previewer] [data-field-control] input:not([type]) {
   width: 100%;
   padding: 8px 12px;
   font-family: var(--p-font);
@@ -139,24 +312,20 @@
     border-color 150ms,
     box-shadow 150ms;
 }
-[data-field-control] input[type="text"]:hover,
-[data-field-control] input[type="number"]:hover {
-  border-color: rgba(47, 43, 61, 0.4);
+[data-previewer] [data-field-control] input[type="text"]:hover,
+[data-previewer] [data-field-control] input[type="number"]:hover,
+[data-previewer] [data-field-control] input:not([type]):hover {
+  border-color: var(--p-text-sec);
 }
-[data-field-control] input[type="text"]:focus,
-[data-field-control] input[type="number"]:focus {
+[data-previewer] [data-field-control] input[type="text"]:focus,
+[data-previewer] [data-field-control] input[type="number"]:focus,
+[data-previewer] [data-field-control] input:not([type]):focus {
   border-color: var(--p-primary);
-  box-shadow: 0 0 0 3px rgba(115, 103, 240, 0.16);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary) 16%, transparent);
 }
 
-[data-field-control] input[type="range"] {
-  width: 100%;
-  accent-color: var(--p-primary);
-  cursor: pointer;
-}
-
-/* ── Select ──────────────────────────────────────────────────── */
-[data-field-control] select {
+/* ── Select ───────────────────────────────────────────────────── */
+[data-previewer] [data-field-control] select {
   width: 100%;
   padding: 8px 32px 8px 12px;
   font-family: var(--p-font);
@@ -172,24 +341,24 @@
   background-position: right 8px center;
   transition: border-color 150ms;
 }
-[data-field-control] select:hover {
-  border-color: rgba(47, 43, 61, 0.4);
+[data-previewer] [data-field-control] select:hover {
+  border-color: var(--p-text-sec);
 }
-[data-field-control] select:focus {
+[data-previewer] [data-field-control] select:focus {
   border-color: var(--p-primary);
-  box-shadow: 0 0 0 3px rgba(115, 103, 240, 0.16);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary) 16%, transparent);
 }
 
-/* ── Checkbox ────────────────────────────────────────────────── */
-[data-field-control] input[type="checkbox"] {
+/* ── Checkbox ─────────────────────────────────────────────────── */
+[data-previewer] [data-field-control] input[type="checkbox"] {
   width: 18px;
   height: 18px;
   accent-color: var(--p-primary);
   cursor: pointer;
 }
 
-/* ── Combobox option buttons ─────────────────────────────────── */
-[data-option] {
+/* ── Combobox option buttons ──────────────────────────────────── */
+[data-previewer] [data-option] {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -205,119 +374,74 @@
     background 150ms,
     border-color 150ms,
     color 150ms;
+  margin: 2px;
 }
-[data-option]:hover {
+[data-previewer] [data-option]:hover {
   background: var(--p-hover);
-  border-color: rgba(47, 43, 61, 0.3);
+  border-color: var(--p-text-sec);
 }
-[data-option][data-selected="true"] {
-  color: #fff;
+[data-previewer] [data-option][data-selected="true"] {
+  color: var(--p-primary-contrast);
   background: var(--p-primary);
   border-color: var(--p-primary);
 }
-[data-option][data-selected="true"]:hover {
+[data-previewer] [data-option][data-selected="true"]:hover {
   background: var(--p-primary-dk);
   border-color: var(--p-primary-dk);
 }
 
-/* ── Combo images ────────────────────────────────────────────── */
-[data-combo-image] {
+/* Circle combo: square aspect so border-radius:50% is a true circle */
+[data-previewer] [data-combo-type="circle"] {
+  padding: 6px;
+  aspect-ratio: 1;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+[data-previewer] [data-combo-image] {
   width: 24px;
   height: 24px;
   object-fit: contain;
   border-radius: 2px;
 }
+[data-previewer] [data-combo-type="circle"] [data-combo-image] {
+  border-radius: 50%;
+}
 
-/* ── Responsive (mobile) ─────────────────────────────────────── */
-/* Active below the breakpoint, or when layout="mobile" is passed.
-   Sections → child sections → fields all become horizontal tab strips;
-   a field tab shows its control (the tab label replaces the field label). */
-
+/* ── Mobile (layout="mobile" or below the responsive breakpoint) ── */
+/* Tab strip, pills, scroll and arrows are shared with desktop above;
+   mobile only adds nested-panel spacing and full-width controls. */
 [data-previewer][data-layout="mobile"] {
   gap: 12px;
 }
 
-/* ── Scrollable tab strip ────────────────────────────────────── */
-[data-previewer][data-layout="mobile"] [data-tab-bar] {
-  gap: 4px;
-  padding: 4px 0;
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -webkit-overflow-scrolling: touch; /* iOS momentum */
-  cursor: grab;
-  border-bottom: none;
-}
-[data-previewer][data-layout="mobile"] [data-tab-bar]::-webkit-scrollbar {
-  display: none; /* Chrome / Safari */
-}
-[data-previewer][data-layout="mobile"] [data-tab-bar]:active {
-  cursor: grabbing;
-}
-
-/* ── Tabs (pill style — scrolls cleanly, no underline clipping) ── */
-[data-previewer][data-layout="mobile"] [data-tab] {
-  padding: 6px 14px;
-  font-family: var(--p-font);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  white-space: nowrap;
-  color: var(--p-text-sec);
-  background: none;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition:
-    color 150ms,
-    background 150ms;
-}
-[data-previewer][data-layout="mobile"] [data-tab]:hover {
-  color: var(--p-text);
-  background: var(--p-hover);
-}
-[data-previewer][data-layout="mobile"] [data-tab][data-active="true"] {
-  color: var(--p-primary);
-  background: var(--p-selected);
-  font-weight: 600;
-}
-
-/* ── Scroll arrows (always visible; dimmed when that side can't scroll) ── */
-[data-previewer][data-layout="mobile"] [data-tab-arrow] {
-  width: 28px;
-  border: none;
-  background: var(--p-bg);
-  color: var(--p-text-sec);
-  cursor: pointer;
-  transition:
-    color 150ms,
-    background 150ms;
-}
-[data-previewer][data-layout="mobile"] [data-tab-arrow="left"] {
-  margin-right: 4px;
-}
-[data-previewer][data-layout="mobile"] [data-tab-arrow="right"] {
-  margin-left: 4px;
-}
-[data-previewer][data-layout="mobile"] [data-tab-arrow]:hover:not(:disabled) {
-  color: var(--p-text);
-  background: var(--p-hover);
-}
-[data-previewer][data-layout="mobile"] [data-tab-arrow]:disabled {
-  opacity: 0.3;
-  cursor: default;
-}
-
-/* ── Tab panel ───────────────────────────────────────────────── */
 [data-previewer][data-layout="mobile"] [data-tab-panel] {
-  padding: 14px 2px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+[data-previewer][data-layout="mobile"] [data-tab-panel] > [data-tab-group] {
+  margin-left: -16px;
+  margin-right: -16px;
+}
 
-/* ── Field tab → control fills the width (label is the tab) ───── */
+/* Field tab → control fills the width (the tab is the label) */
 [data-previewer][data-layout="mobile"] [data-type="FIELD"] {
   gap: 0;
 }
 [data-previewer][data-layout="mobile"] [data-field-control] {
+  width: 100%;
+}
+
+/* Slider in mobile: drop the label grid, go full width (label is hidden) */
+[data-previewer][data-layout="mobile"]
+  [data-type="FIELD"]:has([data-slider-wrapper]) {
+  display: flex;
+  flex-direction: column;
+}
+[data-previewer][data-layout="mobile"]
+  [data-type="FIELD"]:has([data-slider-wrapper])
+  [data-field-control] {
   width: 100%;
 }
