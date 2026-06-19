@@ -83,7 +83,7 @@ function App() {
         onGoToZone={zone => {
           console.log("goToZone:", zone);
         }}
-        layout="desktop"
+        layout="mobile"
       />
     </>
   );

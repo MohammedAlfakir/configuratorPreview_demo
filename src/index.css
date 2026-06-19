@@ -8,9 +8,9 @@
   --p-primary: #000000;
   --p-primary-dk: #000000;
   --p-primary-contrast: #ffffff;
-  --p-divider: rgba(47, 43, 61, 0.12);
+  --p-divider: rgba(0, 0, 0, 0.12);
   --p-bg: #ffffff;
-  --p-bg-page: #f8f7fa;
+  --p-bg-page: #6d6679;
   --p-text: rgba(47, 43, 61, 0.9);
   --p-text-sec: rgba(47, 43, 61, 0.7);
   --p-hover: rgba(47, 43, 61, 0.06);
@@ -424,6 +424,14 @@
 [data-previewer][data-layout="mobile"] [data-tab-panel] > [data-tab-group] {
   margin-left: -16px;
   margin-right: -16px;
+}
+
+/* Nested tab group (a child section's tab strip) gets the same divider line
+   as a nested section on desktop */
+[data-previewer][data-layout="mobile"] [data-tab-panel] [data-tab-group] {
+  border-top: 1px solid var(--p-divider);
+  padding-top: 10px;
+  margin-bottom: 10px;
 }
 
 /* Field tab → control fills the width (the tab is the label) */
