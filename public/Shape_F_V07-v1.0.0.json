@@ -48,6 +48,7 @@
                 "comment": null,
                 "attributes": {
                   "comboType": "combo",
+                  "fullRow": "",
                   "label": "Instaltion type",
                   "source": "SR-6b4b775b",
                   "defaultValue": "",
@@ -550,6 +551,7 @@
                 "comment": null,
                 "attributes": {
                   "comboType": "SWITCH",
+                  "fullRow": "",
                   "label": "Collection",
                   "source": "SR-6292d37f",
                   "defaultValue": "COLLECTION_01",
@@ -572,6 +574,7 @@
                 "comment": null,
                 "attributes": {
                   "comboType": "SWITCH",
+                  "fullRow": "",
                   "label": "Front",
                   "source": "SR-624566dd",
                   "defaultValue": "",
@@ -657,6 +660,7 @@
                 "comment": null,
                 "attributes": {
                   "comboType": "SWITCH",
+                  "fullRow": "",
                   "label": "Color category",
                   "source": "SR-a0322421",
                   "defaultValue": "",
@@ -696,10 +700,11 @@
                 "name": "ZF_FINISH_EXT",
                 "type": "FIELD",
                 "itemTypeName": "Combo",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "comboType": "CIRCLE",
-                  "label": "Color category",
+                  "fullRow": "",
+                  "label": "finish ext",
                   "source": "SR-d3c27484",
                   "defaultValue": "",
                   "image": "",
@@ -791,6 +796,7 @@
                 "comment": null,
                 "attributes": {
                   "comboType": "CIRCLE",
+                  "fullRow": "",
                   "label": "Exterior 02",
                   "source": "SR-a382152b",
                   "defaultValue": "",
@@ -841,6 +847,7 @@
                 "comment": null,
                 "attributes": {
                   "comboType": "CIRCLE",
+                  "fullRow": "",
                   "label": "Interior",
                   "source": "SR-6e00d63d",
                   "defaultValue": "",
@@ -1005,6 +1012,7 @@
                 "comment": null,
                 "attributes": {
                   "comboType": "CIRCLE",
+                  "fullRow": "",
                   "label": "Pull",
                   "source": "SR-618bcbd2",
                   "defaultValue": "",
@@ -1104,6 +1112,7 @@
                 "comment": "",
                 "attributes": {
                   "comboType": "SWITCH",
+                  "fullRow": "",
                   "label": "Column",
                   "source": "SR-64600860",
                   "defaultValue": "",
@@ -1113,7 +1122,7 @@
                   "reverse": "",
                   "size": "",
                   "className": "",
-                  "goToZone": ".data.gotozone"
+                  "goToZone": ""
                 },
                 "dependencies": [],
                 "impactedVariables": [],
@@ -1143,11 +1152,11 @@
                 "name": "ZF_COL01_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_01",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -1187,6 +1196,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -1237,6 +1247,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -1287,6 +1298,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -1329,6 +1341,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -1394,6 +1407,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -1472,6 +1486,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -1545,6 +1560,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -1558,6 +1574,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_01.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_01.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -1588,11 +1611,6 @@
                                 "leftValue": "@ZF_COL01_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -1606,11 +1624,11 @@
                 "name": "ZF_COL02_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_02",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -1650,6 +1668,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -1700,6 +1719,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -1750,6 +1770,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -1792,6 +1813,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -1857,6 +1879,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -1935,6 +1958,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -2008,6 +2032,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -2021,6 +2046,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_02.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_02.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -2051,11 +2083,6 @@
                                 "leftValue": "@ZF_COL02_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -2069,11 +2096,11 @@
                 "name": "ZF_COL03_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_03",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -2113,6 +2140,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -2163,6 +2191,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -2213,6 +2242,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -2255,6 +2285,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -2320,6 +2351,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -2398,6 +2430,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -2471,6 +2504,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -2484,6 +2518,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_03.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_03.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -2514,11 +2555,6 @@
                                 "leftValue": "@ZF_COL03_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -2532,11 +2568,11 @@
                 "name": "ZF_COL04_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_04",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -2576,6 +2612,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -2626,6 +2663,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -2676,6 +2714,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -2718,6 +2757,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -2783,6 +2823,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -2861,6 +2902,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -2934,6 +2976,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -2947,6 +2990,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_04.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_04.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -2977,11 +3027,6 @@
                                 "leftValue": "@ZF_COL04_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -2995,11 +3040,11 @@
                 "name": "ZF_COL05_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_05",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -3039,6 +3084,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -3089,6 +3135,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -3139,6 +3186,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -3181,6 +3229,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -3246,6 +3295,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -3324,6 +3374,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -3397,6 +3448,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -3410,6 +3462,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_05.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_05.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -3440,11 +3499,6 @@
                                 "leftValue": "@ZF_COL05_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -3458,11 +3512,11 @@
                 "name": "ZF_COL06_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_06",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -3502,6 +3556,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -3552,6 +3607,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -3602,6 +3658,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -3644,6 +3701,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -3709,6 +3767,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -3787,6 +3846,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -3860,6 +3920,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -3873,6 +3934,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_06.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_06.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -3903,11 +3971,6 @@
                                 "leftValue": "@ZF_COL06_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -3921,11 +3984,11 @@
                 "name": "ZF_COL07_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_07",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -3965,6 +4028,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -4015,6 +4079,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -4065,6 +4130,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -4107,6 +4173,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -4172,6 +4239,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -4250,6 +4318,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -4323,6 +4392,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -4336,6 +4406,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_07.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_07.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -4366,11 +4443,6 @@
                                 "leftValue": "@ZF_COL07_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -4384,11 +4456,11 @@
                 "name": "ZF_COL08_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_08",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -4428,6 +4500,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -4478,6 +4551,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -4528,6 +4602,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -4570,6 +4645,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -4635,6 +4711,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -4713,6 +4790,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -4786,6 +4864,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -4799,6 +4878,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_08.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_08.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -4829,11 +4915,6 @@
                                 "leftValue": "@ZF_COL08_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -4847,11 +4928,11 @@
                 "name": "ZF_COL09_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_09",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -4891,6 +4972,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -4941,6 +5023,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -4991,6 +5074,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -5033,6 +5117,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -5098,6 +5183,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -5176,6 +5262,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -5249,6 +5336,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -5262,6 +5350,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_09.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_09.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -5292,11 +5387,6 @@
                                 "leftValue": "@ZF_COL09_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -5310,11 +5400,11 @@
                 "name": "ZF_COL10_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_10",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -5354,6 +5444,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -5404,6 +5495,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -5454,6 +5546,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -5496,6 +5589,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -5561,6 +5655,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -5639,6 +5734,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -5712,6 +5808,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -5725,6 +5822,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_10.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_10.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -5755,11 +5859,6 @@
                                 "leftValue": "@ZF_COL10_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -5773,11 +5872,11 @@
                 "name": "ZF_COL11_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_11",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -5817,6 +5916,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -5867,6 +5967,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -5917,6 +6018,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -5959,6 +6061,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -6024,6 +6127,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -6102,6 +6206,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -6175,6 +6280,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -6188,6 +6294,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_11.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_11.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -6218,11 +6331,6 @@
                                 "leftValue": "@ZF_COL11_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -6236,11 +6344,11 @@
                 "name": "ZF_COL12_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_12",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -6280,6 +6388,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -6330,6 +6439,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -6380,6 +6490,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -6422,6 +6533,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -6487,6 +6599,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -6565,6 +6678,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -6638,6 +6752,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -6651,6 +6766,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_12.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_12.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -6681,11 +6803,6 @@
                                 "leftValue": "@ZF_COL12_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -6699,11 +6816,11 @@
                 "name": "ZF_COL13_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_13",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -6743,6 +6860,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -6793,6 +6911,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -6843,6 +6962,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -6885,6 +7005,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -6950,6 +7071,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -7028,6 +7150,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -7101,6 +7224,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -7114,6 +7238,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_13.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_13.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -7144,11 +7275,6 @@
                                 "leftValue": "@ZF_COL13_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -7162,11 +7288,11 @@
                 "name": "ZF_COL14_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_14",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -7206,6 +7332,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -7256,6 +7383,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -7306,6 +7434,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -7348,6 +7477,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -7413,6 +7543,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -7491,6 +7622,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -7564,6 +7696,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -7577,6 +7710,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_14.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_14.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -7607,11 +7747,6 @@
                                 "leftValue": "@ZF_COL14_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -7625,11 +7760,11 @@
                 "name": "ZF_COL15_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_15",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -7669,6 +7804,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -7719,6 +7855,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -7769,6 +7906,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -7811,6 +7949,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -7876,6 +8015,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -7954,6 +8094,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -8027,6 +8168,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -8040,6 +8182,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_15.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_15.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -8070,11 +8219,6 @@
                                 "leftValue": "@ZF_COL15_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -8088,11 +8232,11 @@
                 "name": "ZF_COL16_SECTION",
                 "type": "SECTION",
                 "itemTypeName": "Section",
-                "comment": null,
+                "comment": "",
                 "attributes": {
                   "sectionType": "NONE",
                   "fullWidth": "",
-                  "goToZone": "",
+                  "goToZone": "ART_ZONE_FR_16",
                   "variant": "",
                   "impactedZone": "true",
                   "label": "",
@@ -8132,6 +8276,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Door type",
                       "source": "SR-d68f6bc6",
                       "defaultValue": "",
@@ -8182,6 +8327,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Layout",
                       "source": "SR-1a0b2c1a",
                       "defaultValue": "",
@@ -8232,6 +8378,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone",
                       "source": "SR-0548a025",
                       "defaultValue": "",
@@ -8274,6 +8421,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-zone type",
                       "source": "SR-aa554b44",
                       "defaultValue": "",
@@ -8339,6 +8487,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 1",
                       "source": "SR-918c28bb",
                       "defaultValue": "",
@@ -8417,6 +8566,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Sub-art 2",
                       "source": "SR-cf74b8f9",
                       "defaultValue": "",
@@ -8490,6 +8640,7 @@
                     "comment": null,
                     "attributes": {
                       "comboType": "BUTTON",
+                      "fullRow": "",
                       "label": "Opening",
                       "source": "SR-f340fcf0",
                       "defaultValue": "",
@@ -8503,6 +8654,13 @@
                     },
                     "dependencies": [],
                     "impactedVariables": [
+                      {
+                        "name": "ART_ZONE_FR_16.HAS_DOOR",
+                        "path": ".data.has_door",
+                        "type": {
+                          "name": "STRING"
+                        }
+                      },
                       {
                         "name": "ART_ZONE_FR_16.Hinge_Side_nbr",
                         "path": ".data.hinge_side_nbr",
@@ -8533,11 +8691,6 @@
                                 "leftValue": "@ZF_COL16_DOOR_TYPE",
                                 "comparisonType": "I",
                                 "rightValue": ".data.allowed_door_type"
-                              },
-                              {
-                                "leftValue": ".data.door_type",
-                                "comparisonType": "!=",
-                                "rightValue": "NONE"
                               }
                             ]
                           }
@@ -52293,6 +52446,7 @@
           "allowed_door_type": "SD",
           "door_type": "SD",
           "hinge_side_nbr": 0,
+          "has_door": 1,
           "image": "oaksome/opening/LEFT.svg"
         }
       },
@@ -52303,6 +52457,7 @@
           "allowed_door_type": "SD",
           "door_type": "SD",
           "hinge_side_nbr": 1,
+          "has_door": 1,
           "image": "oaksome/opening/RIGHT.svg"
         }
       },
@@ -52313,27 +52468,30 @@
           "allowed_door_type": "DD",
           "door_type": "DD",
           "hinge_side_nbr": -1,
+          "has_door": 1,
           "image": "oaksome/opening/DD.svg"
         }
       },
       {
         "label": "None",
-        "value": "NONE",
+        "value": "NONESD",
         "data": {
           "allowed_door_type": "SD",
           "door_type": "NONE",
           "hinge_side_nbr": -1,
-          "image": "oaksome/opening/NONE.svg"
+          "has_door": 0,
+          "image": "oaksome/opening/NONESD.svg"
         }
       },
       {
         "label": "None",
-        "value": "NONE",
+        "value": "NONEDD",
         "data": {
           "allowed_door_type": "DD",
           "door_type": "NONE",
           "hinge_side_nbr": -1,
-          "image": "oaksome/opening/NONE.svg"
+          "has_door": 0,
+          "image": "oaksome/opening/NONEDD.svg"
         }
       }
     ]
