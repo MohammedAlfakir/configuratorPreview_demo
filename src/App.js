@@ -76,7 +76,7 @@ function App() {
         key={selected}
         configuratorJson={selected}
         imagePrefix="https://imagedelivery.net/aYYmWUcv7lRhpLdU4ojPsA/"
-        imageSuffix="/public"
+        // imageSuffix="/public"
         onVariableSetChange={vars => {
           console.log("impactedVariables:", vars);
         }}
@@ -89,7 +89,7 @@ function App() {
         onGoToZone={zone => {
           console.log("goToZone:", zone);
         }}
-        layout="mobile"
+        layout="desktop"
       />
     </>
   );

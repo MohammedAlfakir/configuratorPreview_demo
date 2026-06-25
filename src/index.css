@@ -1,13 +1,14 @@
 /* ─────────────────────────────────────────────────────────────────
    @oak-some/configurator-previewer — standalone stylesheet
    No framework required. Re-map the tokens below to your brand.
+   Theme: GREEN (#c1fd48). Requires previewer ≥ 1.10.0 for the slider stepper.
 ───────────────────────────────────────────────────────────────── */
 
 /* ── Tokens ───────────────────────────────────────────────────── */
 :root {
-  --p-primary: #000000;
-  --p-primary-dk: #000000;
-  --p-primary-contrast: #ffffff;
+  --p-primary: #c1fd48;
+  --p-primary-dk: #a6e02f;
+  --p-primary-contrast: #1a1a1a; /* dark text — white is unreadable on lime */
   --p-divider: rgba(0, 0, 0, 0.12);
   --p-bg: #ffffff;
   --p-bg-page: #6d6679;
@@ -16,7 +17,7 @@
   --p-hover: rgba(47, 43, 61, 0.06);
   --p-selected: rgba(47, 43, 61, 0.08);
   --p-error: #e8512a;
-  --p-radius: 6px;
+  --p-radius: 5px;
   --p-font: "Public Sans", sans-serif;
 }
 
@@ -35,10 +36,9 @@
   border-radius: var(--p-radius);
 }
 
-/* Nested section: straight divider line, no rounded corners */
+/* Nested section: spacing only, no divider line */
 [data-previewer] [data-type="SECTION"] [data-type="SECTION"] {
-  border-top: 1px solid var(--p-divider);
-  border-radius: 0;
+  border-radius: var(--p-radius);
   padding-top: 8px;
   margin-top: 8px;
 }
@@ -51,7 +51,7 @@
   padding: 12px 16px;
   background: var(--p-hover);
   border: none;
-  border-radius: 0;
+  border-radius: var(--p-radius);
   font-family: var(--p-font);
   font-size: 0.875rem;
   font-weight: 600;
@@ -70,11 +70,11 @@
   gap: 12px;
 }
 
-/* ── Tab bar (scrollable pill tabs with arrows — desktop & mobile) ── */
+/* ── Tab bar (scrollable square tabs with arrows — desktop & mobile) ── */
 [data-previewer] [data-tab-bar] {
   display: flex;
-  gap: 6px;
-  padding: 6px 0;
+  gap: 0;
+  padding: 0;
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   -webkit-overflow-scrolling: touch; /* iOS momentum */
@@ -87,17 +87,19 @@
   cursor: grabbing;
 }
 
-/* Borderless pill tabs */
+/* Square, flush, uppercase tabs */
 [data-previewer] [data-tab] {
-  padding: 6px 16px;
+  padding: 10px 20px;
   font-family: var(--p-font);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   white-space: nowrap;
   color: var(--p-text-sec);
   background: none;
   border: none;
-  border-radius: 20px;
+  border-radius: var(--p-radius);
   cursor: pointer;
   transition:
     color 150ms,
@@ -108,8 +110,8 @@
   background: var(--p-hover);
 }
 [data-previewer] [data-tab][data-active="true"] {
-  color: var(--p-primary);
-  background: var(--p-selected);
+  color: var(--p-primary-contrast);
+  background: var(--p-primary);
   font-weight: 600;
 }
 
@@ -170,16 +172,18 @@
   margin-top: 8px;
 }
 
-/* Slider fields: label beside track, all tracks start at the same x */
+/* Slider fields: label beside track, aligned to the track row */
 [data-previewer] [data-type="FIELD"]:has([data-slider-wrapper]) {
   display: grid;
   grid-template-columns: 90px 1fr;
-  align-items: center;
+  align-items: end;
   gap: 12px;
 }
 [data-previewer]
   [data-type="FIELD"]:has([data-slider-wrapper])
   [data-field-label] {
+  font-weight: 600;
+  color: var(--p-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -187,6 +191,7 @@
 [data-previewer]
   [data-type="FIELD"]:has([data-slider-wrapper])
   [data-field-control] {
+  display: block;
   min-width: 0;
 }
 
@@ -209,37 +214,87 @@
 }
 
 /* ── Range slider ─────────────────────────────────────────────── */
-/* Wrapper reserves room above for the floating value pill */
+/* Wrapper reserves room above the track for the floating stepper */
 [data-previewer] [data-slider-wrapper] {
   position: relative;
-  padding-top: 26px;
+  padding-top: 44px;
 }
 
-/* Value pill floats above the track at the thumb position.
-   --_pct (0–1) is set inline by the package. */
-[data-previewer] [data-slider-value] {
+/* Stepper row (− value +) floats above the track, centered on the thumb,
+   tracking it. --_pct (0–1) is set inline by the package. */
+[data-previewer] [data-slider-stepper] {
   position: absolute;
-  top: 0;
-  left: calc(var(--_pct) * (100% - 18px) + 9px);
+  top: 4px;
+  left: clamp(0%, calc(var(--_pct, 0) * (100% - 14px) + 7px), 100%);
   transform: translateX(-50%);
-  font-family: var(--p-font);
-  font-size: 0.75rem;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: left 80ms linear;
+}
+
+/* −/+ buttons: round chips, revealed on field hover */
+[data-previewer] [data-slider-step] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  min-height: 26px;
+  font-size: 1rem;
   line-height: 1;
-  white-space: nowrap;
   color: var(--p-text);
-  background: var(--p-bg);
-  border: 1px solid var(--p-divider);
-  border-radius: 20px;
-  padding: 3px 8px;
+  background: var(--p-hover);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    background 150ms,
+    opacity 150ms;
+}
+[data-previewer] [data-slider-step]:hover:not(:disabled) {
+  background: var(--p-selected);
+}
+[data-previewer] [data-slider-step]:disabled {
+  opacity: 0;
+  cursor: default;
 }
 
-/* Min / max labels under the track */
-[data-previewer] [data-slider-range] {
-  margin-top: 8px;
+/* Reveal the steppers when hovering anywhere over the slider field */
+[data-previewer]
+  [data-type="FIELD"]:has([data-slider-wrapper]):hover
+  [data-slider-step] {
+  opacity: 1;
+}
+[data-previewer]
+  [data-type="FIELD"]:has([data-slider-wrapper]):hover
+  [data-slider-step]:disabled {
+  opacity: 0.4;
 }
 
-/* The track: filled (primary) left of thumb, divider right of thumb */
+/* Boxed current value — draggable like the thumb */
+[data-previewer] [data-slider-value-box] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  min-height: 32px;
+  padding: 0 12px;
+  font-family: var(--p-font);
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--p-text);
+  background: var(--p-hover);
+  border-radius: 6px;
+  cursor: grab;
+  user-select: none;
+}
+[data-previewer] [data-slider-value-box]:active {
+  cursor: grabbing;
+}
+
+/* The track: BLACK left of thumb, divider right of thumb */
 [data-previewer] [data-field-control] input[type="range"] {
   padding: 0;
   border: none;
@@ -247,28 +302,35 @@
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 4px;
+  height: 2px;
   background: linear-gradient(
     to right,
-    var(--p-primary) calc(var(--_pct, 0) * (100% - 18px) + 9px),
-    var(--p-divider) calc(var(--_pct, 0) * (100% - 18px) + 9px)
+    #000000 calc(var(--_pct, 0) * (100% - 14px) + 7px),
+    var(--p-divider) calc(var(--_pct, 0) * (100% - 14px) + 7px)
   );
-  border-radius: 2px;
+  border-radius: var(--p-radius);
   outline: none;
   cursor: pointer;
   margin: 2px 0;
 }
+
+/* Thumb: GREEN circle with a BLACK dot in the center */
 [data-previewer]
   [data-field-control]
   input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: var(--p-primary);
-  border: 2px solid var(--p-bg);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  background: radial-gradient(
+    circle,
+    #000000 0,
+    #000000 3px,
+    var(--p-primary) 3px
+  );
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition:
     transform 150ms,
@@ -278,21 +340,26 @@
   [data-field-control]
   input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 [data-previewer] [data-field-control] input[type="range"]::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--p-primary);
-  border: 2px solid var(--p-bg);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  background: radial-gradient(
+    circle,
+    #000000 0,
+    #000000 3px,
+    var(--p-primary) 3px
+  );
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
 [data-previewer] [data-field-control] input[type="range"]::-moz-range-track {
-  height: 4px;
+  height: 2px;
   background: var(--p-divider);
-  border-radius: 2px;
+  border-radius: var(--p-radius);
 }
 
 /* ── Text / number input ──────────────────────────────────────── */
@@ -368,7 +435,7 @@
   color: var(--p-text);
   background: var(--p-bg);
   border: 1px solid var(--p-divider);
-  border-radius: 20px;
+  border-radius: var(--p-radius);
   cursor: pointer;
   transition:
     background 150ms,
@@ -390,22 +457,113 @@
   border-color: var(--p-primary-dk);
 }
 
-/* Circle combo: square aspect so border-radius:50% is a true circle */
-[data-previewer] [data-combo-type="circle"] {
-  padding: 6px;
-  aspect-ratio: 1;
-  justify-content: center;
-  border-radius: 50%;
-}
-
 [data-previewer] [data-combo-image] {
   width: 24px;
   height: 24px;
   object-fit: contain;
-  border-radius: 2px;
+  border-radius: var(--p-radius);
+}
+
+/* ── Column selector (ZF_MODULE field): selected = expanded "COLUMN n" bar,
+   unselected = small round number chip — all on one aligned baseline ──── */
+[data-previewer] [data-name="ZF_MODULE"] [data-field-control] > div {
+  align-items: center;
+  gap: 6px;
+}
+[data-previewer] [data-name="ZF_MODULE"] [data-option] {
+  /* Shared box: same height for bar and chips so they sit on one line */
+  height: 30px;
+  box-sizing: border-box;
+  margin: 0;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    width 240ms cubic-bezier(0.4, 0, 0.2, 1),
+    padding 240ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+/* Selected → expanded green bar reading "COLUMN n" */
+[data-previewer] [data-name="ZF_MODULE"] [data-option][data-selected="true"] {
+  padding: 0 16px;
+  color: var(--p-primary-contrast);
+  background: var(--p-primary);
+  border-color: var(--p-primary);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+[data-previewer]
+  [data-name="ZF_MODULE"]
+  [data-option][data-selected="true"]:hover {
+  background: var(--p-primary-dk);
+  border-color: var(--p-primary-dk);
+}
+/* "COLUMN " prefix fades + slides in as the bar expands */
+[data-previewer]
+  [data-name="ZF_MODULE"]
+  [data-option][data-selected="true"]::before {
+  content: "COLUMN ";
+  display: inline-block;
+  animation: columnLabelIn 280ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+/* Unselected → small round number chip */
+[data-previewer]
+  [data-name="ZF_MODULE"]
+  [data-option]:not([data-selected="true"]) {
+  width: 30px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  color: var(--p-text-sec);
+  background: none;
+  border: 1px solid var(--p-divider);
+}
+[data-previewer]
+  [data-name="ZF_MODULE"]
+  [data-option]:not([data-selected="true"]):hover {
+  background: var(--p-hover);
+  border-color: var(--p-text-sec);
+  color: var(--p-text);
+  transform: scale(1.08);
+}
+
+@keyframes columnLabelIn {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── CIRCLE combo: tall rounded image cards ───────────────────── */
+[data-previewer] [data-combo-type="circle"] {
+  padding: 0;
+  width: 64px;
+  aspect-ratio: 3 / 4;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: var(--p-radius);
+  background: var(--p-hover);
+}
+[data-previewer] [data-combo-type="circle"]:hover {
+  border-color: var(--p-divider);
+  background: var(--p-hover);
+}
+[data-previewer] [data-combo-type="circle"][data-selected="true"] {
+  border-color: var(--p-primary);
+  background: var(--p-bg);
 }
 [data-previewer] [data-combo-type="circle"] [data-combo-image] {
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--p-radius);
 }
 
 /* ── Mobile (layout="mobile" or below the responsive breakpoint) ── */
@@ -426,10 +584,8 @@
   margin-right: -16px;
 }
 
-/* Nested tab group (a child section's tab strip) gets the same divider line
-   as a nested section on desktop */
+/* Nested tab group (a child section's tab strip) — spacing only, no divider */
 [data-previewer][data-layout="mobile"] [data-tab-panel] [data-tab-group] {
-  border-top: 1px solid var(--p-divider);
   padding-top: 10px;
   margin-bottom: 10px;
 }
@@ -442,11 +598,13 @@
   width: 100%;
 }
 
-/* Slider in mobile: drop the label grid, go full width (label is hidden) */
+/* Slider in mobile: stack label on top, slider takes full width */
 [data-previewer][data-layout="mobile"]
   [data-type="FIELD"]:has([data-slider-wrapper]) {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
 }
 [data-previewer][data-layout="mobile"]
   [data-type="FIELD"]:has([data-slider-wrapper])
