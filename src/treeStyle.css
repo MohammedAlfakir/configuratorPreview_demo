@@ -1,0 +1,264 @@
+/* =========================================================================
+@oak-some/catalog-tree — theme matching the app explorer (dark navy panel)
+Drop-in stylesheet. Import once: import "./catalog-tree.css";
+Targets the DOM the package renders — no package upgrade needed.
+
+Rendered structure:
+ul[data-catalog-tree]
+li[data-type][data-depth][data-open][data-selected]
+button
+span <- label (always) — icon injected via ::before
+span <- ▾/▸ toggle (catalog/category) OR "v1.0.0" (configurator)
+ul ... <- nested children
+
+Look: navy panel, grey folder/file icons, chevron on the LEFT, light text,
+version pill, full-width row dividers, indigo selected row.
+========================================================================= */
+
+ul[data-catalog-tree] {
+  /* ---- tokens (override any to re-skin) ---- */
+  --ct-font:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", ui-sans-serif, system-ui,
+    sans-serif;
+  --ct-fs: 15px;
+  --ct-indent: 20px; /* px added per nesting level */
+  --ct-pad-x: 16px; /* left/right padding of a row */
+  --ct-pad-y: 13px; /* top/bottom padding of a row */
+  --ct-radius: 10px; /* panel corner radius */
+
+  --ct-panel-bg: #ffffff;
+  --ct-text: #2f2b3d;
+  --ct-text-secondary: #6b7280;
+  --ct-icon: #9ca3af; /* muted grey folder / file icons */
+  --ct-chevron: #9ca3af;
+  --ct-divider: #e5e7eb;
+  --ct-hover: #f3f4f6;
+
+  --ct-selected-bg: rgba(0, 0, 0, 0.06);
+  --ct-selected-text: #1f2937;
+
+  --ct-version-bg: #f3f4f6;
+  --ct-version-text: #6b7280;
+
+  font-family: var(--ct-font);
+  font-size: var(--ct-fs);
+  color: var(--ct-text);
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--ct-panel-bg);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius);
+  overflow: hidden; /* clip row hover/selection to the rounded panel */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* lists are full width — indentation is done on the button (keeps dividers full width) */
+ul[data-catalog-tree] ul {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+}
+ul[data-catalog-tree] li {
+  list-style: none;
+}
+ul[data-catalog-tree] li[data-open="false"] > ul {
+  display: none;
+}
+
+/* ---- depth → indent step (read by the calc below) ---- */
+ul[data-catalog-tree] li[data-depth="0"] > button {
+  --ct-d: 0;
+}
+ul[data-catalog-tree] li[data-depth="1"] > button {
+  --ct-d: 1;
+}
+ul[data-catalog-tree] li[data-depth="2"] > button {
+  --ct-d: 2;
+}
+ul[data-catalog-tree] li[data-depth="3"] > button {
+  --ct-d: 3;
+}
+ul[data-catalog-tree] li[data-depth="4"] > button {
+  --ct-d: 4;
+}
+ul[data-catalog-tree] li[data-depth="5"] > button {
+  --ct-d: 5;
+}
+ul[data-catalog-tree] li[data-depth="6"] > button {
+  --ct-d: 6;
+}
+ul[data-catalog-tree] li[data-depth="7"] > button {
+  --ct-d: 7;
+}
+ul[data-catalog-tree] li[data-depth="8"] > button {
+  --ct-d: 8;
+}
+
+/* ---- the row (reset native <button>) ---- */
+ul[data-catalog-tree] button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  /* base + per-depth indent + extra for leaves (to clear the chevron column) */
+  padding: var(--ct-pad-y) var(--ct-pad-x) var(--ct-pad-y)
+    calc(
+      var(--ct-pad-x) + var(--ct-d, 0) * var(--ct-indent) + var(--ct-extra, 0px)
+    );
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--ct-divider);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background-color 0.12s ease;
+}
+ul[data-catalog-tree] button:hover {
+  background-color: var(--ct-hover);
+}
+ul[data-catalog-tree] button:focus-visible {
+  outline: 2px solid var(--ct-selected-text);
+  outline-offset: -2px;
+}
+
+/* ---- label = first span (holds the icon via ::before) ---- */
+ul[data-catalog-tree] button > span:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+ul[data-catalog-tree] button > span:first-child::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  background-color: var(--ct-icon);
+  -webkit-mask: var(--ct-glyph) center / contain no-repeat;
+  mask: var(--ct-glyph) center / contain no-repeat;
+}
+
+/* folder icon for catalog + category, file icon for configurator (filled, MUI-style) */
+ul[data-catalog-tree] li[data-type="CATALOG"] > button > span:first-child {
+  --ct-glyph: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2'><path d='M5.5%2C18 C4.11928813%2C18 3%2C19.1192881 3%2C20.5 C3%2C21.8807119 4.11928813%2C23 5.5%2C23 L22%2C23 M3%2C20.5 L3%2C3.5 C3%2C2.11928813 4.11928813%2C1 5.5%2C1 L21%2C1 L21%2C18.0073514 L5.49217286%2C18.0073514 M20.5%2C18 C19.1192881%2C18 18%2C19.1192881 18%2C20.5 C18%2C21.8807119 19.1192881%2C23 20.5%2C23 L20.5%2C23'/></svg>");
+}
+ul[data-catalog-tree] li[data-type="CATEGORY"] > button > span:first-child {
+  --ct-glyph: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'><path d='M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z'/></svg>");
+}
+ul[data-catalog-tree] li[data-type="CONFIGURATOR"] > button > span:first-child {
+  --ct-glyph: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'><path d='M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z'/></svg>");
+}
+
+/* leaves have no chevron — indent a bit more so their icon clears the chevron column */
+ul[data-catalog-tree] li[data-type="CONFIGURATOR"] > button {
+  --ct-extra: 28px;
+}
+
+/* ---- chevron on the LEFT (catalog/category 2nd span = ▾/▸, glyph hidden) ---- */
+ul[data-catalog-tree] li[data-type="CATALOG"] > button > span:nth-child(2),
+ul[data-catalog-tree] li[data-type="CATEGORY"] > button > span:nth-child(2) {
+  order: -1; /* move before the label */
+  flex: 0 0 auto;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  font-size: 0; /* hide the ▾ / ▸ text glyph */
+}
+ul[data-catalog-tree]
+  li[data-type="CATALOG"]
+  > button
+  > span:nth-child(2)::before,
+ul[data-catalog-tree]
+  li[data-type="CATEGORY"]
+  > button
+  > span:nth-child(2)::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--ct-chevron);
+  border-bottom: 2px solid var(--ct-chevron);
+  /* expanded → point UP (matches the app) */
+  transform: translate(-50%, -30%) rotate(225deg);
+}
+/* collapsed → point DOWN */
+ul[data-catalog-tree]
+  li[data-type="CATALOG"][data-open="false"]
+  > button
+  > span:nth-child(2)::before,
+ul[data-catalog-tree]
+  li[data-type="CATEGORY"][data-open="false"]
+  > button
+  > span:nth-child(2)::before {
+  transform: translate(-50%, -70%) rotate(45deg);
+}
+
+/* ---- version pill (configurator 2nd span) ---- */
+ul[data-catalog-tree]
+  li[data-type="CONFIGURATOR"]
+  > button
+  > span:nth-child(2) {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 11px;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: var(--ct-version-bg);
+  color: var(--ct-version-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- selected configurator ---- */
+ul[data-catalog-tree]
+  li[data-type="CONFIGURATOR"][data-selected="true"]
+  > button,
+ul[data-catalog-tree]
+  li[data-type="CONFIGURATOR"][data-selected="true"]
+  > button:hover {
+  background: var(--ct-selected-bg);
+}
+ul[data-catalog-tree]
+  li[data-type="CONFIGURATOR"][data-selected="true"]
+  > button
+  > span:first-child {
+  color: var(--ct-selected-text);
+  font-weight: 600;
+}
+ul[data-catalog-tree]
+  li[data-type="CONFIGURATOR"][data-selected="true"]
+  > button
+  > span:first-child::before {
+  background-color: var(
+    --ct-selected-text
+  ); /* icon adopts the selected color */
+}
+
+/* ---- status states (loading / error / empty) ---- */
+ul[data-catalog-tree] ~ [data-state],
+[data-state] {
+  display: block;
+  padding: 14px 16px;
+  font-family: var(--ct-font, system-ui, sans-serif);
+  font-size: 13px;
+  color: var(--ct-text-secondary, #6b7280);
+}
+[data-state="error"] {
+  color: #ff7074;
+}
+[data-state="empty"] {
+  font-style: italic;
+}

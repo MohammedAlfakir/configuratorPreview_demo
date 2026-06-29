@@ -1,97 +1,136 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ConfiguratorPreviewDialog } from "@oak-some/configurator-previewer";
+import { CatalogTree } from "@oak-some/catalog-tree";
 
-const CONFIGS = [
-  {
-    label: "Shape_U_V05-v1.0.0",
-    value: "/Shape_U_V05-v1.0.0.json",
-  },
-  {
-    label: "Shape CMB V02",
-    value: "/Shape_CMB_V02-v1.0.0.json",
-  },
-  { label: "Shape U", value: "/shapeU-v1.0.0.json" },
-  { label: "Shape CMB", value: "/shapeCMB-v1.0.0.json" },
-  { label: "Configurator", value: "/configurator-v1.0.0.json" },
+const CATALOG_API_URL =
+  "https://backend.tecnibo.com/digitalfactory/oaksome-api/api/articles/tree";
 
-  {
-    label: "Shape_F_V07-v1.0.0",
-    value: "/Shape_F_V07-v1.0.0.json",
-  },
-];
+const exportUrl = id =>
+  `https://backend.tecnibo.com/digitalfactory/oaksome-api/api/configurator/${id}/export`;
 
 function App() {
-  const [selected, setSelected] = useState(CONFIGS[0].value);
+  const [selectedId, setSelectedId] = useState(null);
+  const [configurator, setConfigurator] = useState(null);
+  const [status, setStatus] = useState("idle"); // idle | loading | error
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (selectedId == null) return;
+
+    let cancelled = false;
+    setStatus("loading");
+    setError(null);
+    setConfigurator(null);
+
+    fetch(exportUrl(selectedId))
+      .then(async res => {
+        if (!res.ok) {
+          throw new Error(`Export failed (${res.status})`);
+        }
+        return res.json();
+      })
+      .then(json => {
+        if (cancelled) return;
+        // Endpoint returns { message, data: { configurator, sources } }.
+        // `data` is the ExportedConfigurator object the previewer expects.
+        setConfigurator(json.data);
+        setStatus("idle");
+      })
+      .catch(err => {
+        if (cancelled) return;
+        setError(err.message || "Failed to load configurator");
+        setStatus("error");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedId]);
 
   return (
-    <>
-      <div
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      {/* Sidebar */}
+      <aside
         style={{
-          position: "fixed",
-          bottom: 16,
-          right: 16,
-          zIndex: 9999,
-          display: "flex",
-          gap: 8,
-          background: "rgba(255,255,255,0.95)",
-          border: "1px solid #e2e8f0",
-          borderRadius: 10,
-          padding: "8px 12px",
-          boxShadow: "0 2px 12px rgba(0,0,0,0.12)",
-          alignItems: "center",
+          width: 300,
+          flexShrink: 0,
+          borderRight: "1px solid #e2e8f0",
+          overflowY: "auto",
+          padding: 16,
+          background: "#fafafa",
         }}
       >
-        <span
+        <h2
           style={{
-            fontSize: 12,
+            fontSize: 13,
             fontWeight: 600,
             color: "#64748b",
-            marginRight: 4,
+            textTransform: "uppercase",
+            letterSpacing: 0.5,
+            margin: "0 0 12px",
           }}
         >
-          Configurator
-        </span>
-        {CONFIGS.map(cfg => (
-          <button
-            key={cfg.value}
-            onClick={() => setSelected(cfg.value)}
-            style={{
-              padding: "5px 12px",
-              borderRadius: 6,
-              border: "none",
-              cursor: "pointer",
-              fontSize: 13,
-              fontWeight: selected === cfg.value ? 600 : 400,
-              background: selected === cfg.value ? "#0f172a" : "#f1f5f9",
-              color: selected === cfg.value ? "#fff" : "#475569",
-              transition: "all 0.15s",
-            }}
-          >
-            {cfg.label}
-          </button>
-        ))}
-      </div>
+          Catalog
+        </h2>
+        <CatalogTree
+          apiUrl={CATALOG_API_URL}
+          onSelect={id => setSelectedId(id)}
+          styles={{
+            root: {
+              style: { fontSize: 14, listStyle: "none", padding: 0, margin: 0 },
+            },
+            row: { style: { padding: "6px 8px" } },
+            catalog: { style: { fontWeight: 700, color: "#1d4ed8" } },
+            category: { style: { color: "#475569" } },
+            configurator: { style: { color: "#0f172a", borderRadius: 6 } },
+            selected: { style: { background: "#e0f2fe", fontWeight: 600 } },
+            version: {
+              style: { marginLeft: 6, fontSize: 11, color: "#94a3b8" },
+            },
+            toggle: { style: { marginLeft: "auto", opacity: 0.5 } },
+            children: { style: { paddingLeft: 16, listStyle: "none" } },
+          }}
+        />
+      </aside>
 
-      <ConfiguratorPreviewDialog
-        key={selected}
-        configuratorJson={selected}
-        imagePrefix="https://imagedelivery.net/aYYmWUcv7lRhpLdU4ojPsA/"
-        // imageSuffix="/public"
-        onVariableSetChange={vars => {
-          console.log("impactedVariables:", vars);
-        }}
-        onLabelSetChange={labels => {
-          console.log("labels:", labels);
-        }}
-        onNameSetChange={names => {
-          console.log("names:", names);
-        }}
-        onGoToZone={zone => {
-          console.log("goToZone:", zone);
-        }}
-        layout="desktop"
-      />
-    </>
+      {/* Preview */}
+      <main style={{ flex: 1, overflowY: "auto", padding: 24 }}>
+        {selectedId == null && (
+          <p style={{ color: "#94a3b8" }}>
+            Select a configurator from the catalog to preview it.
+          </p>
+        )}
+
+        {status === "loading" && (
+          <p style={{ color: "#64748b" }}>Loading configurator…</p>
+        )}
+
+        {status === "error" && (
+          <p style={{ color: "#dc2626" }}>Error: {error}</p>
+        )}
+
+        {configurator && status === "idle" && (
+          <ConfiguratorPreviewDialog
+            key={selectedId}
+            configuratorJson={configurator}
+            imagePrefix="https://imagedelivery.net/aYYmWUcv7lRhpLdU4ojPsA/"
+            onVariableSetChange={vars => {
+              console.log("impactedVariables:", vars);
+            }}
+            onLabelSetChange={labels => {
+              console.log("labels:", labels);
+            }}
+            onGoToZone={zone => {
+              console.log("goToZone:", zone);
+            }}
+            onNameSetChange={names => {
+              console.log("names:", names);
+            }}
+            layout="desktop"
+          />
+        )}
+      </main>
+    </div>
   );
 }
 

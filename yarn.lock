@@ -1277,7 +1277,7 @@
   resolved "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.9.0.tgz"
   integrity sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ==
 
-"@emotion/react@^11.0.0", "@emotion/react@^11.0.0-rc.0", "@emotion/react@^11.14.0", "@emotion/react@^11.4.1", "@emotion/react@^11.5.0":
+"@emotion/react@^11.0.0-rc.0", "@emotion/react@^11.14.0", "@emotion/react@^11.4.1", "@emotion/react@^11.5.0":
   version "11.14.0"
   resolved "https://registry.npmjs.org/@emotion/react/-/react-11.14.0.tgz"
   integrity sha512-O000MLDBDdk/EohJPFUqvnp4qnHeYkVP5B0xEG0D/L7cOKP9kefu2DXn8dj74cQfsEzUqh+sr1RzFqiL1o+PpA==
@@ -1307,7 +1307,7 @@
   resolved "https://registry.npmjs.org/@emotion/sheet/-/sheet-1.4.0.tgz"
   integrity sha512-fTBW9/8r2w3dXWYM4HCB1Rdp8NLibOw2+XELH5m5+AkWiL/KqYX6dc0kKYlaYyKjrQ6ds33MCdMPEwgs2z1rqg==
 
-"@emotion/styled@^11.0.0", "@emotion/styled@^11.14.1", "@emotion/styled@^11.3.0":
+"@emotion/styled@^11.14.1", "@emotion/styled@^11.3.0":
   version "11.14.1"
   resolved "https://registry.npmjs.org/@emotion/styled/-/styled-11.14.1.tgz"
   integrity sha512-qEEJt42DuToa3gurlH4Qqc1kVpNq8wO8cJtDzU46TjlzWjDlsVyevtYCRijVq3SrHsROS+gVQ8Fnea108GnKzw==
@@ -1783,10 +1783,15 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oak-some/configurator-previewer@^1.10.1":
-  version "1.10.1"
-  resolved "https://npm.pkg.github.com/download/@oak-some/configurator-previewer/1.10.1/c7b965a39fd165072d0cd5bff829a6b37bfb5ee2"
-  integrity sha512-moNiD+Dx6NWXWA7s9w3uM4mRCFb28dg8d0qmFf1n2P/fSu9D6Ix8JpV66WUWo7k8wCxKSAYzFAjbG4FrDZqXMg==
+"@oak-some/catalog-tree@^1.2.2":
+  version "1.2.2"
+  resolved "https://npm.pkg.github.com/download/@oak-some/catalog-tree/1.2.2/6832849a72873bbf787b6d04d48e69fc38a52717"
+  integrity sha512-2WeV4K1IW+RgzQ3LI8DJJzHFt2pKONUXSoJhIWR+RSCZLsjjeF2vKqibyTuTd6V7qpE/BE0rRnLiplYj4RmY1A==
+
+"@oak-some/configurator-previewer@^1.10.2":
+  version "1.10.2"
+  resolved "https://npm.pkg.github.com/download/@oak-some/configurator-previewer/1.10.2/a1c6ade8150a09a9b3a3876c362e9fcf8844d697"
+  integrity sha512-vvCIWhU85J24ZCzqX7NrwBaJcTDZ/5b6nbAGk5tOqW/cQ2uxpNkEiouFdvzKMlfcQn/x6O8s4yoB9gwhTIBT5g==
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.17"
@@ -3564,11 +3569,6 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
-
-configurator-previewer@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.npmjs.org/configurator-previewer/-/configurator-previewer-1.0.16.tgz"
-  integrity sha512-R45REK8AOlh4GoESxWmM/tuChuD4Hc+bcMQ56DD55+do3DsdlM+XCLRigBq9x2bi4e0L74qubbkpcbzoMYZy2Q==
 
 confusing-browser-globals@^1.0.11:
   version "1.0.11"
