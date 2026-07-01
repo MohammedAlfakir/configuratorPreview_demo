@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import { ConfiguratorPreviewDialog } from "@oak-some/configurator-previewer";
+import * as Prev from "@oak-some/configurator-previewer";
 import { CatalogTree } from "@oak-some/catalog-tree";
+
+// Build fingerprint: confirms whether the running bundle is 1.10.3+ (with the
+// initialValues pin) or a stale older build. Check this in the browser console.
+console.log(
+  "PREVIEWER BUILD:",
+  Object.keys(Prev).includes("nameSetToIdValues")
+    ? "1.10.3+ (pin active)"
+    : "OLD (no pin — stale bundle)",
+  "| exports:",
+  Object.keys(Prev),
+);
 
 const CATALOG_API_URL =
   "https://backend.tecnibo.com/digitalfactory/oaksome-api/api/articles/tree";
@@ -10,6 +22,53 @@ const exportUrl = id =>
 
 // localStorage key for a configurator's saved field values, e.g. id 158 -> "configurator-preset-158".
 const presetKey = id => `configurator-preset-${id}`;
+
+// --- Console capture ---------------------------------------------------------
+// Mirror every console.{log,warn,error,info,debug} call into an in-memory buffer
+// so we can dump the full session (including the previewer's internal logs) to a
+// file. Patched once at module load, before React mounts.
+const LOG_BUFFER = [];
+const safeStringify = arg => {
+  if (typeof arg === "string") return arg;
+  if (arg instanceof Error) return arg.stack || arg.message;
+  try {
+    return JSON.stringify(
+      arg,
+      (_k, v) => (typeof v === "bigint" ? v.toString() : v),
+      2,
+    );
+  } catch {
+    return String(arg); // circular / non-serializable
+  }
+};
+(function patchConsole() {
+  if (typeof window === "undefined" || window.__logCapturePatched) return;
+  window.__logCapturePatched = true;
+  ["log", "info", "warn", "error", "debug"].forEach(level => {
+    const original = console[level].bind(console);
+    console[level] = (...args) => {
+      LOG_BUFFER.push({
+        level,
+        // ISO-ish local timestamp without pulling in a date lib.
+        t: new Date().toISOString(),
+        msg: args.map(safeStringify).join(" "),
+      });
+      original(...args);
+    };
+  });
+})();
+
+// Top-level section names the previewer's NameSet will use, derived from the export.
+// The single root "CONFIGURATOR" structural wrapper is unwrapped — so the effective
+// top-level keys are that wrapper's children (matches how onNameSetChange emits).
+const liveTopSectionNames = exported => {
+  const items = exported?.configurator?.items ?? [];
+  const roots =
+    items.length === 1 && (items[0].children?.length ?? 0) > 0
+      ? items[0].children
+      : items;
+  return roots.map(it => it.name);
+};
 
 function App() {
   const [selectedId, setSelectedId] = useState(null);
@@ -28,6 +87,8 @@ function App() {
   const [seedNonce, setSeedNonce] = useState(0);
   // Transient confirmation text, e.g. "Saved ✓".
   const [toast, setToast] = useState(null);
+  // Diagnostic: warns when a loaded preset's section keys don't match the live config.
+  const [seedMismatch, setSeedMismatch] = useState(null);
 
   useEffect(() => {
     if (selectedId == null) return;
@@ -39,6 +100,7 @@ function App() {
     setLiveNames(null);
     // New config: don't seed until the user clicks Load.
     setSeedValues(null);
+    setSeedMismatch(null);
     setToast(null);
 
     fetch(exportUrl(selectedId))
@@ -103,7 +165,26 @@ function App() {
     try {
       const raw = localStorage.getItem(presetKey(selectedId));
       if (raw == null) return;
-      setSeedValues(JSON.parse(raw));
+      const parsed = JSON.parse(raw);
+
+      // Diagnostic: do the saved preset's top-level section keys match the live config?
+      const savedKeys = Object.keys(parsed ?? {});
+      const liveKeys = liveTopSectionNames(configurator);
+      const overlap = savedKeys.filter(k => liveKeys.includes(k));
+      console.log("PROP initialValues:", parsed);
+      console.log("saved top sections:", savedKeys);
+      console.log("live top sections:", liveKeys);
+      console.log("overlapping sections:", overlap);
+      if (savedKeys.length && overlap.length === 0) {
+        setSeedMismatch({ savedKeys, liveKeys });
+        console.warn(
+          "Preset section names do NOT match this configurator — nothing will seed.",
+        );
+      } else {
+        setSeedMismatch(null);
+      }
+
+      setSeedValues(parsed);
       setSeedNonce(n => n + 1); // force remount -> initialValues is re-read
       setToast("Loaded ✓");
     } catch (e) {
@@ -122,8 +203,63 @@ function App() {
     }
     setHasSavedPreset(false);
     setSeedValues(null);
+    setSeedMismatch(null);
     setSeedNonce(n => n + 1); // remount with no initialValues -> back to export defaults
     setToast("Cleared ✓");
+  };
+
+  // Dump the full captured console buffer (+ current snapshot) to a downloaded file.
+  const saveLogs = () => {
+    const header = [
+      `# Configurator preview — session logs`,
+      `Generated: ${new Date().toISOString()}`,
+      `Selected configurator id: ${selectedId ?? "(none)"}`,
+      `Status: ${status}`,
+      `Has saved preset: ${hasSavedPreset}`,
+      `Seed mismatch: ${seedMismatch ? "YES" : "no"}`,
+      ``,
+      `--- Snapshot ---`,
+      `liveNames (current NameSet emitted by previewer):`,
+      liveNames ? safeStringify(liveNames) : "(none yet)",
+      ``,
+      `seedValues (initialValues passed to previewer):`,
+      seedValues ? safeStringify(seedValues) : "(none — not loaded)",
+      ``,
+      selectedId != null
+        ? (() => {
+            try {
+              const raw = localStorage.getItem(presetKey(selectedId));
+              return `localStorage["${presetKey(selectedId)}"]:\n${raw ?? "(empty)"}`;
+            } catch (e) {
+              return `localStorage read failed: ${e}`;
+            }
+          })()
+        : `localStorage: (no configurator selected)`,
+      ``,
+      `--- Console log (${LOG_BUFFER.length} entries) ---`,
+      ``,
+    ].join("\n");
+
+    const body = LOG_BUFFER.map(
+      e => `[${e.t}] ${e.level.toUpperCase()}: ${e.msg}`,
+    ).join("\n");
+
+    const text = header + body + "\n";
+    try {
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `configurator-logs-${selectedId ?? "session"}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setToast("Logs saved ✓");
+    } catch (e) {
+      console.error("Saving logs failed:", e);
+      setToast("Log save failed");
+    }
   };
 
   return (
@@ -249,6 +385,20 @@ function App() {
               >
                 Clear saved
               </button>
+              <button
+                onClick={saveLogs}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: 6,
+                  border: "1px solid #2563eb",
+                  cursor: "pointer",
+                  background: "#eff6ff",
+                  color: "#1d4ed8",
+                  fontSize: 13,
+                }}
+              >
+                Save logs
+              </button>
               <span style={{ fontSize: 12, color: "#64748b" }}>
                 {hasSavedPreset
                   ? `Saved preset exists for #${selectedId}.`
@@ -262,6 +412,33 @@ function App() {
                 </span>
               )}
             </div>
+
+            {seedMismatch && (
+              <div
+                style={{
+                  marginBottom: 16,
+                  padding: "10px 12px",
+                  background: "#fef2f2",
+                  border: "1px solid #fecaca",
+                  borderRadius: 8,
+                  fontSize: 12,
+                  color: "#991b1b",
+                  lineHeight: 1.5,
+                }}
+              >
+                <strong>Preset doesn’t match this configurator.</strong> The
+                saved values won’t seed — none of their section names exist in
+                this config.
+                <br />
+                Saved sections: {seedMismatch.savedKeys.join(", ") || "(none)"}
+                <br />
+                This config’s sections: {seedMismatch.liveKeys.join(", ")}
+                <br />
+                Fix: <em>Clear saved</em>, change a field, <em>Save</em>, then{" "}
+                <em>Load my data</em> — don’t reuse a preset from another
+                configurator.
+              </div>
+            )}
 
             <ConfiguratorPreviewDialog
               // Remount on config change OR after Load/Clear, so initialValues re-seeds.
