@@ -326,17 +326,21 @@ function App() {
 
         {configurator && status === "idle" && (
           <>
-            {/* Save / restore controls */}
+            {/* Save / restore controls — fixed bottom-right, compact */}
             <div
               style={{
-                display: "flex",
+                position: "fixed",
+                bottom: 24,
+                right: 24,
+                zIndex: 50,
+                display: "inline-flex",
                 gap: 8,
                 alignItems: "center",
-                marginBottom: 16,
                 padding: "8px 12px",
                 background: "#f8fafc",
                 border: "1px solid #e2e8f0",
                 borderRadius: 8,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
               }}
             >
               <button
