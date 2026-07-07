@@ -182,11 +182,22 @@
 [data-previewer]
   [data-type="FIELD"]:has([data-slider-wrapper])
   [data-field-label] {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-weight: 600;
   color: var(--p-text);
   white-space: nowrap;
+  min-width: 0;
+}
+/* Only the text ellipsizes when cramped — the info icon must never be clipped */
+[data-previewer]
+  [data-type="FIELD"]:has([data-slider-wrapper])
+  [data-field-label]
+  [data-field-label-text] {
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 [data-previewer]
   [data-type="FIELD"]:has([data-slider-wrapper])
@@ -196,16 +207,77 @@
 }
 
 [data-previewer] [data-field-label] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--p-font);
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--p-text-sec);
   line-height: 1.4;
 }
+/* labelTop fields: label sits on its own line above the control */
+[data-previewer] [data-field-label][data-label-top="true"] {
+  display: flex;
+}
 
 [data-previewer] [data-field-control] {
   display: flex;
   align-items: center;
+}
+
+/* ── Field info tooltip ───────────────────────────────────────── */
+[data-previewer] [data-field-info] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+[data-previewer] [data-field-info-icon] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 15px;
+  height: 15px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  color: #000000;
+  background: transparent;
+  border: 1.5px solid #000000;
+  border-radius: 50%;
+  cursor: help;
+  user-select: none;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+[data-previewer] [data-field-info-icon]:hover {
+  color: #ffffff;
+  background: #000000;
+  border-color: #000000;
+}
+/* Tooltip is rendered position: fixed by the package (top/left set inline);
+   these are cosmetics only. Not scoped under [data-previewer] on purpose. */
+[data-field-info-tooltip] {
+  z-index: 2147483647;
+  max-width: 260px;
+  width: max-content;
+  padding: 6px 9px;
+  font-family: var(--p-font);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--p-bg);
+  background: var(--p-text);
+  border-radius: var(--p-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  white-space: normal;
+  pointer-events: none;
 }
 
 [data-previewer] [data-no-options] {
