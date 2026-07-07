@@ -1788,10 +1788,10 @@
   resolved "https://npm.pkg.github.com/download/@oak-some/catalog-tree/1.2.2/6832849a72873bbf787b6d04d48e69fc38a52717"
   integrity sha512-2WeV4K1IW+RgzQ3LI8DJJzHFt2pKONUXSoJhIWR+RSCZLsjjeF2vKqibyTuTd6V7qpE/BE0rRnLiplYj4RmY1A==
 
-"@oak-some/configurator-previewer@^1.13.1":
-  version "1.13.1"
-  resolved "https://npm.pkg.github.com/download/@oak-some/configurator-previewer/1.13.1/fe53207a849aa142ee3666b71ace0ba958206174"
-  integrity sha512-bKlQZpVoLgRP/7eEKXIC7JgmSIUmg5PDbbtYs2+gwAX/IZSPS4OYknb7pa/Y51hjRAtCQruquVVK+4ZsQ4Wx6g==
+"@oak-some/configurator-previewer@^1.13.2":
+  version "1.13.2"
+  resolved "https://npm.pkg.github.com/download/@oak-some/configurator-previewer/1.13.2/ab2362154a16a2f8454819fff1d1c7923321f56b"
+  integrity sha512-lZu2vTMekZ8b5ZRbKFUNPtfuEDHbN96puU+sS6n4qOVNzGP5J4MfVrrKOIF+DY0AWHy55+9vluozltauC2h9oA==
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.17"

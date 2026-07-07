@@ -1,7 +1,8 @@
 /* ─────────────────────────────────────────────────────────────────
    @oak-some/configurator-previewer — standalone stylesheet
    No framework required. Re-map the tokens below to your brand.
-   Theme: GREEN (#c1fd48). Requires previewer ≥ 1.10.0 for the slider stepper.
+   Theme: GREEN (#c1fd48). Requires previewer ≥ 1.10.0 for the slider stepper,
+   ≥ 1.13.2 for the field/tab info affordance (tap-to-open on mobile).
 ───────────────────────────────────────────────────────────────── */
 
 /* ── Tokens ───────────────────────────────────────────────────── */
@@ -89,6 +90,9 @@
 
 /* Square, flush, uppercase tabs */
 [data-previewer] [data-tab] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 10px 20px;
   font-family: var(--p-font);
   font-size: 0.75rem;
@@ -113,6 +117,24 @@
   color: var(--p-primary-contrast);
   background: var(--p-primary);
   font-weight: 600;
+}
+/* Info icon on a tab: inherit the tab's text color so it reads on idle and
+   active tabs alike; undo the tab's uppercase so the italic "i" isn't "I" */
+[data-previewer] [data-tab] [data-field-info-icon] {
+  color: currentColor;
+  border-color: currentColor;
+  letter-spacing: 0;
+  text-transform: none;
+}
+[data-previewer] [data-tab] [data-field-info-icon]:hover {
+  color: var(--p-bg);
+  background: var(--p-text);
+  border-color: var(--p-text);
+}
+[data-previewer] [data-tab][data-active="true"] [data-field-info-icon]:hover {
+  color: var(--p-primary);
+  background: var(--p-primary-contrast);
+  border-color: var(--p-primary-contrast);
 }
 
 /* Tab panel side padding; nested TAB sections bleed back to the edge
@@ -265,7 +287,8 @@
    these are cosmetics only. Not scoped under [data-previewer] on purpose. */
 [data-field-info-tooltip] {
   z-index: 2147483647;
-  max-width: 260px;
+  /* Never exceed the viewport on narrow (mobile) screens */
+  max-width: min(260px, calc(100vw - 16px));
   width: max-content;
   padding: 6px 9px;
   font-family: var(--p-font);
@@ -677,4 +700,17 @@
   [data-type="FIELD"]:has([data-slider-wrapper])
   [data-field-control] {
   width: 100%;
+}
+/* Slider label stacks on its own row on mobile — keep the icon inline with the
+   text (the desktop grid alignment no longer applies) */
+[data-previewer][data-layout="mobile"]
+  [data-type="FIELD"]:has([data-slider-wrapper])
+  [data-field-label] {
+  justify-content: flex-start;
+}
+/* Info icon on a mobile tab: the tab strip scrolls horizontally, so keep the
+   icon from being squeezed. On mobile the tooltip is tap-only (the package
+   disables hover in mobile layout). */
+[data-previewer][data-layout="mobile"] [data-tab] [data-field-info-icon] {
+  flex: none;
 }
