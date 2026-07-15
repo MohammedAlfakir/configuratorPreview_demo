@@ -451,19 +451,19 @@ function App() {
               imagePrefix="https://imagedelivery.net/aYYmWUcv7lRhpLdU4ojPsA/"
               // null until "Load my data" is clicked — explicitly simulates entering a saved config.
               initialValues={seedValues ?? undefined}
-              onVariableSetChange={vars => {
-                console.log("impactedVariables:", vars);
-              }}
-              onLabelSetChange={labels => {
-                console.log("labels:", labels);
-              }}
+              // onVariableSetChange={vars => {
+              //   console.log("impactedVariables:", vars);
+              // }}
+              // onLabelSetChange={labels => {
+              //   console.log("labels:", labels);
+              // }}
               onGoToZone={zone => {
                 console.log("goToZone:", zone);
               }}
-              onNameSetChange={names => {
-                console.log("names:", names);
-                setLiveNames(names);
-              }}
+              // onNameSetChange={names => {
+              //   console.log("names:", names);
+              //   setLiveNames(names);
+              // }}
               layout="desktop"
             />
           </>
