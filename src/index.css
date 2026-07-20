@@ -117,11 +117,90 @@
   flex-direction: column;
   gap: 12px;
 }
-/* Padding + divider are for the ACCORDION card body only — a plain (NONE) or tab
-   section body must stay flush with no separator line. */
-[data-previewer] [data-section-type="ACCORDION"] [data-section-body] {
+/* Padding + divider are for the ACCORDION card's OWN body only (direct child) — a
+   plain (NONE), row or tab section body must stay flush with no separator line,
+   even when nested inside an accordion. */
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body] {
   padding: 4px 16px 16px;
   border-top: 1px solid var(--p-divider);
+}
+
+/* ── ROW section ──────────────────────────────────────────────────
+   Lays its child fields out horizontally: each takes an equal share of the row
+   with equal gaps, wrapping when the row gets too narrow. The previewer wraps the
+   fields in a plain <div>, so the flex row lives on that wrapper. Fields use the
+   notched-outline "input top-left label" look (below). */
+[data-previewer] [data-section-type="ROW"] > [data-section-body] > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: start;
+}
+[data-previewer]
+  [data-section-type="ROW"]
+  > [data-section-body]
+  > div
+  > [data-type="FIELD"] {
+  flex: 1 1 0;
+  min-width: 140px;
+  margin-top: 0; /* cancel the vertical +FIELD stacking margin inside a row */
+}
+
+/* Notched-outline label: the label floats into the input's top border, top-left,
+   with a paper-colored backdrop that "cuts" the border like an outlined field. */
+[data-previewer] [data-section-type="ROW"] [data-type="FIELD"] {
+  position: relative;
+  gap: 0;
+  padding-top: 6px; /* room for the label to sit on the border line */
+}
+[data-previewer]
+  [data-section-type="ROW"]
+  [data-type="FIELD"]
+  [data-field-label] {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  z-index: 1;
+  padding: 0 5px;
+  background: var(--p-bg);
+  font-size: 0.72rem;
+  line-height: 1;
+  color: var(--p-text-sec);
+  pointer-events: none;
+  max-width: calc(100% - 24px);
+}
+[data-previewer]
+  [data-section-type="ROW"]
+  [data-type="FIELD"]
+  [data-field-label]
+  [data-field-label-text] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+/* Controls fill the field cell; a consistent radius so the notch reads correctly. */
+[data-previewer]
+  [data-section-type="ROW"]
+  [data-type="FIELD"]
+  [data-field-control] {
+  width: 100%;
+}
+[data-previewer]
+  [data-section-type="ROW"]
+  [data-type="FIELD"]
+  [data-field-control]
+  > * {
+  width: 100%;
+  border-radius: 8px;
+}
+/* When the field holds focus, tint the floating label to primary. */
+[data-previewer]
+  [data-section-type="ROW"]
+  [data-type="FIELD"]:focus-within
+  [data-field-label] {
+  color: var(--p-primary);
 }
 
 /* ── Tab bar (scrollable square tabs with arrows — desktop & mobile) ── */
