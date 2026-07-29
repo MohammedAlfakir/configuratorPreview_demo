@@ -58,16 +58,20 @@ const safeStringify = arg => {
   });
 })();
 
-// Top-level section names the previewer's NameSet will use, derived from the export.
-// The single root "CONFIGURATOR" structural wrapper is unwrapped — so the effective
-// top-level keys are that wrapper's children (matches how onNameSetChange emits).
-const liveTopSectionNames = exported => {
-  const items = exported?.configurator?.items ?? [];
-  const roots =
-    items.length === 1 && (items[0].children?.length ?? 0) > 0
-      ? items[0].children
-      : items;
-  return roots.map(it => it.name);
+// Every name in the export tree, at any depth. onNameSetChange emits a FLAT
+// NameSet keyed by leaf field name (ZF_HEIGHT, ZF_COL01_LAYOUT, …), not by the
+// top-level section wrappers (ZF_FORM, ZF_STYLER, …) — so a preset can only be
+// compared against the full recursive name list, never against the roots alone.
+const liveAllNames = exported => {
+  const out = [];
+  const walk = items => {
+    (items ?? []).forEach(it => {
+      if (it.name) out.push(it.name);
+      walk(it.children);
+    });
+  };
+  walk(exported?.configurator?.items);
+  return out;
 };
 
 function App() {
@@ -167,18 +171,21 @@ function App() {
       if (raw == null) return;
       const parsed = JSON.parse(raw);
 
-      // Diagnostic: do the saved preset's top-level section keys match the live config?
+      // Diagnostic: do the saved preset's field names exist anywhere in the live config?
       const savedKeys = Object.keys(parsed ?? {});
-      const liveKeys = liveTopSectionNames(configurator);
+      const liveKeys = liveAllNames(configurator);
       const overlap = savedKeys.filter(k => liveKeys.includes(k));
       console.log("PROP initialValues:", parsed);
-      console.log("saved top sections:", savedKeys);
-      console.log("live top sections:", liveKeys);
-      console.log("overlapping sections:", overlap);
+      console.log("saved field names:", savedKeys);
+      console.log("live field names:", liveKeys);
+      console.log(
+        `overlapping fields: ${overlap.length}/${savedKeys.length}`,
+        overlap,
+      );
       if (savedKeys.length && overlap.length === 0) {
         setSeedMismatch({ savedKeys, liveKeys });
         console.warn(
-          "Preset section names do NOT match this configurator — nothing will seed.",
+          "Preset field names do NOT match this configurator — nothing will seed.",
         );
       } else {
         setSeedMismatch(null);
@@ -431,12 +438,18 @@ function App() {
                 }}
               >
                 <strong>Preset doesn’t match this configurator.</strong> The
-                saved values won’t seed — none of their section names exist in
+                saved values won’t seed — none of their field names exist in
                 this config.
                 <br />
-                Saved sections: {seedMismatch.savedKeys.join(", ") || "(none)"}
+                Saved fields ({seedMismatch.savedKeys.length}):{" "}
+                {seedMismatch.savedKeys.slice(0, 12).join(", ") || "(none)"}
+                {seedMismatch.savedKeys.length > 12 &&
+                  ` … +${seedMismatch.savedKeys.length - 12} more`}
                 <br />
-                This config’s sections: {seedMismatch.liveKeys.join(", ")}
+                This config’s fields ({seedMismatch.liveKeys.length}):{" "}
+                {seedMismatch.liveKeys.slice(0, 12).join(", ")}
+                {seedMismatch.liveKeys.length > 12 &&
+                  ` … +${seedMismatch.liveKeys.length - 12} more`}
                 <br />
                 Fix: <em>Clear saved</em>, change a field, <em>Save</em>, then{" "}
                 <em>Load my data</em> — don’t reuse a preset from another
@@ -451,19 +464,19 @@ function App() {
               imagePrefix="https://imagedelivery.net/aYYmWUcv7lRhpLdU4ojPsA/"
               // null until "Load my data" is clicked — explicitly simulates entering a saved config.
               initialValues={seedValues ?? undefined}
-              // onVariableSetChange={vars => {
-              //   console.log("impactedVariables:", vars);
-              // }}
+              onVariableSetChange={vars => {
+                console.log("impactedVariables:", vars);
+              }}
               // onLabelSetChange={labels => {
               //   console.log("labels:", labels);
               // }}
               onGoToZone={zone => {
                 console.log("goToZone:", zone);
               }}
-              // onNameSetChange={names => {
-              //   console.log("names:", names);
-              //   setLiveNames(names);
-              // }}
+              onNameSetChange={names => {
+                console.log("names:", names);
+                setLiveNames(names);
+              }}
               layout="desktop"
             />
           </>
