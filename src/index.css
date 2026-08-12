@@ -686,6 +686,48 @@
   border-radius: var(--p-radius);
 }
 
+/* ── "Show more" toggle (fields with a `visibleOptions` cap) ─────
+   Requires previewer ≥ 1.20.0. Rendered as the last child of the option
+   row, so it shares the option buttons' box metrics and sits beside them;
+   the row is flex-wrap, so it drops to the next line by itself when there
+   is no room. Deliberately quieter than an option — dashed, unfilled,
+   secondary text — because it is a control rather than a choice and must
+   not read as a selectable value.
+   No `margin-left: auto` on purpose: it would apply on a wrapped line too
+   and strand the toggle at the far right, away from the last option. */
+[data-previewer] [data-show-more] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-family: var(--p-font);
+  font-size: 0.8125rem;
+  color: var(--p-text-sec);
+  background: transparent;
+  border: 1px dashed var(--p-divider);
+  border-radius: var(--p-radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 150ms,
+    border-color 150ms,
+    color 150ms;
+  margin: 2px;
+}
+[data-previewer] [data-show-more]:hover {
+  color: var(--p-text);
+  background: var(--p-hover);
+  border-color: var(--p-text-sec);
+}
+[data-previewer] [data-show-more]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary) 40%, transparent);
+}
+/* Expanded: solid border, since "Show less" collapses rather than reveals */
+[data-previewer] [data-show-more][data-expanded="true"] {
+  border-style: solid;
+}
+
 /* ── Column selector (ZF_MODULE field): selected = expanded "COLUMN n" bar,
    unselected = small round number chip — all on one aligned baseline ──── */
 [data-previewer] [data-name="ZF_MODULE"] [data-field-control] > div {
@@ -751,6 +793,13 @@
   transform: scale(1.08);
 }
 
+/* Match the column chips' fixed box so a capped ZF_MODULE keeps one baseline */
+[data-previewer] [data-name="ZF_MODULE"] [data-show-more] {
+  height: 30px;
+  box-sizing: border-box;
+  margin: 0;
+}
+
 @keyframes columnLabelIn {
   from {
     opacity: 0;
@@ -786,6 +835,16 @@
   height: 100%;
   object-fit: cover;
   /* border-radius: var(--p-radius); */
+}
+/* CIRCLE options are tall image cards, so a default-height toggle beside them
+   would float against their top edge. Match the card box and center the label. */
+[data-previewer] [data-combo-type="circle"] ~ [data-show-more] {
+  width: 64px;
+  aspect-ratio: 3 / 4;
+  padding: 6px;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
 }
 
 /* ── Mobile (layout="mobile" or below the responsive breakpoint) ── */
