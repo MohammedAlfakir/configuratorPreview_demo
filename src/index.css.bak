@@ -6,25 +6,25 @@
    `styles` prop — the previewer's own data-attributes are the whole
    styling surface.
 
-   Requires previewer >= 1.22.1.
+   Requires previewer >= 1.21.0.
 
    Drop-in:
-       import "./index.css";
+       import "./previewer-oaksome.css";
 
        <ConfiguratorPreviewDialog configuratorJson={...} />
        // pass NO `styles` prop — this file replaces it
 
-   Every colour comes from the Stoemp tokens declared on [data-previewer]
-   below, so the sheet has no dependency on MUI or any other framework —
-   re-map those tokens to re-brand it.
+   ── FONTS (required, or the @font-face urls fail the build) ──────
+   Bundlers resolve url() at BUILD time, so these files must exist.
+   Copy all three from the conf app's public/fonts into a `fonts/`
+   folder beside this stylesheet:
 
-   ── FONTS ───────────────────────────────────────────────────────
-   Resolved RELATIVE to this stylesheet: keep the three .woff2 files in
-   a `fonts/` folder beside it. Bundlers resolve url() at BUILD time, so
-   a path that points nowhere fails the build. Copy them from the conf
-   app's public/fonts.
+       previewer-oaksome.css
+       fonts/for-yetgroteskweb-medium.woff2
+       fonts/for-yetgroteskweb-bold.woff2
+       fonts/PPAir-RegularMono.woff2
 
-   Don't want the fonts at all? Delete the @font-face blocks below and
+   Don't want the fonts? Delete the four @font-face blocks below and
    re-map --font-titre / --font-mono to your own stack.
 
    Yet Grotesk ships medium + bold only: 400 and 500 both map to the
@@ -36,7 +36,7 @@
      --combo-row-gap  per-type option-row gap, on [data-combo-options]
      --teinte         an option's own colour, on [data-option]
 ───────────────────────────────────────────────────────────────── */
-@font-face {
+[data-previewer] @font-face {
   font-family: "Yet Grotesk";
   src: url("./fonts/for-yetgroteskweb-medium.woff2") format("woff2");
   font-weight: 400;
@@ -223,10 +223,10 @@
   left: 10px;
   z-index: 1;
   padding: 0 5px;
-  background: var(--blanc);
+  background: var(--mui-palette-background-paper);
   font-size: 0.72rem;
   line-height: 1;
-  color: var(--beige-fonce);
+  color: var(--mui-palette-text-secondary);
   pointer-events: none;
   max-width: calc(100% - 24px);
 }
@@ -262,7 +262,7 @@
   [data-section-type="ROW"]
   [data-type="FIELD"]:focus-within
   [data-field-label] {
-  color: var(--noir);
+  color: var(--mui-palette-primary-main);
 }
 
 /* ── Tab bar (scrollable square tabs with arrows — desktop & mobile) ── */
@@ -482,7 +482,7 @@
   [data-type="FIELD"]:has(input[type="checkbox"])
   [data-field-label] {
   font-size: 0.875rem;
-  color: var(--noir);
+  color: var(--mui-palette-text-primary);
   cursor: pointer;
 }
 
@@ -527,7 +527,7 @@
   gap: 8px;
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--beige-fonce);
+  color: var(--mui-palette-text-secondary);
   line-height: 1.4;
 }
 /* labelTop fields: label sits on its own line above the control */
@@ -557,9 +557,9 @@
   line-height: 1;
   /* italic glyph leans right — nudge it back so it reads centered in the ring */
   text-indent: -0.5px;
-  color: var(--beige-fonce);
+  color: var(--mui-palette-text-secondary);
   background: transparent;
-  border: 1.5px solid var(--beige-fonce);
+  border: 1.5px solid var(--mui-palette-text-secondary);
   border-radius: 50%;
   cursor: help;
   user-select: none;
@@ -569,9 +569,9 @@
     border-color 0.15s ease;
 }
 [data-previewer] [data-field-info-icon]:hover {
-  color: var(--blanc);
-  background: var(--noir);
-  border-color: var(--noir);
+  color: var(--mui-palette-primary-contrastText);
+  background: var(--mui-palette-primary-main);
+  border-color: var(--mui-palette-primary-main);
 }
 /* Tooltip is rendered position: fixed by the package (top/left set inline);
    these are cosmetics only. */
@@ -584,8 +584,8 @@
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.4;
-  color: var(--blanc);
-  background: var(--noir);
+  color: var(--mui-palette-background-paper);
+  background: var(--mui-palette-text-primary);
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   white-space: normal;
@@ -594,7 +594,7 @@
 
 [data-previewer] [data-no-options] {
   font-size: 0.75rem;
-  color: #e8512a;
+  color: var(--mui-palette-error-main);
 }
 
 [data-previewer] [data-field-control] {
@@ -949,19 +949,20 @@
   width: 100%;
   padding: 8px 12px;
   font-size: 0.875rem;
-  color: var(--noir);
-  background: var(--blanc);
-  border: 1px solid var(--noir-15);
+  color: var(--mui-palette-text-primary);
+  background: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider);
   border-radius: 5px;
   outline: none;
   transition: border-color 150ms;
 }
 [data-previewer] input:hover {
-  border-color: var(--noir);
+  border-color: var(--mui-palette-text-primary);
 }
 [data-previewer] input:focus {
-  border-color: var(--noir);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--noir) 20%, transparent);
+  border-color: var(--mui-palette-primary-main);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--mui-palette-primary-main) 20%, transparent);
 }
 
 /* ── Select ──────────────────────────────────────────────────── */
@@ -969,9 +970,9 @@
   width: 100%;
   padding: 8px 32px 8px 12px;
   font-size: 0.875rem;
-  color: var(--noir);
-  background: var(--blanc);
-  border: 1px solid var(--noir-15);
+  color: var(--mui-palette-text-primary);
+  background: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider);
   border-radius: 5px;
   outline: none;
   appearance: none;
@@ -981,11 +982,12 @@
   transition: border-color 150ms;
 }
 [data-previewer] select:hover {
-  border-color: var(--noir);
+  border-color: var(--mui-palette-text-primary);
 }
 [data-previewer] select:focus {
-  border-color: var(--noir);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--noir) 20%, transparent);
+  border-color: var(--mui-palette-primary-main);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--mui-palette-primary-main) 20%, transparent);
 }
 
 /* ── Checkbox ────────────────────────────────────────────────── */
@@ -996,9 +998,9 @@
   height: 20px;
   margin: 0;
   flex: 0 0 auto;
-  border: 2px solid var(--noir-15);
+  border: 2px solid var(--mui-palette-divider);
   border-radius: 6px;
-  background: var(--blanc);
+  background: var(--mui-palette-background-paper);
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
@@ -1008,11 +1010,11 @@
     box-shadow 150ms;
 }
 [data-previewer] input[type="checkbox"]:hover {
-  border-color: var(--beige-fonce);
+  border-color: var(--mui-palette-text-secondary);
 }
 [data-previewer] input[type="checkbox"]:checked {
-  border-color: var(--noir);
-  background-color: var(--noir);
+  border-color: var(--mui-palette-primary-main);
+  background-color: var(--mui-palette-primary-main);
   /* White checkmark, centered */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M13 4.5L6.5 11L3 7.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -1021,7 +1023,8 @@
 }
 [data-previewer] input[type="checkbox"]:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--noir) 25%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--mui-palette-primary-main) 25%, transparent);
 }
 [data-previewer] input[type="checkbox"]:disabled {
   cursor: not-allowed;
@@ -1544,9 +1547,9 @@
   padding: 6px 14px;
   font-size: 0.8125rem;
   font-family: inherit;
-  color: var(--beige-fonce);
+  color: var(--mui-palette-text-secondary);
   background: transparent;
-  border: 1px dashed var(--noir-15);
+  border: 1px dashed var(--mui-palette-divider);
   border-radius: 5px;
   cursor: pointer;
   white-space: nowrap;
@@ -1563,12 +1566,12 @@
      next to the options on whichever line it lands. */
 }
 [data-previewer] [data-show-more]:hover {
-  color: var(--noir);
-  background: var(--beige);
-  border-color: var(--noir);
+  color: var(--mui-palette-primary-main);
+  background: var(--mui-palette-action-hover);
+  border-color: var(--mui-palette-primary-main);
 }
 [data-previewer] [data-show-more]:focus-visible {
-  outline: 2px solid var(--noir);
+  outline: 2px solid var(--mui-palette-primary-main);
   outline-offset: 1px;
 }
 /* Expanded: solid border, since "Show less" collapses rather than reveals. */
@@ -1602,17 +1605,17 @@
 /* Selected → expanded blue bar reading "COLUMN n" */
 [data-previewer] [data-name="ZF_MODULE"] [data-option][data-selected="true"] {
   padding: 0 16px;
-  color: var(--blanc);
-  background: var(--noir);
-  border-color: var(--noir);
+  color: var(--mui-palette-primary-contrastText);
+  background: var(--mui-palette-primary-main);
+  border-color: var(--mui-palette-primary-main);
   font-weight: 600;
   letter-spacing: 0.04em;
 }
 [data-previewer]
   [data-name="ZF_MODULE"]
   [data-option][data-selected="true"]:hover {
-  background: var(--noir);
-  border-color: var(--noir);
+  background: var(--mui-palette-primary-dark);
+  border-color: var(--mui-palette-primary-dark);
 }
 /* "COLUMN " prefix fades + slides in as the bar expands */
 [data-previewer]
@@ -1631,16 +1634,16 @@
   padding: 0;
   border-radius: 50%;
   font-size: 0.75rem;
-  color: var(--beige-fonce);
+  color: var(--mui-palette-text-secondary);
   background: none;
-  border: 1px solid var(--noir-15);
+  border: 1px solid var(--mui-palette-divider);
 }
 [data-previewer]
   [data-name="ZF_MODULE"]
   [data-option]:not([data-option][data-selected="true"]):hover {
-  background: var(--beige);
-  border-color: var(--beige-fonce);
-  color: var(--noir);
+  background: var(--mui-palette-action-hover);
+  border-color: var(--mui-palette-text-secondary);
+  color: var(--mui-palette-text-primary);
   transform: scale(1.08);
 }
 
@@ -1671,15 +1674,15 @@
   overflow: hidden;
   border: 2px solid transparent;
   border-radius: 5px;
-  background: var(--beige);
+  background: var(--mui-palette-action-hover);
 }
 [data-previewer] [data-combo-type="circle"]:hover {
-  border-color: var(--noir-15);
-  background: var(--beige);
+  border-color: var(--mui-palette-divider);
+  background: var(--mui-palette-action-hover);
 }
 [data-previewer] [data-combo-type="circle"][data-selected="true"] {
-  border-color: var(--noir);
-  background: var(--blanc);
+  border-color: var(--mui-palette-primary-main);
+  background: var(--mui-palette-background-paper);
 }
 [data-previewer] [data-combo-type="circle"] [data-combo-image] {
   width: 100%;
