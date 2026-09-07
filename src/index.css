@@ -1459,8 +1459,14 @@
 [data-previewer]
   [data-combo-options][data-combo-type="iconselect"]
   [data-option][data-selected="true"] {
-  background: var(--fond);
-  box-shadow: inset 0 0 0 1px var(--beige-fonce-15);
+  /* Stays WHITE when selected — the kit lightens to `--fond` here, but on a
+     white panel that reads as a faint grey wash rather than a selection.
+     With the fill gone the hairline is the ONLY marker, so it takes the full
+     `--beige-fonce` at 2px rather than the kit's 15%-opacity 1px: at that
+     weight on white the selected tile was indistinguishable from its
+     neighbours. */
+  background: var(--blanc);
+  box-shadow: inset 0 0 0 2px var(--beige-fonce);
 }
 
 /* The icon inside the tile: 24px, per the kit. */
@@ -1516,8 +1522,9 @@
   padding: 0;
   border-radius: 5px;
   overflow: hidden;
-  /* Beige shows through while the image loads, and behind a transparent one. */
-  background: var(--beige);
+  /* White behind the image — it shows while the image loads and through a
+     transparent one, so it should read as the panel rather than as a fill. */
+  background: var(--blanc);
   box-shadow: inset 0 0 0 1px var(--beige);
 }
 
