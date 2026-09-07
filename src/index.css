@@ -102,74 +102,156 @@
   padding-top: 8px;
   margin-top: 8px;
 }
-/* Accordion cards own their padding (see below) — a nested one must not inherit the
-   generic section's inner padding-top, which would push the header off the card edge. */
+/* A nested accordion must not inherit the generic nested-section padding: its
+   hairline has to sit flush, as the top edge of its own item. */
 [data-previewer] [data-type="SECTION"] [data-section-type="ACCORDION"] {
   padding-top: 0;
 }
 
-/* ── Accordion section ───────────────────────────────────────── */
-/* Card shell: rounded, neutral hairline border, clips the body's rounded corners. */
+/* ── Accordion section — kit component 30 « Drop-down M » ─────────────────────
+   Figma 4346:29934, ported from the kit's own `css/dropdown-m.css`. NOT a card:
+   there is no border, fill or radius — a single black hairline that sits below
+   the item's LAST VISIBLE element, and a `+` drawn from two 1px lines that
+   rotates 45° into a `×` (black in both states; the blue elsewhere in the kit's
+   Figma belongs to the FAQ rail, not to this toggle).
+
+   SMALL is the compact register and narrows the whole item; LARGE spans the
+   full width with the desktop 74px closed height. */
+
 [data-previewer] [data-section-type="ACCORDION"] {
-  /* The kit has no accordion, so the shape and behaviour here are ours — only
-     the palette is the kit's: a beige hairline on the panel's white ground. */
-  border: 1px solid var(--beige);
-  border-radius: 5px;
-  background: var(--blanc);
-  overflow: hidden;
+  border: none;
+  border-radius: 0;
+  background: none;
+  /* SMALL narrows the WHOLE item — hairline, title and body — so the register
+     changes the block's footprint, not just its text measure. 62.5% is the
+     kit's reading measure (576 of its 922-wide list). */
+  max-width: 62.5%;
 }
-/* Breathing room between stacked accordion cards, wherever they sit — adjacent to
-   each other or separated by another section, at root or nested in a section body. */
-[data-previewer]
-  [data-section-type="ACCORDION"]
-  + [data-section-type="ACCORDION"],
+[data-previewer] [data-section-type="ACCORDION"][data-size="large"] {
+  max-width: none;
+}
+
+/* The hairlines ARE the separation, so stacked items sit flush. */
+[data-previewer] [data-section-type="ACCORDION"] + [data-section-type="ACCORDION"] {
+  margin-top: 0;
+}
 [data-previewer] [data-section-type="ACCORDION"] + [data-type="SECTION"],
 [data-previewer] [data-type="SECTION"] + [data-section-type="ACCORDION"] {
-  margin-top: 16px;
+  margin-top: 25px;
 }
 
 [data-previewer] [data-section-header] {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 25px;
   width: 100%;
-  padding: 13px 16px;
-  background: transparent;
-  border: none;
-  /* `.k-titre-xs`, the kit's group title: Yet Grotesk 500 14/18 in black. */
-  font: 500 14px/18px var(--font-titre);
+  /* Balanced, so the hairline sits the same distance from the title whether the
+     item is open or closed. NOT the kit's fixed 150 — that is a mobile tap
+     target measured on a 390px phone, and it leaves ~100px of dead space under
+     a one-line title in a desktop panel. */
+  padding: 25px 0 25px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font: 700 30px/32px var(--font-titre);
   letter-spacing: 0;
+  text-transform: none;
   color: var(--noir);
   text-align: left;
   cursor: pointer;
 }
+/* The hairline sits below the item's last visible element: under the header
+   while closed, under the body once open — so opening an item moves the line
+   down past its content. Declared AFTER the header's own `border: 0` above,
+   which would otherwise wipe it out on source order. */
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-header] {
+  border-bottom: 1px solid var(--noir);
+}
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-header] {
+  border-bottom: none;
+}
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+  border-bottom: 1px solid var(--noir);
+}
 [data-previewer] [data-section-header]:focus-visible {
-  outline: none;
-  box-shadow: inset 0 0 0 2px var(--beige-fonce-15);
+  outline: 1px solid var(--noir);
+  outline-offset: 4px;
+  box-shadow: none;
+}
+[data-previewer] [data-section-header] > * {
+  min-width: 0;
+  /* Figma trims its text to the cap height; without this each item is a little
+     taller. Progressive — never broken where unsupported. */
+  text-box: trim-both cap alphabetic;
+}
+/* Open: the title keeps its top padding and gives up the bottom one, because
+   the body below now carries the space before the hairline. */
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] [data-section-header] {
+  padding: 25px 0 0;
+}
+/* LARGE: only the gap differs — the closed item hugs its title either way. */
+[data-previewer] [data-section-type="ACCORDION"][data-size="large"] [data-section-header] {
+  gap: 10px;
 }
 
-/* Chevron rendered from the header (no markup needed). Points DOWN when closed
-   (expand), UP when open (collapse), and eases between the two. */
+/* The `+`: two 1px strokes in a 13.2px box, 4.4 below the cap line, drawn as
+   two gradients so one pseudo-element carries both. */
 [data-previewer] [data-section-header]::after {
   content: "";
+  position: relative;
   flex: 0 0 auto;
   order: 2;
-  margin-left: auto;
-  width: 9px;
-  height: 9px;
-  border-right: 2px solid var(--noir-35);
-  border-bottom: 2px solid var(--noir-35);
-  transform: rotate(45deg); /* points down → closed (expand) */
-  transform-origin: center;
-  transition:
-    transform 220ms cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 150ms ease;
+  margin-left: 0;
+  width: 13.2px;
+  height: 13.2px;
+  margin-top: 4.4px;
+  border: 0;
+  background:
+    linear-gradient(var(--noir), var(--noir)) center / 1px 100% no-repeat,
+    linear-gradient(var(--noir), var(--noir)) center / 100% 1px no-repeat;
+  transform: none;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+/* Kept flush with the item's right edge as it turns (the kit's +1.93). */
 [data-previewer]
   [data-section-type="ACCORDION"][data-open="true"]
   [data-section-header]::after {
-  transform: rotate(-135deg); /* points up → open (collapse) */
-  border-color: var(--noir);
+  transform: translateX(1.93px) rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-previewer] [data-section-header]::after {
+    transition: none;
+  }
+}
+
+/* ── Open / close motion ──────────────────────────────────────────────────────
+   The body eases in on the toggle's curve and duration so the two read as one
+   gesture. Entry only: the renderer mounts the body on open and unmounts it on
+   close, so there is nothing left to animate on the way out.
+   `grid-template-rows: 0fr → 1fr` is what animates the height to `auto`. */
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+  display: grid;
+  grid-template-rows: 1fr;
+  animation: ddm-open 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] > * {
+  min-height: 0;
+}
+@keyframes ddm-open {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+    animation: none;
+  }
 }
 
 [data-previewer] [data-section-body] {
@@ -177,12 +259,21 @@
   flex-direction: column;
   gap: 12px;
 }
-/* Padding + divider are for the ACCORDION card's OWN body only (direct child) — a
-   plain (NONE), row or tab section body must stay flush with no separator line, even
-   when nested inside an accordion. */
+/* `.ddm-body`: 48 below the title's cap line, and more room above the hairline
+   than a closed header leaves — an open item usually ends in a control rather
+   than a line of text, which needs the air. Direct child only, so a plain, row
+   or tab section nested inside keeps its own flush layout. */
 [data-previewer] [data-section-type="ACCORDION"] > [data-section-body] {
-  padding: 4px 16px 16px;
-  border-top: 1px solid var(--beige);
+  padding: 48px 0 40px;
+  border-top: none;
+}
+/* The body already carries that padding, so the first and last field inside
+   must not stack their own outer margin on top of it. */
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body] [data-type="FIELD"]:first-child {
+  margin-top: 0;
+}
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body] [data-type="FIELD"]:last-child {
+  margin-bottom: 0;
 }
 
 /* ── ROW section ─────────────────────────────────────────────────
@@ -851,8 +942,14 @@
    click target while the mark is 8px. */
 [data-previewer] [data-slider-notch]::before {
   content: "";
-  width: 8px;
-  height: 8px;
+  /* 8px is the kit's mark, but never wider than the space each stop has: with
+     many stops a fixed 8px overlaps its neighbours and the track reads as one
+     solid bar instead of a scale. `--_dot` is measured by the renderer off the
+     live track width (capped at 8, floored at 3) — a percentage of the track
+     cannot be resolved here, since inside the dot a percentage means a share of
+     its own 14px button. */
+  width: var(--_dot, 8px);
+  height: var(--_dot, 8px);
   border-radius: 50%;
   background: var(--beige);
   transition:
