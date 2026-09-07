@@ -65,6 +65,13 @@
 [data-previewer] {
   display: flex;
   flex-direction: column;
+  /* Keeps the configurator off the panel's edges — the kit's own panel pads its
+     scrolling body (`.cfg-scroll`) rather than letting controls run to the
+     border. Horizontal only: vertical rhythm is the blocks' own margins.
+     Wider on the left, matching the kit's own asymmetric panel padding
+     (`.cfg-scroll` is 24 on the left against 32 on the right). */
+  padding-left: 48px;
+  padding-right: 24px;
   gap: 16px;
 
   /* ── Stoëmp tokens (kit-configurateur/css/tokens.css) ──────────
@@ -128,6 +135,16 @@
   max-width: 62.5%;
 }
 [data-previewer] [data-section-type="ACCORDION"][data-size="large"] {
+  max-width: none;
+}
+
+/* On MOBILE an accordion is always FULL WIDTH, whatever its `size` says. The
+   size register is a desktop measure — narrowing a block to 62.5% of a phone
+   panel would leave the controls inside it unusably cramped — so the wrapper
+   the renderer puts around the mobile strip simply spans its container.
+   (The wrapper still carries `data-size`, so a consumer that wants the desktop
+   behaviour on mobile can opt back in.) */
+[data-previewer] [data-mobile-section="ACCORDION"]{
   max-width: none;
 }
 
@@ -954,7 +971,14 @@
      thumb's circle stays on the rail, but a notched slider hides that thumb —
      the dots are the marks, and they line up with where the track starts and
      stops. */
-  left: calc(var(--_at, 0) * 100%);
+  /* Inset by half a dot at each end so the MARKS sit inside the track's span:
+     each dot is centred on its position, so without this the first one's left
+     half (and the last one's right half) hangs outside the track — the step
+     slider started 4px left of every other field. `--_dot` is the dot's
+     measured diameter, so the inset follows it at any density. */
+  left: calc(
+    var(--_dot, 8px) / 2 + var(--_at, 0) * (100% - var(--_dot, 8px))
+  );
   transform: translate(-50%, -50%);
   width: 14px;
   height: 14px;
@@ -1008,10 +1032,15 @@
 [data-previewer]
   [data-slider-wrapper]:has([data-slider-notches])
   input[type="range"] {
+  /* Ends exactly on the current dot: the dots are inset by half a dot at each
+     end, so the fill travels that same reduced span rather than the full
+     track. */
   background: linear-gradient(
     to right,
-    var(--noir) calc(var(--_pct, 0) * 100%),
-    var(--beige) calc(var(--_pct, 0) * 100%)
+    var(--noir)
+      calc(var(--_dot, 8px) / 2 + var(--_pct, 0) * (100% - var(--_dot, 8px))),
+    var(--beige)
+      calc(var(--_dot, 8px) / 2 + var(--_pct, 0) * (100% - var(--_dot, 8px)))
   );
 }
 
@@ -1033,7 +1062,14 @@
 [data-previewer]
   [data-slider-wrapper]:has([data-slider-notches])
   [data-slider-stepper] {
-  left: calc(var(--_pct, 0) * var(--_track-w));
+  /* The dots are inset by half a dot at each end, so the tag travels the same
+     reduced span to stay centred on the current one. `--_track-w` is the track
+     as a percentage of the wrapper, and the stepper is positioned against the
+     wrapper — so the dot inset is expressed as a fraction of that track. */
+  left: calc(
+    var(--_dot, 8px) / 2 + var(--_pct, 0) *
+      (var(--_track-w) - var(--_dot, 8px))
+  );
 }
 
 /* `.k-slider--crante .k-slider-curseur { display: none }` — the current notch
