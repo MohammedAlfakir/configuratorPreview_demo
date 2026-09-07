@@ -137,7 +137,7 @@
 }
 [data-previewer] [data-section-type="ACCORDION"] + [data-type="SECTION"],
 [data-previewer] [data-type="SECTION"] + [data-section-type="ACCORDION"] {
-  margin-top: 25px;
+  margin-top: 28px;
 }
 
 [data-previewer] [data-section-header] {
@@ -246,6 +246,35 @@
   to {
     grid-template-rows: 1fr;
     opacity: 1;
+  }
+}
+
+/* Closing: the mirror of the open animation. The renderer keeps the body
+   mounted while `data-closing="true"` and unmounts it once this animation
+   finishes, so the exit lasts exactly as long as this rule says — nothing has
+   to agree on a duration. `both` holds the collapsed state through the final
+   frame so it cannot flash back to full height before unmounting. */
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body][data-closing="true"] {
+  /* The grid baseline has to be present BEFORE the animation starts. The open
+     rule is keyed on [data-open="true"], which is already false by the time
+     data-closing appears — so without restating it here the element has no
+     `grid-template-rows` to animate away from and the exit is skipped. */
+  display: grid;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+  animation: ddm-close 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body][data-closing="true"] > * {
+  min-height: 0;
+}
+@keyframes ddm-close {
+  from {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -577,22 +606,23 @@
   cursor: pointer;
 }
 
-/* Space between stacked fields (and field ↔ section transitions).
-   `.cfg-corps` puts 25px between option groups. Carried as a margin above AND
-   below each field rather than only between siblings: the air itself does the
-   separating, so no rule has to be drawn. Adjacent margins collapse, so two
-   stacked fields still sit 32px apart rather than 64. */
+/* ── One gap between blocks ───────────────────────────────────────────────────
+   Every field and every ACCORDION section is a block, and the space between any
+   two of them is the same 28px — field↔field, field↔accordion, accordion↔field
+   alike. Before this they were three different values (56, 25 and 25), so a
+   slider followed by another slider sat further apart than the same slider
+   followed by a section.
+
+   Carried as a margin above AND below each block so the first and last in a run
+   get the same air as the ones between; adjacent margins collapse to a single
+   28 rather than doubling.
+
+   NONE and TAB sections are deliberately NOT included: a NONE section is a bare
+   wrapper with no visual presence of its own, and a TAB section carries its own
+   strip spacing. Both stay exactly as they were. */
 [data-previewer] [data-type="FIELD"] {
-  margin-top: 32px;
-  margin-bottom: 32px;
-}
-/* Between two stacked fields the margins collapse to a single 32, which reads
-   too tight for sliders — each one is a label + value + track group that needs
-   to separate clearly from the next. Raising just the top margin where a field
-   follows another lifts the gap to 56 without touching the 32 that sits above
-   the first field and below the last. */
-[data-previewer] [data-type="FIELD"] + [data-type="FIELD"] {
-  margin-top: 56px;
+  margin-top: 28px;
+  margin-bottom: 28px;
 }
 /* A flex container does not collapse its children's margins and adds its own
    gap on top, so the body must contribute none of its own between fields — the
@@ -607,9 +637,11 @@
   gap: 0;
 }
 
-[data-previewer] [data-type="FIELD"] + [data-type="SECTION"],
-[data-previewer] [data-type="SECTION"] + [data-type="FIELD"] {
-  margin-top: 25px;
+/* A field meeting an ACCORDION section, in either order — the same 28. Scoped
+   to ACCORDION so NONE and TAB sections are untouched. */
+[data-previewer] [data-type="FIELD"] + [data-section-type="ACCORDION"],
+[data-previewer] [data-section-type="ACCORDION"] + [data-type="FIELD"] {
+  margin-top: 28px;
 }
 
 [data-previewer] [data-field-label] {
