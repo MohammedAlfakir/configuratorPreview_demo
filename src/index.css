@@ -552,6 +552,26 @@
   cursor: default;
 }
 
+/* The scroll arrows sit OUTSIDE the strip in the renderer's markup, so their
+   width (28) plus margin (4) pushed the first tab 32px right of every field
+   below it. The arrow row is pulled back by that much, which puts the tabs on
+   the same left edge as everything else and lets the arrows hang in the root's
+   own padding instead of displacing the content. */
+[data-previewer] [data-tab-group] > div:has(> [data-tab-arrow]) {
+  margin-left: -32px;
+  margin-right: -32px;
+}
+
+/* The slider track's start is the reading edge everything lines up on: a field
+   label, a slider's rail and a section title all begin there. A tab pill has
+   10px of inner padding, so its BOX on that edge put its text 10px right of
+   every label. The strip is pulled back by that padding, which lands the pill's
+   text on the same edge — the fill and hairline then start 10px earlier, which
+   is the trade for aligning what you actually read. */
+[data-previewer] [data-tab-bar] {
+  margin-left: -10px;
+}
+
 /* ── Field wrapper ───────────────────────────────────────────── */
 [data-previewer] [data-type="FIELD"] {
   display: flex;
@@ -575,15 +595,12 @@
 }
 /* `.k-titre-xs`: Yet Grotesk 500 14/18 in black, with 8px before the info icon
    and a 21px minimum box so a label with no icon still holds the same height. */
+/* The slider's label keeps the shared type above; these are its layout
+   extras: no wrap, and shrinkable so the text can ellipsize. */
 [data-previewer]
   [data-type="FIELD"]:has([data-slider-wrapper])
-  [data-field-label] {
+  [data-field-label]{
   display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 21px;
-  font: 500 14px/18px var(--font-titre);
-  color: var(--noir);
   white-space: nowrap;
   min-width: 0;
 }
@@ -661,14 +678,17 @@
   margin-top: 28px;
 }
 
-[data-previewer] [data-field-label] {
+/* `.k-titre-xs`, the kit's group title — the label for EVERY field, not
+   just sliders. It used to be 12px de-emphasised here while the slider
+   rule set 14px black, so a switch's title read a size smaller and
+   lighter than the slider's above it. */
+[data-previewer] [data-field-label]{
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--beige-fonce);
-  line-height: 1.4;
+  min-height: 21px;
+  font: 500 14px/18px var(--font-titre);
+  color: var(--noir);
 }
 /* labelTop fields: label sits on its own line above the control */
 [data-previewer] [data-field-label][data-label-top="true"] {
@@ -1876,27 +1896,42 @@
 }
 
 /* Tab panel: give content breathing room on the sides */
+/* No horizontal inset: the previewer root already pads, and adding 16 here
+   put every field inside a tab panel 16px right of the fields outside one. */
 [data-previewer] [data-tab-panel] {
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-/* Nested TAB sections bleed back to the edge so their tab strips stay aligned */
+/* The tab panel no longer insets its content, so a nested TAB section
+   needs no bleed to stay aligned with it. */
 [data-previewer] [data-tab-panel] > [data-section-type="TAB"] {
-  margin-left: -16px;
-  margin-right: -16px;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 [data-previewer][data-layout="mobile"] [data-tab-panel] {
-  padding: 14px 16px;
+  padding: 14px 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+/* Leading above the previewer's FIRST row, on both layouts. Without it the
+   content sat flush against the top of its container — in the preview popup
+   that meant the first tab strip touching the header's hairline.
+
+   Put on the root's first child rather than as root padding, so it cannot
+   double up with the padding a host already applies, and it is right wherever
+   the previewer is embedded rather than only in this popup. */
+[data-previewer] > *:first-child {
+  margin-top: 20px;
+}
+
 [data-previewer][data-layout="mobile"] [data-tab-panel] > [data-tab-group] {
-  margin-left: -16px;
-  margin-right: -16px;
+  /* No bleed: the panel it sits in has no inset to cancel. */
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Nested tab group (a child section's tab strip) spacing on mobile */
