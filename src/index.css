@@ -144,12 +144,14 @@
    the renderer puts around the mobile strip simply spans its container.
    (The wrapper still carries `data-size`, so a consumer that wants the desktop
    behaviour on mobile can opt back in.) */
-[data-previewer] [data-mobile-section="ACCORDION"]{
+[data-previewer] [data-mobile-section="ACCORDION"] {
   max-width: none;
 }
 
 /* The hairlines ARE the separation, so stacked items sit flush. */
-[data-previewer] [data-section-type="ACCORDION"] + [data-section-type="ACCORDION"] {
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  + [data-section-type="ACCORDION"] {
   margin-top: 0;
 }
 [data-previewer] [data-section-type="ACCORDION"] + [data-type="SECTION"],
@@ -185,10 +187,14 @@
 [data-previewer] [data-section-type="ACCORDION"] > [data-section-header] {
   border-bottom: 1px solid var(--noir);
 }
-[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-header] {
+[data-previewer]
+  [data-section-type="ACCORDION"][data-open="true"]
+  > [data-section-header] {
   border-bottom: none;
 }
-[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+[data-previewer]
+  [data-section-type="ACCORDION"][data-open="true"]
+  > [data-section-body] {
   border-bottom: 1px solid var(--noir);
 }
 [data-previewer] [data-section-header]:focus-visible {
@@ -204,11 +210,15 @@
 }
 /* Open: the title keeps its top padding and gives up the bottom one, because
    the body below now carries the space before the hairline. */
-[data-previewer] [data-section-type="ACCORDION"][data-open="true"] [data-section-header] {
+[data-previewer]
+  [data-section-type="ACCORDION"][data-open="true"]
+  [data-section-header] {
   padding: 25px 0 0;
 }
 /* LARGE: only the gap differs — the closed item hugs its title either way. */
-[data-previewer] [data-section-type="ACCORDION"][data-size="large"] [data-section-header] {
+[data-previewer]
+  [data-section-type="ACCORDION"][data-size="large"]
+  [data-section-header] {
   gap: 10px;
 }
 
@@ -247,12 +257,17 @@
    gesture. Entry only: the renderer mounts the body on open and unmounts it on
    close, so there is nothing left to animate on the way out.
    `grid-template-rows: 0fr → 1fr` is what animates the height to `auto`. */
-[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+[data-previewer]
+  [data-section-type="ACCORDION"][data-open="true"]
+  > [data-section-body] {
   display: grid;
   grid-template-rows: 1fr;
   animation: ddm-open 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] > * {
+[data-previewer]
+  [data-section-type="ACCORDION"][data-open="true"]
+  > [data-section-body]
+  > * {
   min-height: 0;
 }
 @keyframes ddm-open {
@@ -271,7 +286,9 @@
    finishes, so the exit lasts exactly as long as this rule says — nothing has
    to agree on a duration. `both` holds the collapsed state through the final
    frame so it cannot flash back to full height before unmounting. */
-[data-previewer] [data-section-type="ACCORDION"] > [data-section-body][data-closing="true"] {
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  > [data-section-body][data-closing="true"] {
   /* The grid baseline has to be present BEFORE the animation starts. The open
      rule is keyed on [data-open="true"], which is already false by the time
      data-closing appears — so without restating it here the element has no
@@ -281,7 +298,10 @@
   overflow: hidden;
   animation: ddm-close 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-[data-previewer] [data-section-type="ACCORDION"] > [data-section-body][data-closing="true"] > * {
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  > [data-section-body][data-closing="true"]
+  > * {
   min-height: 0;
 }
 @keyframes ddm-close {
@@ -295,7 +315,9 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+  [data-previewer]
+    [data-section-type="ACCORDION"][data-open="true"]
+    > [data-section-body] {
     animation: none;
   }
 }
@@ -315,10 +337,16 @@
 }
 /* The body already carries that padding, so the first and last field inside
    must not stack their own outer margin on top of it. */
-[data-previewer] [data-section-type="ACCORDION"] > [data-section-body] [data-type="FIELD"]:first-child {
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  > [data-section-body]
+  [data-type="FIELD"]:first-child {
   margin-top: 0;
 }
-[data-previewer] [data-section-type="ACCORDION"] > [data-section-body] [data-type="FIELD"]:last-child {
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  > [data-section-body]
+  [data-type="FIELD"]:last-child {
   margin-bottom: 0;
 }
 
@@ -599,7 +627,7 @@
    extras: no wrap, and shrinkable so the text can ellipsize. */
 [data-previewer]
   [data-type="FIELD"]:has([data-slider-wrapper])
-  [data-field-label]{
+  [data-field-label] {
   display: flex;
   white-space: nowrap;
   min-width: 0;
@@ -682,7 +710,7 @@
    just sliders. It used to be 12px de-emphasised here while the slider
    rule set 14px black, so a switch's title read a size smaller and
    lighter than the slider's above it. */
-[data-previewer] [data-field-label]{
+[data-previewer] [data-field-label] {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -996,9 +1024,7 @@
      half (and the last one's right half) hangs outside the track — the step
      slider started 4px left of every other field. `--_dot` is the dot's
      measured diameter, so the inset follows it at any density. */
-  left: calc(
-    var(--_dot, 8px) / 2 + var(--_at, 0) * (100% - var(--_dot, 8px))
-  );
+  left: calc(var(--_dot, 8px) / 2 + var(--_at, 0) * (100% - var(--_dot, 8px)));
   transform: translate(-50%, -50%);
   width: 14px;
   height: 14px;
@@ -1087,8 +1113,7 @@
      as a percentage of the wrapper, and the stepper is positioned against the
      wrapper — so the dot inset is expressed as a fraction of that track. */
   left: calc(
-    var(--_dot, 8px) / 2 + var(--_pct, 0) *
-      (var(--_track-w) - var(--_dot, 8px))
+    var(--_dot, 8px) / 2 + var(--_pct, 0) * (var(--_track-w) - var(--_dot, 8px))
   );
 }
 
@@ -1806,11 +1831,18 @@
   background: var(--noir);
   border-color: var(--noir);
 }
-/* "COLUMN " prefix fades + slides in as the bar expands */
+/* No "COLUMN " prefix here any more.
+   It was written when the option's label was just the number, so CSS supplied
+   the word. The source now sends the full text in `label` ("Column 1") and the
+   digit alone in `data.short`, which the previewer shows on the unselected
+   circles — so a CSS prefix would render "COLUMN Column 1". Dropping it also
+   removes an English string hardcoded into a stylesheet and keyed to a field
+   NAME, which said "COLUMN" on any ZF_MODULE field whatever it contained.
+   The label still fades/slides in as the bar expands. */
 [data-previewer]
   [data-name="ZF_MODULE"]
-  [data-option][data-selected="true"]::before {
-  content: "COLUMN ";
+  [data-option][data-selected="true"]
+  [data-option-label] {
   display: inline-block;
   animation: columnLabelIn 280ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }

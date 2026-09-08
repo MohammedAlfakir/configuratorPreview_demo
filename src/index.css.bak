@@ -6,25 +6,25 @@
    `styles` prop — the previewer's own data-attributes are the whole
    styling surface.
 
-   Requires previewer >= 1.21.0.
+   Requires previewer >= 1.22.1.
 
    Drop-in:
-       import "./previewer-oaksome.css";
+       import "./index.css";
 
        <ConfiguratorPreviewDialog configuratorJson={...} />
        // pass NO `styles` prop — this file replaces it
 
-   ── FONTS (required, or the @font-face urls fail the build) ──────
-   Bundlers resolve url() at BUILD time, so these files must exist.
-   Copy all three from the conf app's public/fonts into a `fonts/`
-   folder beside this stylesheet:
+   Every colour comes from the Stoemp tokens declared on [data-previewer]
+   below, so the sheet has no dependency on MUI or any other framework —
+   re-map those tokens to re-brand it.
 
-       previewer-oaksome.css
-       fonts/for-yetgroteskweb-medium.woff2
-       fonts/for-yetgroteskweb-bold.woff2
-       fonts/PPAir-RegularMono.woff2
+   ── FONTS ───────────────────────────────────────────────────────
+   Resolved RELATIVE to this stylesheet: keep the three .woff2 files in
+   a `fonts/` folder beside it. Bundlers resolve url() at BUILD time, so
+   a path that points nowhere fails the build. Copy them from the conf
+   app's public/fonts.
 
-   Don't want the fonts? Delete the four @font-face blocks below and
+   Don't want the fonts at all? Delete the @font-face blocks below and
    re-map --font-titre / --font-mono to your own stack.
 
    Yet Grotesk ships medium + bold only: 400 and 500 both map to the
@@ -36,7 +36,7 @@
      --combo-row-gap  per-type option-row gap, on [data-combo-options]
      --teinte         an option's own colour, on [data-option]
 ───────────────────────────────────────────────────────────────── */
-[data-previewer] @font-face {
+@font-face {
   font-family: "Yet Grotesk";
   src: url("./fonts/for-yetgroteskweb-medium.woff2") format("woff2");
   font-weight: 400;
@@ -65,6 +65,13 @@
 [data-previewer] {
   display: flex;
   flex-direction: column;
+  /* Keeps the configurator off the panel's edges — the kit's own panel pads its
+     scrolling body (`.cfg-scroll`) rather than letting controls run to the
+     border. Horizontal only: vertical rhythm is the blocks' own margins.
+     Wider on the left, matching the kit's own asymmetric panel padding
+     (`.cfg-scroll` is 24 on the left against 32 on the right). */
+  padding-left: 48px;
+  padding-right: 24px;
   gap: 16px;
 
   /* ── Stoëmp tokens (kit-configurateur/css/tokens.css) ──────────
@@ -102,74 +109,195 @@
   padding-top: 8px;
   margin-top: 8px;
 }
-/* Accordion cards own their padding (see below) — a nested one must not inherit the
-   generic section's inner padding-top, which would push the header off the card edge. */
+/* A nested accordion must not inherit the generic nested-section padding: its
+   hairline has to sit flush, as the top edge of its own item. */
 [data-previewer] [data-type="SECTION"] [data-section-type="ACCORDION"] {
   padding-top: 0;
 }
 
-/* ── Accordion section ───────────────────────────────────────── */
-/* Card shell: rounded, neutral hairline border, clips the body's rounded corners. */
+/* ── Accordion section — kit component 30 « Drop-down M » ─────────────────────
+   Figma 4346:29934, ported from the kit's own `css/dropdown-m.css`. NOT a card:
+   there is no border, fill or radius — a single black hairline that sits below
+   the item's LAST VISIBLE element, and a `+` drawn from two 1px lines that
+   rotates 45° into a `×` (black in both states; the blue elsewhere in the kit's
+   Figma belongs to the FAQ rail, not to this toggle).
+
+   SMALL is the compact register and narrows the whole item; LARGE spans the
+   full width with the desktop 74px closed height. */
+
 [data-previewer] [data-section-type="ACCORDION"] {
-  /* The kit has no accordion, so the shape and behaviour here are ours — only
-     the palette is the kit's: a beige hairline on the panel's white ground. */
-  border: 1px solid var(--beige);
-  border-radius: 5px;
-  background: var(--blanc);
-  overflow: hidden;
+  border: none;
+  border-radius: 0;
+  background: none;
+  /* SMALL narrows the WHOLE item — hairline, title and body — so the register
+     changes the block's footprint, not just its text measure. 62.5% is the
+     kit's reading measure (576 of its 922-wide list). */
+  max-width: 62.5%;
 }
-/* Breathing room between stacked accordion cards, wherever they sit — adjacent to
-   each other or separated by another section, at root or nested in a section body. */
-[data-previewer]
-  [data-section-type="ACCORDION"]
-  + [data-section-type="ACCORDION"],
+[data-previewer] [data-section-type="ACCORDION"][data-size="large"] {
+  max-width: none;
+}
+
+/* On MOBILE an accordion is always FULL WIDTH, whatever its `size` says. The
+   size register is a desktop measure — narrowing a block to 62.5% of a phone
+   panel would leave the controls inside it unusably cramped — so the wrapper
+   the renderer puts around the mobile strip simply spans its container.
+   (The wrapper still carries `data-size`, so a consumer that wants the desktop
+   behaviour on mobile can opt back in.) */
+[data-previewer] [data-mobile-section="ACCORDION"]{
+  max-width: none;
+}
+
+/* The hairlines ARE the separation, so stacked items sit flush. */
+[data-previewer] [data-section-type="ACCORDION"] + [data-section-type="ACCORDION"] {
+  margin-top: 0;
+}
 [data-previewer] [data-section-type="ACCORDION"] + [data-type="SECTION"],
 [data-previewer] [data-type="SECTION"] + [data-section-type="ACCORDION"] {
-  margin-top: 16px;
+  margin-top: 28px;
 }
 
 [data-previewer] [data-section-header] {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 25px;
   width: 100%;
-  padding: 13px 16px;
-  background: transparent;
-  border: none;
-  /* `.k-titre-xs`, the kit's group title: Yet Grotesk 500 14/18 in black. */
-  font: 500 14px/18px var(--font-titre);
+  /* Balanced, so the hairline sits the same distance from the title whether the
+     item is open or closed. NOT the kit's fixed 150 — that is a mobile tap
+     target measured on a 390px phone, and it leaves ~100px of dead space under
+     a one-line title in a desktop panel. */
+  padding: 25px 0 25px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font: 700 30px/32px var(--font-titre);
   letter-spacing: 0;
+  text-transform: none;
   color: var(--noir);
   text-align: left;
   cursor: pointer;
 }
+/* The hairline sits below the item's last visible element: under the header
+   while closed, under the body once open — so opening an item moves the line
+   down past its content. Declared AFTER the header's own `border: 0` above,
+   which would otherwise wipe it out on source order. */
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-header] {
+  border-bottom: 1px solid var(--noir);
+}
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-header] {
+  border-bottom: none;
+}
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+  border-bottom: 1px solid var(--noir);
+}
 [data-previewer] [data-section-header]:focus-visible {
-  outline: none;
-  box-shadow: inset 0 0 0 2px var(--beige-fonce-15);
+  outline: 1px solid var(--noir);
+  outline-offset: 4px;
+  box-shadow: none;
+}
+[data-previewer] [data-section-header] > * {
+  min-width: 0;
+  /* Figma trims its text to the cap height; without this each item is a little
+     taller. Progressive — never broken where unsupported. */
+  text-box: trim-both cap alphabetic;
+}
+/* Open: the title keeps its top padding and gives up the bottom one, because
+   the body below now carries the space before the hairline. */
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] [data-section-header] {
+  padding: 25px 0 0;
+}
+/* LARGE: only the gap differs — the closed item hugs its title either way. */
+[data-previewer] [data-section-type="ACCORDION"][data-size="large"] [data-section-header] {
+  gap: 10px;
 }
 
-/* Chevron rendered from the header (no markup needed). Points DOWN when closed
-   (expand), UP when open (collapse), and eases between the two. */
+/* The `+`: two 1px strokes in a 13.2px box, 4.4 below the cap line, drawn as
+   two gradients so one pseudo-element carries both. */
 [data-previewer] [data-section-header]::after {
   content: "";
+  position: relative;
   flex: 0 0 auto;
   order: 2;
-  margin-left: auto;
-  width: 9px;
-  height: 9px;
-  border-right: 2px solid var(--noir-35);
-  border-bottom: 2px solid var(--noir-35);
-  transform: rotate(45deg); /* points down → closed (expand) */
-  transform-origin: center;
-  transition:
-    transform 220ms cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 150ms ease;
+  margin-left: 0;
+  width: 13.2px;
+  height: 13.2px;
+  margin-top: 4.4px;
+  border: 0;
+  background:
+    linear-gradient(var(--noir), var(--noir)) center / 1px 100% no-repeat,
+    linear-gradient(var(--noir), var(--noir)) center / 100% 1px no-repeat;
+  transform: none;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+/* Kept flush with the item's right edge as it turns (the kit's +1.93). */
 [data-previewer]
   [data-section-type="ACCORDION"][data-open="true"]
   [data-section-header]::after {
-  transform: rotate(-135deg); /* points up → open (collapse) */
-  border-color: var(--noir);
+  transform: translateX(1.93px) rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-previewer] [data-section-header]::after {
+    transition: none;
+  }
+}
+
+/* ── Open / close motion ──────────────────────────────────────────────────────
+   The body eases in on the toggle's curve and duration so the two read as one
+   gesture. Entry only: the renderer mounts the body on open and unmounts it on
+   close, so there is nothing left to animate on the way out.
+   `grid-template-rows: 0fr → 1fr` is what animates the height to `auto`. */
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+  display: grid;
+  grid-template-rows: 1fr;
+  animation: ddm-open 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] > * {
+  min-height: 0;
+}
+@keyframes ddm-open {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+/* Closing: the mirror of the open animation. The renderer keeps the body
+   mounted while `data-closing="true"` and unmounts it once this animation
+   finishes, so the exit lasts exactly as long as this rule says — nothing has
+   to agree on a duration. `both` holds the collapsed state through the final
+   frame so it cannot flash back to full height before unmounting. */
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body][data-closing="true"] {
+  /* The grid baseline has to be present BEFORE the animation starts. The open
+     rule is keyed on [data-open="true"], which is already false by the time
+     data-closing appears — so without restating it here the element has no
+     `grid-template-rows` to animate away from and the exit is skipped. */
+  display: grid;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+  animation: ddm-close 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body][data-closing="true"] > * {
+  min-height: 0;
+}
+@keyframes ddm-close {
+  from {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-previewer] [data-section-type="ACCORDION"][data-open="true"] > [data-section-body] {
+    animation: none;
+  }
 }
 
 [data-previewer] [data-section-body] {
@@ -177,12 +305,21 @@
   flex-direction: column;
   gap: 12px;
 }
-/* Padding + divider are for the ACCORDION card's OWN body only (direct child) — a
-   plain (NONE), row or tab section body must stay flush with no separator line, even
-   when nested inside an accordion. */
+/* `.ddm-body`: 48 below the title's cap line, and more room above the hairline
+   than a closed header leaves — an open item usually ends in a control rather
+   than a line of text, which needs the air. Direct child only, so a plain, row
+   or tab section nested inside keeps its own flush layout. */
 [data-previewer] [data-section-type="ACCORDION"] > [data-section-body] {
-  padding: 4px 16px 16px;
-  border-top: 1px solid var(--beige);
+  padding: 48px 0 40px;
+  border-top: none;
+}
+/* The body already carries that padding, so the first and last field inside
+   must not stack their own outer margin on top of it. */
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body] [data-type="FIELD"]:first-child {
+  margin-top: 0;
+}
+[data-previewer] [data-section-type="ACCORDION"] > [data-section-body] [data-type="FIELD"]:last-child {
+  margin-bottom: 0;
 }
 
 /* ── ROW section ─────────────────────────────────────────────────
@@ -223,10 +360,10 @@
   left: 10px;
   z-index: 1;
   padding: 0 5px;
-  background: var(--mui-palette-background-paper);
+  background: var(--blanc);
   font-size: 0.72rem;
   line-height: 1;
-  color: var(--mui-palette-text-secondary);
+  color: var(--beige-fonce);
   pointer-events: none;
   max-width: calc(100% - 24px);
 }
@@ -262,7 +399,7 @@
   [data-section-type="ROW"]
   [data-type="FIELD"]:focus-within
   [data-field-label] {
-  color: var(--mui-palette-primary-main);
+  color: var(--noir);
 }
 
 /* ── Tab bar (scrollable square tabs with arrows — desktop & mobile) ── */
@@ -415,6 +552,26 @@
   cursor: default;
 }
 
+/* The scroll arrows sit OUTSIDE the strip in the renderer's markup, so their
+   width (28) plus margin (4) pushed the first tab 32px right of every field
+   below it. The arrow row is pulled back by that much, which puts the tabs on
+   the same left edge as everything else and lets the arrows hang in the root's
+   own padding instead of displacing the content. */
+[data-previewer] [data-tab-group] > div:has(> [data-tab-arrow]) {
+  margin-left: -32px;
+  margin-right: -32px;
+}
+
+/* The slider track's start is the reading edge everything lines up on: a field
+   label, a slider's rail and a section title all begin there. A tab pill has
+   10px of inner padding, so its BOX on that edge put its text 10px right of
+   every label. The strip is pulled back by that padding, which lands the pill's
+   text on the same edge — the fill and hairline then start 10px earlier, which
+   is the trade for aligning what you actually read. */
+[data-previewer] [data-tab-bar] {
+  margin-left: -10px;
+}
+
 /* ── Field wrapper ───────────────────────────────────────────── */
 [data-previewer] [data-type="FIELD"] {
   display: flex;
@@ -438,15 +595,12 @@
 }
 /* `.k-titre-xs`: Yet Grotesk 500 14/18 in black, with 8px before the info icon
    and a 21px minimum box so a label with no icon still holds the same height. */
+/* The slider's label keeps the shared type above; these are its layout
+   extras: no wrap, and shrinkable so the text can ellipsize. */
 [data-previewer]
   [data-type="FIELD"]:has([data-slider-wrapper])
-  [data-field-label] {
+  [data-field-label]{
   display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 21px;
-  font: 500 14px/18px var(--font-titre);
-  color: var(--noir);
   white-space: nowrap;
   min-width: 0;
 }
@@ -482,26 +636,27 @@
   [data-type="FIELD"]:has(input[type="checkbox"])
   [data-field-label] {
   font-size: 0.875rem;
-  color: var(--mui-palette-text-primary);
+  color: var(--noir);
   cursor: pointer;
 }
 
-/* Space between stacked fields (and field ↔ section transitions).
-   `.cfg-corps` puts 25px between option groups. Carried as a margin above AND
-   below each field rather than only between siblings: the air itself does the
-   separating, so no rule has to be drawn. Adjacent margins collapse, so two
-   stacked fields still sit 32px apart rather than 64. */
+/* ── One gap between blocks ───────────────────────────────────────────────────
+   Every field and every ACCORDION section is a block, and the space between any
+   two of them is the same 28px — field↔field, field↔accordion, accordion↔field
+   alike. Before this they were three different values (56, 25 and 25), so a
+   slider followed by another slider sat further apart than the same slider
+   followed by a section.
+
+   Carried as a margin above AND below each block so the first and last in a run
+   get the same air as the ones between; adjacent margins collapse to a single
+   28 rather than doubling.
+
+   NONE and TAB sections are deliberately NOT included: a NONE section is a bare
+   wrapper with no visual presence of its own, and a TAB section carries its own
+   strip spacing. Both stay exactly as they were. */
 [data-previewer] [data-type="FIELD"] {
-  margin-top: 32px;
-  margin-bottom: 32px;
-}
-/* Between two stacked fields the margins collapse to a single 32, which reads
-   too tight for sliders — each one is a label + value + track group that needs
-   to separate clearly from the next. Raising just the top margin where a field
-   follows another lifts the gap to 56 without touching the 32 that sits above
-   the first field and below the last. */
-[data-previewer] [data-type="FIELD"] + [data-type="FIELD"] {
-  margin-top: 56px;
+  margin-top: 28px;
+  margin-bottom: 28px;
 }
 /* A flex container does not collapse its children's margins and adds its own
    gap on top, so the body must contribute none of its own between fields — the
@@ -516,19 +671,24 @@
   gap: 0;
 }
 
-[data-previewer] [data-type="FIELD"] + [data-type="SECTION"],
-[data-previewer] [data-type="SECTION"] + [data-type="FIELD"] {
-  margin-top: 25px;
+/* A field meeting an ACCORDION section, in either order — the same 28. Scoped
+   to ACCORDION so NONE and TAB sections are untouched. */
+[data-previewer] [data-type="FIELD"] + [data-section-type="ACCORDION"],
+[data-previewer] [data-section-type="ACCORDION"] + [data-type="FIELD"] {
+  margin-top: 28px;
 }
 
-[data-previewer] [data-field-label] {
+/* `.k-titre-xs`, the kit's group title — the label for EVERY field, not
+   just sliders. It used to be 12px de-emphasised here while the slider
+   rule set 14px black, so a switch's title read a size smaller and
+   lighter than the slider's above it. */
+[data-previewer] [data-field-label]{
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--mui-palette-text-secondary);
-  line-height: 1.4;
+  min-height: 21px;
+  font: 500 14px/18px var(--font-titre);
+  color: var(--noir);
 }
 /* labelTop fields: label sits on its own line above the control */
 [data-previewer] [data-field-label][data-label-top="true"] {
@@ -557,9 +717,9 @@
   line-height: 1;
   /* italic glyph leans right — nudge it back so it reads centered in the ring */
   text-indent: -0.5px;
-  color: var(--mui-palette-text-secondary);
+  color: var(--beige-fonce);
   background: transparent;
-  border: 1.5px solid var(--mui-palette-text-secondary);
+  border: 1.5px solid var(--beige-fonce);
   border-radius: 50%;
   cursor: help;
   user-select: none;
@@ -569,9 +729,9 @@
     border-color 0.15s ease;
 }
 [data-previewer] [data-field-info-icon]:hover {
-  color: var(--mui-palette-primary-contrastText);
-  background: var(--mui-palette-primary-main);
-  border-color: var(--mui-palette-primary-main);
+  color: var(--blanc);
+  background: var(--noir);
+  border-color: var(--noir);
 }
 /* Tooltip is rendered position: fixed by the package (top/left set inline);
    these are cosmetics only. */
@@ -584,8 +744,8 @@
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.4;
-  color: var(--mui-palette-background-paper);
-  background: var(--mui-palette-text-primary);
+  color: var(--blanc);
+  background: var(--noir);
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   white-space: normal;
@@ -594,7 +754,7 @@
 
 [data-previewer] [data-no-options] {
   font-size: 0.75rem;
-  color: var(--mui-palette-error-main);
+  color: #e8512a;
 }
 
 [data-previewer] [data-field-control] {
@@ -831,7 +991,14 @@
      thumb's circle stays on the rail, but a notched slider hides that thumb —
      the dots are the marks, and they line up with where the track starts and
      stops. */
-  left: calc(var(--_at, 0) * 100%);
+  /* Inset by half a dot at each end so the MARKS sit inside the track's span:
+     each dot is centred on its position, so without this the first one's left
+     half (and the last one's right half) hangs outside the track — the step
+     slider started 4px left of every other field. `--_dot` is the dot's
+     measured diameter, so the inset follows it at any density. */
+  left: calc(
+    var(--_dot, 8px) / 2 + var(--_at, 0) * (100% - var(--_dot, 8px))
+  );
   transform: translate(-50%, -50%);
   width: 14px;
   height: 14px;
@@ -851,8 +1018,14 @@
    click target while the mark is 8px. */
 [data-previewer] [data-slider-notch]::before {
   content: "";
-  width: 8px;
-  height: 8px;
+  /* 8px is the kit's mark, but never wider than the space each stop has: with
+     many stops a fixed 8px overlaps its neighbours and the track reads as one
+     solid bar instead of a scale. `--_dot` is measured by the renderer off the
+     live track width (capped at 8, floored at 3) — a percentage of the track
+     cannot be resolved here, since inside the dot a percentage means a share of
+     its own 14px button. */
+  width: var(--_dot, 8px);
+  height: var(--_dot, 8px);
   border-radius: 50%;
   background: var(--beige);
   transition:
@@ -879,10 +1052,15 @@
 [data-previewer]
   [data-slider-wrapper]:has([data-slider-notches])
   input[type="range"] {
+  /* Ends exactly on the current dot: the dots are inset by half a dot at each
+     end, so the fill travels that same reduced span rather than the full
+     track. */
   background: linear-gradient(
     to right,
-    var(--noir) calc(var(--_pct, 0) * 100%),
-    var(--beige) calc(var(--_pct, 0) * 100%)
+    var(--noir)
+      calc(var(--_dot, 8px) / 2 + var(--_pct, 0) * (100% - var(--_dot, 8px))),
+    var(--beige)
+      calc(var(--_dot, 8px) / 2 + var(--_pct, 0) * (100% - var(--_dot, 8px)))
   );
 }
 
@@ -904,7 +1082,14 @@
 [data-previewer]
   [data-slider-wrapper]:has([data-slider-notches])
   [data-slider-stepper] {
-  left: calc(var(--_pct, 0) * var(--_track-w));
+  /* The dots are inset by half a dot at each end, so the tag travels the same
+     reduced span to stay centred on the current one. `--_track-w` is the track
+     as a percentage of the wrapper, and the stepper is positioned against the
+     wrapper — so the dot inset is expressed as a fraction of that track. */
+  left: calc(
+    var(--_dot, 8px) / 2 + var(--_pct, 0) *
+      (var(--_track-w) - var(--_dot, 8px))
+  );
 }
 
 /* `.k-slider--crante .k-slider-curseur { display: none }` — the current notch
@@ -949,20 +1134,19 @@
   width: 100%;
   padding: 8px 12px;
   font-size: 0.875rem;
-  color: var(--mui-palette-text-primary);
-  background: var(--mui-palette-background-paper);
-  border: 1px solid var(--mui-palette-divider);
+  color: var(--noir);
+  background: var(--blanc);
+  border: 1px solid var(--noir-15);
   border-radius: 5px;
   outline: none;
   transition: border-color 150ms;
 }
 [data-previewer] input:hover {
-  border-color: var(--mui-palette-text-primary);
+  border-color: var(--noir);
 }
 [data-previewer] input:focus {
-  border-color: var(--mui-palette-primary-main);
-  box-shadow: 0 0 0 2px
-    color-mix(in srgb, var(--mui-palette-primary-main) 20%, transparent);
+  border-color: var(--noir);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--noir) 20%, transparent);
 }
 
 /* ── Select ──────────────────────────────────────────────────── */
@@ -970,9 +1154,9 @@
   width: 100%;
   padding: 8px 32px 8px 12px;
   font-size: 0.875rem;
-  color: var(--mui-palette-text-primary);
-  background: var(--mui-palette-background-paper);
-  border: 1px solid var(--mui-palette-divider);
+  color: var(--noir);
+  background: var(--blanc);
+  border: 1px solid var(--noir-15);
   border-radius: 5px;
   outline: none;
   appearance: none;
@@ -982,12 +1166,11 @@
   transition: border-color 150ms;
 }
 [data-previewer] select:hover {
-  border-color: var(--mui-palette-text-primary);
+  border-color: var(--noir);
 }
 [data-previewer] select:focus {
-  border-color: var(--mui-palette-primary-main);
-  box-shadow: 0 0 0 2px
-    color-mix(in srgb, var(--mui-palette-primary-main) 20%, transparent);
+  border-color: var(--noir);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--noir) 20%, transparent);
 }
 
 /* ── Checkbox ────────────────────────────────────────────────── */
@@ -998,9 +1181,9 @@
   height: 20px;
   margin: 0;
   flex: 0 0 auto;
-  border: 2px solid var(--mui-palette-divider);
+  border: 2px solid var(--noir-15);
   border-radius: 6px;
-  background: var(--mui-palette-background-paper);
+  background: var(--blanc);
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
@@ -1010,11 +1193,11 @@
     box-shadow 150ms;
 }
 [data-previewer] input[type="checkbox"]:hover {
-  border-color: var(--mui-palette-text-secondary);
+  border-color: var(--beige-fonce);
 }
 [data-previewer] input[type="checkbox"]:checked {
-  border-color: var(--mui-palette-primary-main);
-  background-color: var(--mui-palette-primary-main);
+  border-color: var(--noir);
+  background-color: var(--noir);
   /* White checkmark, centered */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M13 4.5L6.5 11L3 7.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -1023,8 +1206,7 @@
 }
 [data-previewer] input[type="checkbox"]:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--mui-palette-primary-main) 25%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--noir) 25%, transparent);
 }
 [data-previewer] input[type="checkbox"]:disabled {
   cursor: not-allowed;
@@ -1277,8 +1459,14 @@
 [data-previewer]
   [data-combo-options][data-combo-type="iconselect"]
   [data-option][data-selected="true"] {
-  background: var(--fond);
-  box-shadow: inset 0 0 0 1px var(--beige-fonce-15);
+  /* Stays WHITE when selected — the kit lightens to `--fond` here, but on a
+     white panel that reads as a faint grey wash rather than a selection.
+     With the fill gone the hairline is the ONLY marker, so it takes the full
+     `--beige-fonce` at 2px rather than the kit's 15%-opacity 1px: at that
+     weight on white the selected tile was indistinguishable from its
+     neighbours. */
+  background: var(--blanc);
+  box-shadow: inset 0 0 0 2px var(--beige-fonce);
 }
 
 /* The icon inside the tile: 24px, per the kit. */
@@ -1334,8 +1522,9 @@
   padding: 0;
   border-radius: 5px;
   overflow: hidden;
-  /* Beige shows through while the image loads, and behind a transparent one. */
-  background: var(--beige);
+  /* White behind the image — it shows while the image loads and through a
+     transparent one, so it should read as the panel rather than as a fill. */
+  background: var(--blanc);
   box-shadow: inset 0 0 0 1px var(--beige);
 }
 
@@ -1547,9 +1736,9 @@
   padding: 6px 14px;
   font-size: 0.8125rem;
   font-family: inherit;
-  color: var(--mui-palette-text-secondary);
+  color: var(--beige-fonce);
   background: transparent;
-  border: 1px dashed var(--mui-palette-divider);
+  border: 1px dashed var(--noir-15);
   border-radius: 5px;
   cursor: pointer;
   white-space: nowrap;
@@ -1566,12 +1755,12 @@
      next to the options on whichever line it lands. */
 }
 [data-previewer] [data-show-more]:hover {
-  color: var(--mui-palette-primary-main);
-  background: var(--mui-palette-action-hover);
-  border-color: var(--mui-palette-primary-main);
+  color: var(--noir);
+  background: var(--beige);
+  border-color: var(--noir);
 }
 [data-previewer] [data-show-more]:focus-visible {
-  outline: 2px solid var(--mui-palette-primary-main);
+  outline: 2px solid var(--noir);
   outline-offset: 1px;
 }
 /* Expanded: solid border, since "Show less" collapses rather than reveals. */
@@ -1605,17 +1794,17 @@
 /* Selected → expanded blue bar reading "COLUMN n" */
 [data-previewer] [data-name="ZF_MODULE"] [data-option][data-selected="true"] {
   padding: 0 16px;
-  color: var(--mui-palette-primary-contrastText);
-  background: var(--mui-palette-primary-main);
-  border-color: var(--mui-palette-primary-main);
+  color: var(--blanc);
+  background: var(--noir);
+  border-color: var(--noir);
   font-weight: 600;
   letter-spacing: 0.04em;
 }
 [data-previewer]
   [data-name="ZF_MODULE"]
   [data-option][data-selected="true"]:hover {
-  background: var(--mui-palette-primary-dark);
-  border-color: var(--mui-palette-primary-dark);
+  background: var(--noir);
+  border-color: var(--noir);
 }
 /* "COLUMN " prefix fades + slides in as the bar expands */
 [data-previewer]
@@ -1634,16 +1823,16 @@
   padding: 0;
   border-radius: 50%;
   font-size: 0.75rem;
-  color: var(--mui-palette-text-secondary);
+  color: var(--beige-fonce);
   background: none;
-  border: 1px solid var(--mui-palette-divider);
+  border: 1px solid var(--noir-15);
 }
 [data-previewer]
   [data-name="ZF_MODULE"]
   [data-option]:not([data-option][data-selected="true"]):hover {
-  background: var(--mui-palette-action-hover);
-  border-color: var(--mui-palette-text-secondary);
-  color: var(--mui-palette-text-primary);
+  background: var(--beige);
+  border-color: var(--beige-fonce);
+  color: var(--noir);
   transform: scale(1.08);
 }
 
@@ -1674,15 +1863,15 @@
   overflow: hidden;
   border: 2px solid transparent;
   border-radius: 5px;
-  background: var(--mui-palette-action-hover);
+  background: var(--beige);
 }
 [data-previewer] [data-combo-type="circle"]:hover {
-  border-color: var(--mui-palette-divider);
-  background: var(--mui-palette-action-hover);
+  border-color: var(--noir-15);
+  background: var(--beige);
 }
 [data-previewer] [data-combo-type="circle"][data-selected="true"] {
-  border-color: var(--mui-palette-primary-main);
-  background: var(--mui-palette-background-paper);
+  border-color: var(--noir);
+  background: var(--blanc);
 }
 [data-previewer] [data-combo-type="circle"] [data-combo-image] {
   width: 100%;
@@ -1714,27 +1903,42 @@
 }
 
 /* Tab panel: give content breathing room on the sides */
+/* No horizontal inset: the previewer root already pads, and adding 16 here
+   put every field inside a tab panel 16px right of the fields outside one. */
 [data-previewer] [data-tab-panel] {
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-/* Nested TAB sections bleed back to the edge so their tab strips stay aligned */
+/* The tab panel no longer insets its content, so a nested TAB section
+   needs no bleed to stay aligned with it. */
 [data-previewer] [data-tab-panel] > [data-section-type="TAB"] {
-  margin-left: -16px;
-  margin-right: -16px;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 [data-previewer][data-layout="mobile"] [data-tab-panel] {
-  padding: 14px 16px;
+  padding: 14px 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+/* Leading above the previewer's FIRST row, on both layouts. Without it the
+   content sat flush against the top of its container — in the preview popup
+   that meant the first tab strip touching the header's hairline.
+
+   Put on the root's first child rather than as root padding, so it cannot
+   double up with the padding a host already applies, and it is right wherever
+   the previewer is embedded rather than only in this popup. */
+[data-previewer] > *:first-child {
+  margin-top: 20px;
+}
+
 [data-previewer][data-layout="mobile"] [data-tab-panel] > [data-tab-group] {
-  margin-left: -16px;
-  margin-right: -16px;
+  /* No bleed: the panel it sits in has no inset to cancel. */
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Nested tab group (a child section's tab strip) spacing on mobile */
