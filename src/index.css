@@ -113,6 +113,32 @@
    hairline has to sit flush, as the top edge of its own item. */
 [data-previewer] [data-type="SECTION"] [data-section-type="ACCORDION"] {
   padding-top: 0;
+  /* The generic nested-section rule above also adds `margin-top: 8px`; the
+     accordion's own flush hairline is its separator, so that 8px is a visible
+     seam rather than spacing. Zeroed here alongside the padding. */
+  margin-top: 0;
+}
+
+/* A NONE section is a bare grouping wrapper with no visual presence of its own —
+   no header, no fill, no hairline. It must therefore contribute NO spacing: the
+   generic nested-section padding/margin above would otherwise add 16px at a
+   boundary the user cannot see, on top of the 28px margin the preceding field
+   already carries. */
+[data-previewer] [data-type="SECTION"] [data-section-type="NONE"] {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* A NONE section groups fields without drawing anything, so a field either side
+   of its boundary must sit on the SAME rhythm as two plain sibling fields — the
+   28px their collapsed margins give. The section body is `display: flex` by
+   default, and a flex container never collapses its children's margins: the
+   preceding field's 28px bottom and the next field's 28px top would then ADD to
+   56 across the boundary, while the identical pair inside one wrapper collapse
+   to 28. Restoring `display: block` here lets the margins collapse through the
+   invisible wrapper, so a NONE section costs exactly nothing in spacing terms. */
+[data-previewer] [data-section-type="NONE"] > [data-section-body] {
+  display: block;
 }
 
 /* ── Accordion section — kit component 30 « Drop-down M » ─────────────────────
@@ -327,12 +353,17 @@
   flex-direction: column;
   gap: 12px;
 }
-/* `.ddm-body`: 48 below the title's cap line, and more room above the hairline
-   than a closed header leaves — an open item usually ends in a control rather
-   than a line of text, which needs the air. Direct child only, so a plain, row
-   or tab section nested inside keeps its own flush layout. */
+/* `.ddm-body`: 28 below the title's cap line (see the padding note), and more
+   room above the hairline than a closed header leaves — an open item usually
+   ends in a control rather than a line of text, which needs the air. Direct
+   child only, so a plain, row or tab section nested inside keeps its own flush
+   layout. */
 [data-previewer] [data-section-type="ACCORDION"] > [data-section-body] {
-  padding: 48px 0 40px;
+  /* 28 (not the kit's 48) below the title's cap line: the first field then sits
+     on the SAME rhythm as every field-to-field gap, so an accordion introduces
+     no wider step than a plain run of fields. The bottom is left as it was —
+     it sits above the hairline and serves a different purpose. */
+  padding: 28px 0 40px;
   border-top: none;
 }
 /* The body already carries that padding, so the first and last field inside
