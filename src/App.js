@@ -17,6 +17,10 @@ console.log(
 const CATALOG_API_URL =
   "https://backend.tecnibo.com/digitalfactory/oaksome-api/api/articles/tree";
 
+// Product images come back host-relative (`/api/image/3/view`), so they are
+// resolved against the API's mount path — the catalog URL minus `/api/...`.
+const IMAGE_PREFIX = CATALOG_API_URL.replace(/\/api\/.*$/, "/");
+
 const exportUrl = id =>
   `https://backend.tecnibo.com/digitalfactory/oaksome-api/api/configurator/${id}/export`;
 
@@ -75,7 +79,13 @@ const liveAllNames = exported => {
 };
 
 function App() {
+  // The CONFIGURATOR id being previewed. Since catalog-tree 4 the tree lists
+  // products, so this is the picked product's `configurator.id`.
   const [selectedId, setSelectedId] = useState(null);
+  // Name of a picked product that has no configurator — there is nothing to
+  // preview, so the main pane says so instead of staying blank.
+  const [productWithoutConfigurator, setProductWithoutConfigurator] =
+    useState(null);
   const [configurator, setConfigurator] = useState(null);
   const [status, setStatus] = useState("idle"); // idle | loading | error
   const [error, setError] = useState(null);
@@ -294,23 +304,19 @@ function App() {
         >
           Catalog
         </h2>
+        {/* Styled by treeStyle.css alone (no `styles` prop): inline styles
+            would outrank the sheet. */}
         <CatalogTree
           apiUrl={CATALOG_API_URL}
-          onSelect={id => setSelectedId(id)}
-          styles={{
-            root: {
-              style: { fontSize: 14, listStyle: "none", padding: 0, margin: 0 },
-            },
-            row: { style: { padding: "6px 8px" } },
-            catalog: { style: { fontWeight: 700, color: "#1d4ed8" } },
-            category: { style: { color: "#475569" } },
-            configurator: { style: { color: "#0f172a", borderRadius: 6 } },
-            selected: { style: { background: "#e0f2fe", fontWeight: 600 } },
-            version: {
-              style: { marginLeft: 6, fontSize: 11, color: "#94a3b8" },
-            },
-            toggle: { style: { marginLeft: "auto", opacity: 0.5 } },
-            children: { style: { paddingLeft: 16, listStyle: "none" } },
+          imagePrefix={IMAGE_PREFIX}
+          onSelectProduct={product => {
+            if (product.configurator) {
+              setProductWithoutConfigurator(null);
+              setSelectedId(product.configurator.id);
+            } else {
+              setSelectedId(null);
+              setProductWithoutConfigurator(product.name);
+            }
           }}
         />
       </aside>
@@ -319,7 +325,9 @@ function App() {
       <main style={{ flex: 1, overflowY: "auto", padding: 24 }}>
         {selectedId == null && (
           <p style={{ color: "#94a3b8" }}>
-            Select a configurator from the catalog to preview it.
+            {productWithoutConfigurator
+              ? `"${productWithoutConfigurator}" has no configurator to preview.`
+              : "Select a product from the catalog to preview its configurator."}
           </p>
         )}
 

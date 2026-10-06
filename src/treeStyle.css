@@ -1,117 +1,867 @@
+/* Demo copy of the conf app's RP tree theme (apps/conf/src/styles/
+   catalogTree-rp.css) without its [data-tree-theme] gate, so it applies to
+   every tree here. Requires @oak-some/catalog-tree >= 4.1.0. */
+
 /* =========================================================================
-@oak-some/catalog-tree — theme matching the app explorer (dark navy panel)
-Drop-in stylesheet. Import once: import "./catalog-tree.css";
-Targets the DOM the package renders — no package upgrade needed.
+    @oak-some/catalog-tree — theme for BOTH layouts
+    Drop-in stylesheet. Import once:  import "./catalog-browse.css";
 
-Rendered structure:
-ul[data-catalog-tree]
-li[data-type][data-depth][data-open][data-selected]
-button
-span <- label (always) — icon injected via ::before
-span <- ▾/▸ toggle (catalog/category) OR "v1.0.0" (configurator)
-ul ... <- nested children
+      <CatalogTree browse />   one level at a time  → div[data-catalog-browse]
+      <CatalogTree />          nested tree          → ul[data-catalog-tree]
 
-Look: navy panel, grey folder/file icons, chevron on the LEFT, light text,
-version pill, full-width row dividers, indigo selected row.
-========================================================================= */
+    Both roots also carry `data-catalog-ui`, and every rule that should apply to
+    both is scoped to THAT attribute. Rules scoped to [data-catalog-browse] or
+    [data-catalog-tree] are deliberately layout-specific.
 
-ul[data-catalog-tree] {
+    Tree mode differences worth knowing:
+      • the CARD is the [data-row] button, not the <li> — an <li> there also
+        wraps its children's <ul>, so bordering it would box in a whole subtree
+      • nesting is indented via `margin-left` on the child <li>. The package
+        injects its reset as a <style> INSIDE the root <ul>, so that sheet sorts
+        after this file and wins on the <ul>'s own padding/margin.
+
+    Rendered structure:
+      div[data-catalog-browse][data-view="grid"|"list"]
+        div[data-browse-header]                 <- only below the root
+          button[data-browse-back]              <- ← arrow icon
+          span[data-browse-title]               <- name of the level you're in
+        div[data-browse-toolbar]
+          div[data-browse-search]      > svg + input
+          div[data-browse-view-toggle] > button[data-view-button][data-active]
+        ul[data-browse-grid]
+          li[data-type][data-depth][data-open][data-selected][data-has-children]
+            div[data-row-wrapper]
+              button[data-row]
+                img[data-node-image] | span[data-node-image-fallback]
+                span[data-row-text] > span[data-label] + span[data-subtitle]
+                span[data-count-badge]
+              button[data-expand]               <- chevron, configurators only
+            div[data-variants]                  <- inline panel, when expanded
+              ul > li > button[data-row][data-variant-row]
+              button[data-create-variant]
+
+    Look: white cards on a light page, square thumbnails, bold name over a muted
+          "N items available" line, dark pill badge, square dark back button,
+          bordered search + view toggle, inline variants on a tinted panel.
+
+    Independent corner radii:
+      --ct-radius             the CARD (<li> holding image + name + subtitle)
+      --ct-radius-thumb       the square thumbnail in LIST view
+      --ct-radius-thumb-grid  the full-width thumbnail in GRID view
+      --ct-radius-sm          controls (search, view toggle, back, chevron, pills)
+    ========================================================================= */
+
+/* Neutralise host-app list defaults. A global like `ul:not([class]) {
+   padding-inline-start: 40px }` (specificity 0-1-1) outranks a bare
+   `[data-catalog-tree]` (0-1-0) and indents the whole component away from the
+   toolbar above it. Every list we own is reset here first, at a specificity that
+   holds, and the theme's own indents are re-applied further down. */
+[data-catalog-ui] ul,
+[data-catalog-ui][data-catalog-tree],
+[data-catalog-ui] [data-browse-grid],
+[data-catalog-ui] [data-catalog-tree] {
+  margin: 0;
+  padding: 0;
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+/* Tokens live on the shared hook, so BOTH layouts inherit them. */
+[data-catalog-ui] {
   /* ---- tokens (override any to re-skin) ---- */
   --ct-font:
     -apple-system, BlinkMacSystemFont, "Segoe UI", ui-sans-serif, system-ui,
     sans-serif;
   --ct-fs: 15px;
-  --ct-indent: 20px; /* px added per nesting level */
-  --ct-pad-x: 16px; /* left/right padding of a row */
-  --ct-pad-y: 13px; /* top/bottom padding of a row */
-  --ct-radius: 10px; /* panel corner radius */
+  --ct-radius: 10px; /* THE CARD — the <li> holding image + name + subtitle */
+  --ct-radius-sm: 6px; /* controls: search, view toggle, back, chevron, pills */
+  --ct-radius-thumb: 8px; /* the square thumbnail in LIST view */
+  --ct-radius-thumb-grid: 8px; /* the full-width thumbnail in GRID view */
+  --ct-gap: 12px; /* space between cards in list view */
 
   --ct-panel-bg: #ffffff;
   --ct-text: #2f2b3d;
   --ct-text-secondary: #6b7280;
-  --ct-icon: #9ca3af; /* muted grey folder / file icons */
-  --ct-chevron: #9ca3af;
+  --ct-icon: #9ca3af;
+  --ct-chevron: #6b7280;
   --ct-divider: #e5e7eb;
-  --ct-hover: #f3f4f6;
+  --ct-hover: #f9fafb;
 
-  --ct-selected-bg: rgba(0, 0, 0, 0.06);
+  --ct-accent: #111827; /* back button + count badge fill */
+  --ct-accent-text: #ffffff;
+
+  --ct-selected-bg: rgba(0, 0, 0, 0.04);
   --ct-selected-text: #1f2937;
 
-  --ct-version-bg: #f3f4f6;
-  --ct-version-text: #6b7280;
+  --ct-thumb-bg: #f7f7f8; /* empty thumbnail box */
+  --ct-thumb-size: 64px; /* square thumbnail, inset from the card edge */
+
+  /* Card geometry. Width is always fluid — cards fill whatever space the host
+      gives the component. Only the HEIGHT is fixed, so rows stay uniform no
+      matter how long a name is or whether a subtitle is present. */
+  --ct-card-h: 82px; /* list-view card height — thumb + 2×card-pad, roughly */
+  --ct-card-pad: 8px; /* padding around the thumbnail inside the card */
+  --ct-thumb-inset: 2px; /* extra left offset, on top of --ct-card-pad */
+  --ct-card-min-w: 200px; /* grid-view column floor — columns still flex to 1fr */
+  --ct-grid-text-h: 68px; /* grid-view text block — fixed so cards align */
+  --ct-grid-text-pad: 12px; /* padding around the grid card's title block */
+  --ct-text-pad: 14px; /* gap between thumbnail and the title block */
+
+  /* Variants (custom configurators) render as indented child cards. */
+  --ct-variants-bg: #fafafa;
+  --ct-variant-indent: 14px; /* applied twice: panel padding + child gutter */
+  --ct-variant-gap: 10px;
+  --ct-variant-h: 62px; /* child row height — shorter than the parent card */
+  --ct-variant-pad: 16px; /* child's inner padding — clears its own border */
+  --ct-variant-text-gap: 16px; /* space right of a child's thumbnail */
+  --ct-variant-pad-tight: 10px; /* child padding inside the narrow grid panel */
+  --ct-grid-panel-w: 340px; /* floating child panel width in grid view */
+
+  --ct-tree-indent: 22px; /* per-level indent in tree mode (browse=false) */
+  --ct-expand-size: 28px; /* the chevron button's box; the glyph inside is 16px */
+  --ct-expand-gap: 14px; /* gap between the chevron and the card's right edge */
+  --ct-version-gap: -8px; /* title -> version pill gap on a grid card */
+
+  --ct-fav-active: #f59e0b; /* filled star colour */
+  --ct-fav-gap: 4px; /* gap between the star and the chevron beside it */
+  --ct-fav-version-gap: -8px; /* title -> version gap on a favorite tile */
 
   font-family: var(--ct-font);
   font-size: var(--ct-fs);
   color: var(--ct-text);
   line-height: 1.4;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  background: var(--ct-panel-bg);
-  border: 1px solid var(--ct-divider);
-  border-radius: var(--ct-radius);
-  overflow: hidden; /* clip row hover/selection to the rounded panel */
   -webkit-user-select: none;
   user-select: none;
+
+  /* Width is fluid: fill whatever the host gives us, and become a query
+      container so the layout adapts to that width rather than the viewport's. */
+  width: 100%;
+  box-sizing: border-box;
+  container: catalog-browse / inline-size;
 }
 
-/* lists are full width — indentation is done on the button (keeps dividers full width) */
-ul[data-catalog-tree] ul {
-  margin: 0 !important;
-  padding: 0 !important;
-  list-style: none;
-}
-ul[data-catalog-tree] li {
-  list-style: none;
-}
-ul[data-catalog-tree] li[data-open="false"] > ul {
-  display: none;
+/* =========================================================================
+    Header — ← icon button + the current level's name
+    ========================================================================= */
+
+[data-catalog-browse] [data-browse-header] {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--ct-divider);
+  margin-bottom: 16px;
 }
 
-/* ---- depth → indent step (read by the calc below) ---- */
-ul[data-catalog-tree] li[data-depth="0"] > button {
-  --ct-d: 0;
+[data-catalog-browse] [data-browse-back] {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: var(--ct-accent);
+  color: var(--ct-accent-text);
+  border: none;
+  border-radius: var(--ct-radius-sm);
+  cursor: pointer;
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
 }
-ul[data-catalog-tree] li[data-depth="1"] > button {
-  --ct-d: 1;
+[data-catalog-browse] [data-browse-back]:hover {
+  opacity: 0.85;
 }
-ul[data-catalog-tree] li[data-depth="2"] > button {
-  --ct-d: 2;
+[data-catalog-browse] [data-browse-back]:active {
+  transform: scale(0.96);
 }
-ul[data-catalog-tree] li[data-depth="3"] > button {
-  --ct-d: 3;
-}
-ul[data-catalog-tree] li[data-depth="4"] > button {
-  --ct-d: 4;
-}
-ul[data-catalog-tree] li[data-depth="5"] > button {
-  --ct-d: 5;
-}
-ul[data-catalog-tree] li[data-depth="6"] > button {
-  --ct-d: 6;
-}
-ul[data-catalog-tree] li[data-depth="7"] > button {
-  --ct-d: 7;
-}
-ul[data-catalog-tree] li[data-depth="8"] > button {
-  --ct-d: 8;
+[data-catalog-browse] [data-browse-back]:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 2px;
 }
 
-/* ---- the row (reset native <button>) ---- */
-ul[data-catalog-tree] button {
+[data-catalog-browse] [data-browse-title] {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ct-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================================
+    Toolbar — search + grid/list toggle
+    ========================================================================= */
+
+[data-catalog-ui] [data-browse-toolbar] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+[data-catalog-ui] [data-browse-search] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 46px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  background: var(--ct-panel-bg);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius-sm);
+  color: var(--ct-icon);
+  transition: border-color 0.12s ease;
+}
+[data-catalog-ui] [data-browse-search]:focus-within {
+  border-color: var(--ct-chevron);
+}
+[data-catalog-ui] [data-browse-search] > svg {
+  flex: 0 0 auto;
+}
+
+[data-catalog-ui] [data-browse-search] input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ct-text);
+  appearance: none;
+  -webkit-appearance: none;
+}
+[data-catalog-ui] [data-browse-search] input::placeholder {
+  color: var(--ct-icon);
+}
+/* kill the native WebKit clear button — the border already frames the field */
+[data-catalog-ui] [data-browse-search] input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+[data-catalog-ui] [data-browse-view-toggle] {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+[data-catalog-ui] [data-view-button] {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  background: var(--ct-panel-bg);
+  color: var(--ct-text);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius-sm);
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+[data-catalog-ui] [data-view-button]:hover {
+  background: var(--ct-hover);
+}
+[data-catalog-ui] [data-view-button][data-active="true"] {
+  background: var(--ct-accent);
+  color: var(--ct-accent-text);
+  border-color: var(--ct-accent);
+}
+[data-catalog-ui] [data-view-button]:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 2px;
+}
+
+/* ---- tag filter: a dropdown beside the search, same height as the controls ---- */
+[data-catalog-ui] [data-tag-filter] {
+  flex: 0 0 auto;
+}
+[data-catalog-ui] [data-tag-filter-button] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  max-width: 220px;
+  margin: 0;
+  padding: 0 12px 0 14px;
+  box-sizing: border-box;
+  background: var(--ct-panel-bg);
+  color: var(--ct-text);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius-sm);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+[data-catalog-ui] [data-tag-filter-button]:hover {
+  background: var(--ct-hover);
+}
+[data-catalog-ui] [data-tag-filter-button] > svg {
+  flex: 0 0 auto;
+  color: var(--ct-icon);
+}
+[data-catalog-ui] [data-tag-filter-label] {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+[data-catalog-ui] [data-tag-filter][data-open="true"] [data-tag-filter-button] {
+  border-color: var(--ct-chevron);
+}
+/* tags picked: the button takes the accent, like the active view button */
+[data-catalog-ui] [data-tag-filter][data-active="true"] [data-tag-filter-button] {
+  background: var(--ct-accent);
+  color: var(--ct-accent-text);
+  border-color: var(--ct-accent);
+}
+[data-catalog-ui] [data-tag-filter][data-active="true"] [data-tag-filter-button] > svg {
+  color: inherit;
+}
+[data-catalog-ui] [data-tag-filter-button]:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 2px;
+}
+
+[data-catalog-ui] [data-tag-menu] {
+  top: calc(100% + 6px);
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  max-height: 320px;
+  padding: 6px;
+  box-sizing: border-box;
+  background: var(--ct-panel-bg);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 20;
+}
+[data-catalog-ui] [data-tag-menu] > ul {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+[data-catalog-ui] [data-tag-menu-search] {
+  flex: 0 0 auto;
+  height: 34px;
+  margin: 0 0 6px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  background: none;
+  color: var(--ct-text);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius-sm);
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+[data-catalog-ui] [data-tag-menu-search]:focus {
+  border-color: var(--ct-chevron);
+}
+[data-catalog-ui] [data-tag-option] {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
+  margin: 0;
+  padding: 8px 10px;
   box-sizing: border-box;
-  /* base + per-depth indent + extra for leaves (to clear the chevron column) */
-  padding: var(--ct-pad-y) var(--ct-pad-x) var(--ct-pad-y)
-    calc(
-      var(--ct-pad-x) + var(--ct-d, 0) * var(--ct-indent) + var(--ct-extra, 0px)
-    );
+  background: none;
+  color: var(--ct-text);
+  border: none;
+  border-radius: var(--ct-radius-sm);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+[data-catalog-ui] [data-tag-option]:hover {
+  background: var(--ct-hover);
+}
+[data-catalog-ui] [data-tag-option]:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: -2px;
+}
+[data-catalog-ui] [data-tag-check] {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--ct-chevron);
+  border-radius: 4px;
+}
+[data-catalog-ui] [data-tag-option][data-active="true"] [data-tag-check] {
+  background: var(--ct-accent);
+  border-color: var(--ct-accent);
+  color: var(--ct-accent-text);
+}
+[data-catalog-ui] [data-tag-name] {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+[data-catalog-ui] [data-tag-menu-empty] {
+  padding: 8px 10px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ct-text-secondary);
+}
+[data-catalog-ui] [data-tag-clear] {
+  flex: 0 0 auto;
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  background: none;
+  color: var(--ct-text-secondary);
+  border: none;
+  border-top: 1px solid var(--ct-divider);
+  border-radius: 0;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+[data-catalog-ui] [data-tag-clear]:hover {
+  color: var(--ct-text);
+}
+
+/* =========================================================================
+    Rows — one white card per node
+    ========================================================================= */
+
+/* ---- list view (default): stacked cards that fill their container. Width is
+    entirely fluid — the component adapts to whatever space the host gives it,
+    from a narrow sidebar to a full-width panel. Only the height is fixed. ---- */
+[data-catalog-browse][data-view="list"] [data-browse-grid] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ct-gap);
+  width: 100%;
+}
+
+/* ---- grid view: square-ish cards, thumbnail on top ---- */
+[data-catalog-browse][data-view="grid"] [data-browse-grid] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ct-card-min-w), 1fr));
+  gap: 16px;
+  /* `start` so an expanded card grows downward instead of stretching its whole
+      row; collapsed cards in a row still match, since the square thumbnail plus
+      the fixed-height text block gives every card the same intrinsic height. */
+  align-items: start;
+}
+
+/* THE CARD. In browse mode these are the current level's rows; in tree mode
+   every node is a card, nested lists included. */
+[data-catalog-browse] [data-browse-grid] > li {
+  background: var(--ct-panel-bg);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius);
+  overflow: hidden;
+  transition: border-color 0.12s ease;
+}
+
+/* Tree mode: the CARD is the row itself, not the <li>. An <li> here also wraps
+   its children's <ul>, so bordering the <li> would draw a box around the whole
+   subtree instead of around one node. */
+/* Tree-mode card rules live further down, after the shared [data-catalog-ui]
+   [data-row] block — see the note there. */
+[data-catalog-browse] [data-browse-grid] > li:hover {
+  border-color: #d8dade;
+}
+
+/* Tree mode: stack cards with the same rhythm the list view uses, and indent
+   each nested level so the hierarchy stays readable. */
+[data-catalog-tree] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ct-gap);
+}
+/* Nested levels.
+   The indent is applied to each child <li>, NOT as padding/margin on the <ul>:
+   the package injects its reset as a <style> inside the root <ul>, so that sheet
+   sorts after this file and reliably wins on the <ul>'s own box properties.
+   `margin-left` on the <li> is untouched by the reset, so it always lands. */
+[data-catalog-tree] li > ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ct-gap);
+}
+[data-catalog-tree] li > ul > li {
+  margin-left: var(--ct-tree-indent);
+  margin-top: 0;
+}
+/* breathing room between a parent row and its first child */
+[data-catalog-tree] li > ul > li:first-child {
+  margin-top: var(--ct-gap);
+}
+
+/* ---- tree mode, GRID view ----
+   Only the TOP level tiles as cards. A node's children render as an indented
+   panel below it — the same shape browse mode uses for a configurator's custom
+   configurators — rather than as more grid cells, which would make a subtree
+   indistinguishable from its siblings. */
+[data-catalog-tree-root][data-view="grid"] [data-catalog-tree] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ct-card-min-w), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+/* The child panel FLOATS: absolutely positioned under the card head so opening
+   one card cannot resize it or reflow the grid. Same behaviour as browse mode's
+   variants panel, which also never disturbs the tiles around it. */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open="true"]
+  > ul {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  /* wider than the card: a ~200px cell squeezed child names to "T1…". It floats,
+     so the extra width costs the grid nothing. */
+  right: auto;
+  width: var(--ct-grid-panel-w);
+  max-width: 90vw;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ct-variant-gap);
+  background: var(--ct-variants-bg);
+  border: 1px solid var(--ct-divider);
+  border-top: none;
+  /* top-LEFT stays square: that edge butts against the card above it. The panel
+     is wider than the card, so its top-right corner is exposed and gets the
+     radius, as do both bottom corners. */
+  border-radius: 0 var(--ct-radius) var(--ct-radius) var(--ct-radius);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+/* deeper levels stay in flow inside the floating panel */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li[data-type]
+  li[data-type]
+  > ul {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ct-variant-gap);
   background: none;
   border: none;
-  border-bottom: 1px solid var(--ct-divider);
+  box-shadow: none;
+}
+/* The floating panel is only as wide as the card (~200px), so child rows must
+   give the NAME priority: tighter padding, a smaller thumbnail, and the version
+   pill dropped — otherwise the label truncates to "T1…" or vanishes entirely. */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open="true"]
+  > ul
+  [data-version] {
+  display: none;
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open="true"]
+  > ul
+  [data-label] {
+  font-size: 14px;
+}
+
+/* each child is a compact bordered row, not a tile */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li
+  > ul
+  > li
+  > [data-row-wrapper] {
+  flex-direction: row;
+  align-items: center;
+  height: var(--ct-variant-h);
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li
+  > ul
+  > li
+  > [data-row-wrapper]
+  > [data-row] {
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--ct-variant-pad-tight);
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li
+  > ul
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-node-image],
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li
+  > ul
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-node-image-fallback] {
+  width: 36px;
+  height: 36px;
+  aspect-ratio: 1 / 1;
+  margin-left: 0;
+  border-radius: var(--ct-radius-thumb);
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li
+  > ul
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-row-text] {
+  height: auto;
+  padding: 0 0 0 var(--ct-variant-pad-tight);
+}
+/* a child's own chevron returns inline rather than pinned to a card corner */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li
+  > ul
+  > li
+  > [data-row-wrapper]
+  > [data-expand] {
+  position: static;
+  transform: none;
+  margin-right: var(--ct-expand-gap);
+}
+/* A container in GRID view stays a card: same tile shape as a leaf, with its
+   chevron in the top-right corner beside the title. Expanding never reshapes the
+   card — that reshaping is what made the layout appear to flip to list mode.
+
+   The child panel is ABSOLUTE, so an open card neither grows nor pushes its
+   neighbours: every tile keeps identical width and height, and the panel floats
+   over the grid like a dropdown. `z-index` lifts it above adjacent cards. */
+[data-catalog-tree-root][data-view="grid"] [data-catalog-tree] > li[data-open] {
+  position: relative;
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open="true"] {
+  /* above sibling tiles, so the floating panel is not clipped behind them */
+  z-index: 2;
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open]
+  > [data-row-wrapper] {
+  position: relative;
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open]
+  > [data-row-wrapper]
+  > [data-row] {
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+  gap: 0;
+  padding: var(--ct-card-pad);
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open]
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-node-image],
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open]
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-node-image-fallback] {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  margin-left: 0;
+  border-radius: var(--ct-radius-thumb-grid);
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open]
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-row-text] {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--ct-grid-text-h);
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--ct-grid-text-pad);
+  /* keep the title clear of the cornered chevron */
+  padding-right: calc(var(--ct-grid-text-pad) + var(--ct-expand-size) + 8px);
+}
+/* the chevron corners itself beside the title, as in browse-mode grid */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li[data-open]
+  > [data-row-wrapper]
+  > [data-expand] {
+  position: absolute;
+  right: var(--ct-grid-text-pad);
+  bottom: calc(var(--ct-grid-text-h) / 2);
+  transform: translateY(50%);
+  margin: 0;
+}
+
+/* Panel insets live on the child <li>, not as padding on the <ul>: the blanket
+   list reset at the top of this file zeroes <ul> padding at a specificity this
+   cannot beat, and margins on the <li> are untouched by it. */
+[data-catalog-tree-root][data-view="grid"] [data-catalog-tree] li > ul > li {
+  margin: 0 var(--ct-variant-gap) 0 var(--ct-variant-indent);
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li
+  > ul
+  > li:first-child {
+  margin-top: var(--ct-variant-gap);
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  li
+  > ul
+  > li:last-child {
+  margin-bottom: var(--ct-variant-gap);
+}
+/* stack the card contents: thumbnail on top, title below — as in browse grid */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li:not([data-open])
+  > [data-row-wrapper] {
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li:not([data-open])
+  > [data-row-wrapper]
+  > [data-row] {
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+  gap: 0;
+  padding: var(--ct-card-pad);
+}
+/* Only a LEAF tiles as a card, so only a leaf gets the full-width square. A node
+   with children keeps the list-row thumbnail (its head is a heading for the
+   panel below, and a full-width 1:1 image there becomes a giant square). */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li:not([data-open])
+  [data-node-image],
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li:not([data-open])
+  [data-node-image-fallback] {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  margin-left: 0;
+  border-radius: var(--ct-radius-thumb-grid);
+}
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li:not([data-open])
+  [data-row-text] {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--ct-grid-text-h);
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--ct-grid-text-pad);
+}
+/* Leaf cards: the version pill is ABSOLUTE inside the card head. In flow it
+   added ~31px that container cards (which have no pill) never get, so leaves came
+   out taller than catalogs/categories in the same row. Taking it out of flow
+   makes every grid head exactly --ct-grid-text-h tall regardless of type. */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li:not([data-open])
+  > [data-row-wrapper] {
+  position: relative;
+}
+/* Version pill on a grid card: directly beneath the title and left-aligned with
+   it. ABSOLUTE so it adds no height — in flow it made leaf cards taller than
+   container cards (which have no pill) and grid rows came out uneven.
+   Offset by card padding + text padding so its left edge matches the title's.
+   NOTE: not scoped to `:not([data-open])` — that qualifier stopped the rule
+   matching, leaving the shared `margin-left:auto` to float the pill off-card. */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-version] {
+  position: absolute;
+  left: calc(var(--ct-card-pad) + var(--ct-grid-text-pad));
+  top: calc(
+    100% - var(--ct-grid-text-h) + var(--ct-grid-text-pad) + 21px +
+      var(--ct-version-gap)
+  );
+  margin: 0;
+}
+/* title pinned to the top of its block so the pill tucks in just below it */
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-row-text] {
+  justify-content: flex-start;
+}
+
+[data-catalog-ui] [data-row-wrapper] {
+  display: flex;
+  align-items: stretch;
+}
+
+/* Fixed card height in list view. Applied to the wrapper (not the <li>) so an
+    expanded configurator keeps a constant head while its variants panel grows
+    underneath. Overridden in grid view, where cards are column-shaped. */
+[data-catalog-browse][data-view="list"] [data-row-wrapper] {
+  height: var(--ct-card-h);
+}
+
+[data-catalog-ui] [data-row] {
+  display: flex;
+  align-items: center;
+  gap: 0; /* spacing comes from the text block's own padding */
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  /* padding frames the inset thumbnail on all four sides */
+  padding: var(--ct-card-pad);
+  background: none;
+  border: none;
   cursor: pointer;
   text-align: left;
   color: inherit;
@@ -120,145 +870,762 @@ ul[data-catalog-tree] button {
   -webkit-appearance: none;
   transition: background-color 0.12s ease;
 }
-ul[data-catalog-tree] button:hover {
+/* Hover tints the whole CARD, not just the row button — the chevron sits outside
+   [data-row], so a row-scoped hover left an untinted strip behind it. Driven off
+   the wrapper's :hover so pointing anywhere in the head (row OR chevron) lights
+   the full width. Variant rows opt out: they tint individually. */
+[data-catalog-browse] [data-browse-grid] > li:has(> [data-row-wrapper]:hover) {
   background-color: var(--ct-hover);
 }
-ul[data-catalog-tree] button:focus-visible {
-  outline: 2px solid var(--ct-selected-text);
+/* ---- tree mode (browse=false): the ROW is the card ----
+   Placed after the shared [data-catalog-ui] [data-row] block above, which sets
+   `border:none` — correct for browse mode, where the <li> carries the border,
+   but it would override these at equal specificity if they came first.
+   The <li> can't be the card here: it also wraps its children's <ul>, so a
+   border on it would box in the whole subtree instead of one node. */
+/* The card is the WRAPPER, so the chevron sits inside the border with the row
+   rather than orphaned in the gap beyond it. Bordering [data-row] instead left
+   the chevron outside the card, reading as a double frame. */
+[data-catalog-tree] [data-row-wrapper] {
+  height: var(--ct-card-h);
+  background: var(--ct-panel-bg);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius);
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+[data-catalog-tree] [data-row-wrapper]:hover {
+  background-color: var(--ct-hover);
+  border-color: #d8dade;
+}
+/* the row fills the card and stays transparent so the card's fill shows */
+[data-catalog-tree] [data-row] {
+  height: 100%;
+  background: none;
+  border: none;
+}
+[data-catalog-ui] [data-row]:focus-visible {
+  outline: 2px solid var(--ct-accent);
   outline-offset: -2px;
 }
 
-/* ---- label = first span (holds the icon via ::before) ---- */
-ul[data-catalog-tree] button > span:first-child {
+/* ---- thumbnail: a square, inset from the card edge by the row padding plus
+    --ct-thumb-inset, which nudges it right for a little more breathing room ---- */
+[data-catalog-ui] [data-node-image],
+[data-catalog-ui] [data-node-image-fallback] {
+  flex: 0 0 auto;
+  width: var(--ct-thumb-size);
+  height: var(--ct-thumb-size);
+  aspect-ratio: 1 / 1;
+  align-self: center;
+  margin-left: var(--ct-thumb-inset);
+  box-sizing: border-box;
+  background: var(--ct-thumb-bg);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius-thumb);
+}
+/* the image fills its square box; overflow is cropped rather than letterboxed */
+[data-catalog-ui] [data-node-image] {
+  object-fit: cover;
+  overflow: hidden;
+}
+/* screenshots show an empty grey box for imageless nodes — hide the initial */
+[data-catalog-ui] [data-node-image-fallback] {
+  font-size: 0;
+}
+
+/* ---- label + subtitle ---- */
+[data-catalog-ui] [data-row-text] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
   flex: 1 1 auto;
   min-width: 0;
+  /* horizontal only — the row's own padding handles the vertical rhythm */
+  padding: 0 var(--ct-text-pad);
+}
+[data-catalog-ui] [data-label] {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ct-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  /* `max-width` (not just overflow) is what makes ellipsis work for a flex item
+     in a column: without it the span sizes to its text and overflows the card
+     instead of clipping. */
+  max-width: 100%;
+  min-width: 0;
 }
-ul[data-catalog-tree] button > span:first-child::before {
-  content: "";
+/* A grid cell defaults to min-width:auto, which lets a long name widen the whole
+   column. Pinning it to 0 lets the label clip to the card instead. */
+[data-catalog-ui] [data-browse-grid] > li,
+[data-catalog-tree-root][data-view="grid"] [data-catalog-tree] > li,
+[data-catalog-tree-root][data-view="grid"] [data-catalog-tree] li > ul > li {
+  min-width: 0;
+}
+[data-catalog-browse] [data-subtitle] {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--ct-text-secondary);
+}
+
+/* ---- child-count badge ---- */
+[data-catalog-browse] [data-count-badge] {
+  display: grid;
+  place-items: center;
   flex: 0 0 auto;
-  width: 18px;
-  height: 18px;
-  background-color: var(--ct-icon);
-  -webkit-mask: var(--ct-glyph) center / contain no-repeat;
-  mask: var(--ct-glyph) center / contain no-repeat;
-}
-
-/* folder icon for catalog + category, file icon for configurator (filled, MUI-style) */
-ul[data-catalog-tree] li[data-type="CATALOG"] > button > span:first-child {
-  --ct-glyph: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2'><path d='M5.5%2C18 C4.11928813%2C18 3%2C19.1192881 3%2C20.5 C3%2C21.8807119 4.11928813%2C23 5.5%2C23 L22%2C23 M3%2C20.5 L3%2C3.5 C3%2C2.11928813 4.11928813%2C1 5.5%2C1 L21%2C1 L21%2C18.0073514 L5.49217286%2C18.0073514 M20.5%2C18 C19.1192881%2C18 18%2C19.1192881 18%2C20.5 C18%2C21.8807119 19.1192881%2C23 20.5%2C23 L20.5%2C23'/></svg>");
-}
-ul[data-catalog-tree] li[data-type="CATEGORY"] > button > span:first-child {
-  --ct-glyph: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'><path d='M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z'/></svg>");
-}
-ul[data-catalog-tree] li[data-type="CONFIGURATOR"] > button > span:first-child {
-  --ct-glyph: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'><path d='M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z'/></svg>");
-}
-
-/* leaves have no chevron — indent a bit more so their icon clears the chevron column */
-ul[data-catalog-tree] li[data-type="CONFIGURATOR"] > button {
-  --ct-extra: 28px;
-}
-
-/* ---- chevron on the LEFT (catalog/category 2nd span = ▾/▸, glyph hidden) ---- */
-ul[data-catalog-tree] li[data-type="CATALOG"] > button > span:nth-child(2),
-ul[data-catalog-tree] li[data-type="CATEGORY"] > button > span:nth-child(2) {
-  order: -1; /* move before the label */
-  flex: 0 0 auto;
-  position: relative;
-  width: 16px;
-  height: 16px;
-  font-size: 0; /* hide the ▾ / ▸ text glyph */
-}
-ul[data-catalog-tree]
-  li[data-type="CATALOG"]
-  > button
-  > span:nth-child(2)::before,
-ul[data-catalog-tree]
-  li[data-type="CATEGORY"]
-  > button
-  > span:nth-child(2)::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 7px;
-  height: 7px;
-  border-right: 2px solid var(--ct-chevron);
-  border-bottom: 2px solid var(--ct-chevron);
-  /* expanded → point UP (matches the app) */
-  transform: translate(-50%, -30%) rotate(225deg);
-}
-/* collapsed → point DOWN */
-ul[data-catalog-tree]
-  li[data-type="CATALOG"][data-open="false"]
-  > button
-  > span:nth-child(2)::before,
-ul[data-catalog-tree]
-  li[data-type="CATEGORY"][data-open="false"]
-  > button
-  > span:nth-child(2)::before {
-  transform: translate(-50%, -70%) rotate(45deg);
-}
-
-/* ---- version pill (configurator 2nd span) ---- */
-ul[data-catalog-tree]
-  li[data-type="CONFIGURATOR"]
-  > button
-  > span:nth-child(2) {
-  flex: 0 0 auto;
+  /* pushed right; the row's padding already keeps it clear of the card border */
   margin-left: auto;
-  font-size: 11px;
-  line-height: 1;
-  padding: 3px 7px;
-  border-radius: 6px;
-  background: var(--ct-version-bg);
-  color: var(--ct-version-text);
+  margin-right: 4px;
+  align-self: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: var(--ct-accent);
+  color: var(--ct-accent-text);
+  font-size: 13px;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- selected configurator ---- */
-ul[data-catalog-tree]
-  li[data-type="CONFIGURATOR"][data-selected="true"]
-  > button,
-ul[data-catalog-tree]
-  li[data-type="CONFIGURATOR"][data-selected="true"]
-  > button:hover {
-  background: var(--ct-selected-bg);
-}
-ul[data-catalog-tree]
-  li[data-type="CONFIGURATOR"][data-selected="true"]
-  > button
-  > span:first-child {
-  color: var(--ct-selected-text);
-  font-weight: 600;
-}
-ul[data-catalog-tree]
-  li[data-type="CONFIGURATOR"][data-selected="true"]
-  > button
-  > span:first-child::before {
-  background-color: var(
-    --ct-selected-text
-  ); /* icon adopts the selected color */
+/* ---- version pill (configurator rows) ---- */
+[data-catalog-ui] [data-version] {
+  flex: 0 0 auto;
+  margin-left: auto;
+  margin-right: 4px;
+  align-self: center;
+  font-size: 11px;
+  line-height: 1;
+  padding: 4px 7px;
+  border-radius: var(--ct-radius-sm);
+  background: #f3f4f6;
+  color: var(--ct-text-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
-/* ---- status states (loading / error / empty) ---- */
-ul[data-catalog-tree] ~ [data-state],
+/* ---- expand chevron (configurators with variants) ---- */
+[data-catalog-ui] [data-expand] {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  /* the wrapper is align-items:stretch, so centre this explicitly — otherwise a
+     fixed-height button sits at the top of a taller row */
+  align-self: center;
+  /* box sized to the 16px glyph inside it, so the icon does not swim in a
+     too-large square */
+  width: var(--ct-expand-size);
+  height: var(--ct-expand-size);
+  /* its own token, so the gap to the card's right edge can be tuned without
+     changing --ct-card-pad, which also drives the thumbnail inset */
+  margin-right: var(--ct-expand-gap);
+  padding: 0;
+  /* it is a <span role="button"> in tree mode, so the pointer isn't automatic */
+  cursor: pointer;
+  /* transparent, not panel-coloured: an opaque fill here punches a white hole
+     in the card's tint when the row is selected or expanded */
+  background: none;
+  color: var(--ct-chevron);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius-sm);
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+/* a translucent tint, so it reads as "this button" on top of the card's own
+   hover fill instead of covering it with an opaque colour */
+[data-catalog-ui] [data-expand]:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: var(--ct-chevron);
+}
+[data-catalog-ui] [data-expand]:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 2px;
+}
+
+/* an expanded card keeps its head visually attached to the panel below */
+[data-catalog-browse] [data-browse-grid] > li[data-open="true"] {
+  background: var(--ct-hover);
+}
+
+/* ---- selected configurator ---- */
+/* The tint goes on the CARD, not the row button, so it covers the full width
+   including the chevron's column — tinting only [data-row] left an untinted
+   strip behind the chevron. */
+/* `:not(:has(...))` so a parent hands its highlight over to the child: clicking
+   a variant should light up that variant's border, not the card containing it. */
+/* Tree mode marks the wrapper, since the wrapper is the card there. The same
+   `:not(:has(...))` guard applies: a parent hands its highlight to a selected
+   descendant, so a configurator and its picked variant are never lit at once. */
+[data-catalog-tree]
+  li[data-selected="true"]:not(:has(ul li[data-selected="true"]))
+  > [data-row-wrapper],
+[data-catalog-browse]
+  [data-browse-grid]
+  > li[data-selected="true"]:not(
+    :has([data-variants] li[data-selected="true"])
+  ) {
+  background: var(--ct-selected-bg);
+  border-color: var(--ct-selected-text);
+}
+
+/* the selected child gets the highlight instead */
+[data-catalog-browse] [data-variants] li[data-selected="true"] {
+  background: var(--ct-selected-bg);
+  border-color: var(--ct-selected-text);
+}
+/* the row and chevron stay transparent so the card's tint shows through */
+[data-catalog-ui] li[data-selected="true"] > [data-row-wrapper] [data-row],
+[data-catalog-ui]
+  li[data-selected="true"]
+  > [data-row-wrapper]
+  [data-row]:hover {
+  background: none;
+}
+/* Same `:not(:has(...))` guard as the border/tint above. Without it a parent
+   configurator kept the selected TEXT colour after its variant was picked — the
+   card border cleared correctly but the darker title read as still-selected. */
+[data-catalog-ui]
+  li[data-selected="true"]:not(:has(ul li[data-selected="true"]))
+  > [data-row-wrapper]
+  [data-row]
+  [data-label],
+[data-catalog-browse]
+  [data-browse-grid]
+  > li[data-selected="true"]:not(:has([data-variants] li[data-selected="true"]))
+  [data-row-text]
+  [data-label],
+[data-catalog-browse] [data-variants] li[data-selected="true"] [data-label] {
+  color: var(--ct-selected-text);
+}
+
+/* =========================================================================
+    Inline variants panel — a configurator's custom configurators
+    ========================================================================= */
+
+/* The panel reads as a nested level: indented from the left and marked with a
+    vertical spine, so a variant is visibly a child of the row above it. */
+[data-catalog-browse] [data-variants] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ct-variant-gap);
+  padding: var(--ct-variant-gap);
+  padding-left: var(--ct-variant-indent);
+  background: var(--ct-variants-bg);
+  border-top: 1px solid var(--ct-divider);
+}
+[data-catalog-browse] [data-variants] > ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ct-variant-gap);
+  margin: 0;
+  padding: 0;
+  padding-left: var(--ct-variant-indent);
+  list-style: none;
+}
+
+/* A variant is its own bordered child card, indented from the parent. The fill
+   stays transparent so it sits on the panel tint rather than punching a white
+   hole in it — the border alone defines the card. */
+[data-catalog-browse] [data-variants] li {
+  background: none;
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius);
+}
+/* inner padding keeps the thumbnail off the child's own left border */
+[data-catalog-browse] [data-variant-row] {
+  align-items: center;
+  height: var(--ct-variant-h);
+  padding: 0 var(--ct-variant-pad);
+  background: none;
+}
+/* transparent by default, so hover needs a tint that reads against the panel */
+[data-catalog-browse] [data-variant-row]:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+/* a smaller thumbnail keeps children visually subordinate to their parent */
+[data-catalog-browse] [data-variant-row] [data-node-image],
+[data-catalog-browse] [data-variant-row] [data-node-image-fallback] {
+  width: 42px;
+  height: 42px;
+  align-self: center;
+  margin-left: 0; /* the variant row's own padding is enough at this size */
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius-thumb);
+}
+/* Space between the child's thumbnail and its name.
+   NOTE: a variant row renders [data-node-image] + [data-label] directly, with
+   no [data-row-text] wrapper (unlike the main rows), so the gap has to go on
+   the label itself — a rule targeting [data-row-text] here matches nothing. */
+[data-catalog-browse] [data-variant-row] [data-label] {
+  margin-left: var(--ct-variant-text-gap);
+  font-weight: 600;
+}
+/* covers the case where a wrapper IS present, so both shapes stay consistent */
+[data-catalog-browse] [data-variant-row] [data-row-text] {
+  padding: 0 0 0 var(--ct-variant-text-gap);
+}
+[data-catalog-browse] [data-variant-row] [data-row-text] [data-label] {
+  margin-left: 0;
+}
+
+/* aligned with the child cards — indented past the spine, not under it */
+[data-catalog-browse] [data-create-variant] {
+  display: block;
+  width: auto;
+  margin-left: calc(var(--ct-variant-indent) + 2px);
+  padding: 12px;
+  box-sizing: border-box;
+  background: var(--ct-panel-bg);
+  border: 1px dashed #d1d5db;
+  border-radius: var(--ct-radius-sm);
+  color: var(--ct-text-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease;
+}
+[data-catalog-browse] [data-create-variant]:hover {
+  background: var(--ct-hover);
+  border-color: var(--ct-chevron);
+  color: var(--ct-text);
+}
+[data-catalog-browse] [data-create-variant]:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 2px;
+}
+
+/* =========================================================================
+    Grid view overrides — thumbnail on top, text below
+    ========================================================================= */
+
+[data-catalog-browse][data-view="grid"] [data-row-wrapper] {
+  flex-direction: column;
+  align-items: stretch;
+}
+[data-catalog-browse][data-view="grid"] [data-row]:not([data-variant-row]) {
+  flex-direction: column;
+  align-items: stretch;
+  /* no gap — the text block carries its own padding, so a gap here would
+     double the space between the thumbnail and the title */
+  gap: 0;
+  padding: var(--ct-card-pad);
+}
+/* The CARD thumbnail is a full-width square, inset by the row padding. Variants
+    inside the expanded panel keep their compact size ([data-variant-row] above). */
+[data-catalog-browse][data-view="grid"]
+  [data-row]:not([data-variant-row])
+  > [data-node-image],
+[data-catalog-browse][data-view="grid"]
+  [data-row]:not([data-variant-row])
+  > [data-node-image-fallback] {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  /* full-width here, so the list view's left nudge must not apply */
+  margin-left: 0;
+  /* Slightly tighter than the card so the two curves sit concentrically rather
+     than fighting — but still clearly rounded. */
+  border-radius: var(--ct-radius-thumb-grid);
+}
+/* Fixed text-block height so a card with a subtitle ("2 items available") is
+    exactly as tall as one without — otherwise grid rows come out ragged.
+    Padding is set explicitly here: the list-view rule is horizontal-only, which
+    left the title flush against the card's bottom edge in a column layout. */
+[data-catalog-browse][data-view="grid"] [data-row-text] {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--ct-grid-text-h);
+  /* centre the block vertically, but keep the text left-aligned so a card with
+     a subtitle and one without read the same way */
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--ct-grid-text-pad);
+}
+/* the badge can't float right in a column — pin it to the thumbnail corner.
+   The wrapper is also a containing block, since the chevron is a SIBLING of
+   [data-row] and would otherwise position against the page. */
+[data-catalog-browse][data-view="grid"] [data-row],
+[data-catalog-browse][data-view="grid"] [data-row-wrapper] {
+  position: relative;
+}
+/* offset by the card padding plus a little, so it sits inside the thumbnail
+   rather than straddling its corner */
+[data-catalog-browse][data-view="grid"] [data-count-badge] {
+  position: absolute;
+  top: calc(var(--ct-card-pad) + 8px);
+  right: calc(var(--ct-card-pad) + 8px);
+  margin: 0;
+}
+[data-catalog-browse][data-view="grid"] [data-version] {
+  margin-left: var(--ct-text-pad);
+  margin-right: var(--ct-text-pad);
+  margin-bottom: 12px;
+  align-self: flex-start;
+}
+/* Grid: the chevron sits at the right of the title, vertically centred on it,
+   instead of stretching into a full-width bar underneath.
+   Anchored to the CENTRE of the text block — the text block is the last thing in
+   the card head and has a known height, so its midline is `text-h / 2` up from
+   the head's bottom. Anchoring to `bottom` instead would tie the chevron to the
+   card edge and leave it below the title's baseline. */
+[data-catalog-browse][data-view="grid"] [data-expand] {
+  position: absolute;
+  right: var(--ct-grid-text-pad);
+  bottom: calc(var(--ct-grid-text-h) / 2);
+  transform: translateY(50%);
+  width: var(--ct-expand-size);
+  margin: 0;
+}
+/* keep the title clear of the controls it now sits beside */
+[data-catalog-browse][data-view="grid"] [data-row-text] {
+  padding-right: calc(var(--ct-grid-text-pad) + 42px);
+}
+
+/* GRID: the star sits on the THUMBNAIL's top-right corner, like the count badge
+   on container cards — it reads as a marker on the item rather than another
+   control competing with the chevron beside the title. Offset by the card
+   padding so it lands inside the image, not straddling its corner. */
+[data-catalog-browse][data-view="grid"] [data-favorite],
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li
+  > [data-row-wrapper]
+  > [data-favorite] {
+  position: absolute;
+  top: calc(var(--ct-card-pad) + 6px);
+  right: calc(var(--ct-card-pad) + 6px);
+  bottom: auto;
+  transform: none;
+  margin: 0;
+  /* a chip over the image, so the star stays legible on any thumbnail */
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--ct-divider);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+[data-catalog-browse][data-view="grid"] [data-favorite]:hover,
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li
+  > [data-row-wrapper]
+  > [data-favorite]:hover {
+  background: #ffffff;
+}
+
+/* Grid: variants start flush at the card's left edge — the list view's indent
+   would waste horizontal space in an already-narrow column. */
+[data-catalog-browse][data-view="grid"] [data-variants] {
+  padding-left: var(--ct-variant-gap);
+}
+[data-catalog-browse][data-view="grid"] [data-variants] > ul {
+  padding-left: 0;
+}
+
+/* Grid cards: square bottom corners in BOTH layouts, so a card sits flush
+   against whatever follows it (a floating child panel in tree mode, the row
+   below in browse mode) instead of showing a rounded lip. */
+[data-catalog-browse][data-view="grid"] [data-browse-grid] > li,
+[data-catalog-tree-root][data-view="grid"]
+  [data-catalog-tree]
+  > li
+  > [data-row-wrapper] {
+  border-top-left-radius: var(--ct-radius);
+  border-top-right-radius: var(--ct-radius);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* =========================================================================
+    Favorites — star toggle + the pinned section below the toolbar
+    ========================================================================= */
+
+/* Sized and shaped like the chevron beside it, so the two read as one control
+   group. Muted until active, then filled in the accent colour. */
+[data-catalog-ui] [data-favorite] {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  align-self: center;
+  width: var(--ct-expand-size);
+  height: var(--ct-expand-size);
+  margin-right: var(--ct-fav-gap);
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  color: var(--ct-icon);
+  border: 1px solid transparent;
+  border-radius: var(--ct-radius-sm);
+  transition:
+    color 0.12s ease,
+    background-color 0.12s ease;
+}
+[data-catalog-ui] [data-favorite]:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--ct-fav-active);
+}
+[data-catalog-ui] [data-favorite][data-active="true"] {
+  color: var(--ct-fav-active);
+}
+[data-catalog-ui] [data-favorite]:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 2px;
+}
+
+/* The pinned section sits BELOW the toolbar, separated by a rule so it reads as
+   a distinct shelf rather than the first rows of the list. */
+[data-catalog-ui] [data-favorites-section] {
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ct-divider);
+}
+[data-catalog-ui] [data-favorites-title] {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ct-text-secondary);
+}
+
+/* The list FOLLOWS THE ACTIVE VIEW rather than using a shape of its own: a
+   favorite should look like the same card it looks like in the tree below.
+   Previously it was always a ~220px auto-fill grid, so in list view the rows
+   came out narrow and side-by-side instead of full-width stacked. */
+
+/* ---- favorites in LIST view: full-width stacked rows ---- */
+[data-catalog-ui][data-view="list"] [data-favorites-list] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ct-gap);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---- favorites in GRID view: tiles matching the grid cards ---- */
+[data-catalog-ui][data-view="grid"] [data-favorites-list] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ct-card-min-w), 1fr));
+  gap: 16px;
+  align-items: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-catalog-ui] [data-favorites-list] > li {
+  min-width: 0;
+}
+
+/* the card shell, shared by both views */
+[data-catalog-ui] [data-favorites-list] > li > [data-row-wrapper] {
+  background: var(--ct-panel-bg);
+  border: 1px solid var(--ct-divider);
+  border-radius: var(--ct-radius);
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+[data-catalog-ui] [data-favorites-list] > li > [data-row-wrapper]:hover {
+  background-color: var(--ct-hover);
+  border-color: #d8dade;
+}
+
+/* LIST view: the fixed-height horizontal row shape */
+[data-catalog-ui][data-view="list"]
+  [data-favorites-list]
+  > li
+  > [data-row-wrapper] {
+  height: var(--ct-card-h);
+  flex-direction: row;
+  align-items: stretch;
+}
+
+/* GRID view: thumbnail on top, title below — same as a grid card */
+[data-catalog-ui][data-view="grid"]
+  [data-favorites-list]
+  > li
+  > [data-row-wrapper] {
+  position: relative;
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+}
+[data-catalog-ui][data-view="grid"]
+  [data-favorites-list]
+  > li
+  > [data-row-wrapper]
+  > [data-row] {
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+  gap: 0;
+  padding: var(--ct-card-pad);
+}
+[data-catalog-ui][data-view="grid"]
+  [data-favorites-list]
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-node-image],
+[data-catalog-ui][data-view="grid"]
+  [data-favorites-list]
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-node-image-fallback] {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  margin-left: 0;
+  border-radius: var(--ct-radius-thumb-grid);
+}
+[data-catalog-ui][data-view="grid"]
+  [data-favorites-list]
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-row-text] {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--ct-grid-text-h);
+  /* flex-start, not center: the version pill is absolutely positioned just below
+     the title, so the title must sit at the TOP of the block or the two overlap. */
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: var(--ct-grid-text-pad);
+}
+/* the star corners onto the thumbnail, exactly as on a grid card */
+[data-catalog-ui][data-view="grid"]
+  [data-favorites-list]
+  > li
+  > [data-row-wrapper]
+  > [data-favorite] {
+  position: absolute;
+  top: calc(var(--ct-card-pad) + 6px);
+  right: calc(var(--ct-card-pad) + 6px);
+  bottom: auto;
+  transform: none;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--ct-divider);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+/* version pill under the title, matching the grid card treatment */
+[data-catalog-ui][data-view="grid"]
+  [data-favorites-list]
+  > li
+  > [data-row-wrapper]
+  > [data-row]
+  > [data-version] {
+  position: absolute;
+  left: calc(var(--ct-card-pad) + var(--ct-grid-text-pad));
+  /* Measured from the card's BOTTOM: the text block is the last thing in the
+     card, so `100% - text-h` is its top edge. Anchoring from the card's top
+     instead put the pill up on the thumbnail. */
+  top: calc(
+    100% - var(--ct-grid-text-h) + var(--ct-grid-text-pad) + 21px +
+      var(--ct-fav-version-gap)
+  );
+  margin: 0;
+}
+
+/* selected favorite */
+[data-catalog-ui]
+  [data-favorites-list]
+  > li[data-selected="true"]
+  > [data-row-wrapper] {
+  background: var(--ct-selected-bg);
+  border-color: var(--ct-selected-text);
+}
+[data-catalog-ui]
+  [data-favorites-list]
+  > li[data-selected="true"]
+  [data-label] {
+  color: var(--ct-selected-text);
+}
+
+/* =========================================================================
+    Status states (loading / error / empty / no results)
+    ========================================================================= */
+
+[data-catalog-ui] [data-state],
 [data-state] {
   display: block;
-  padding: 14px 16px;
+  padding: 18px 4px;
   font-family: var(--ct-font, system-ui, sans-serif);
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--ct-text-secondary, #6b7280);
 }
 [data-state="error"] {
   color: #ff7074;
 }
-[data-state="empty"] {
+[data-state="empty"],
+[data-state="no-results"] {
   font-style: italic;
+}
+
+/* =========================================================================
+    Narrow containers
+
+    Keyed off the COMPONENT's own width, not the viewport — the tree is often
+    mounted in a sidebar or split pane, where a viewport media query would report
+    "wide" while the component itself is only 300px. Container queries measure the
+    space the component actually has.
+    ========================================================================= */
+
+@container catalog-browse (max-width: 420px) {
+  [data-catalog-ui] {
+    --ct-thumb-size: 52px;
+    --ct-card-h: 78px;
+    --ct-card-pad: 10px;
+    --ct-text-pad: 12px;
+    --ct-card-min-w: 140px;
+  }
+  [data-catalog-ui] [data-browse-toolbar] {
+    flex-wrap: wrap;
+  }
+  [data-catalog-ui] [data-browse-search] {
+    flex-basis: 100%;
+  }
+  /* the tag button now starts the second row: open its menu rightwards */
+  [data-catalog-ui] [data-tag-menu] {
+    left: 0;
+    right: auto;
+  }
+}
+
+/* Fallback for engines without container queries: a viewport query is a coarse
+    approximation, but better than no adaptation at all on small screens. */
+@supports not (container-type: inline-size) {
+  @media (max-width: 520px) {
+    [data-catalog-ui] {
+      --ct-thumb-size: 52px;
+      --ct-card-h: 78px;
+      --ct-card-pad: 10px;
+      --ct-text-pad: 12px;
+    }
+    [data-catalog-ui] [data-browse-toolbar] {
+      flex-wrap: wrap;
+    }
+    [data-catalog-ui] [data-browse-search] {
+      flex-basis: 100%;
+    }
+    /* the tag button now starts the second row: open its menu rightwards */
+    [data-catalog-ui] [data-tag-menu] {
+      left: 0;
+      right: auto;
+    }
+  }
 }

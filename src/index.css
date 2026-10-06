@@ -6,7 +6,7 @@
    `styles` prop — the previewer's own data-attributes are the whole
    styling surface.
 
-   Requires previewer >= 1.22.1.
+   Requires previewer >= 1.28.0
 
    Drop-in:
        import "./index.css";
@@ -65,6 +65,7 @@
 [data-previewer] {
   display: flex;
   flex-direction: column;
+  gap: 16px;
   /* Keeps the configurator off the panel's edges — the kit's own panel pads its
      scrolling body (`.cfg-scroll`) rather than letting controls run to the
      border. Horizontal only: vertical rhythm is the blocks' own margins.
@@ -72,7 +73,6 @@
      (`.cfg-scroll` is 24 on the left against 32 on the right). */
   padding-left: 48px;
   padding-right: 24px;
-  gap: 16px;
 
   /* ── Stoëmp tokens (kit-configurateur/css/tokens.css) ──────────
      Scoped to the previewer root so they never leak into the admin
@@ -104,14 +104,18 @@
   border-radius: 5px;
 }
 
-[data-previewer] [data-type="SECTION"] [data-type="SECTION"] {
+[data-previewer]
+  [data-type="SECTION"]
+  [data-type="SECTION"] {
   border-radius: 5px;
   padding-top: 8px;
   margin-top: 8px;
 }
 /* A nested accordion must not inherit the generic nested-section padding: its
    hairline has to sit flush, as the top edge of its own item. */
-[data-previewer] [data-type="SECTION"] [data-section-type="ACCORDION"] {
+[data-previewer]
+  [data-type="SECTION"]
+  [data-section-type="ACCORDION"] {
   padding-top: 0;
   /* The generic nested-section rule above also adds `margin-top: 8px`; the
      accordion's own flush hairline is its separator, so that 8px is a visible
@@ -123,8 +127,11 @@
    no header, no fill, no hairline. It must therefore contribute NO spacing: the
    generic nested-section padding/margin above would otherwise add 16px at a
    boundary the user cannot see, on top of the 28px margin the preceding field
-   already carries. */
-[data-previewer] [data-type="SECTION"] [data-section-type="NONE"] {
+   already carries. Fields inside it keep their own margins, so the rhythm is
+   unchanged — only the invisible wrapper's contribution is removed. */
+[data-previewer]
+  [data-type="SECTION"]
+  [data-section-type="NONE"] {
   padding-top: 0;
   margin-top: 0;
 }
@@ -132,35 +139,43 @@
 /* A NONE section groups fields without drawing anything, so a field either side
    of its boundary must sit on the SAME rhythm as two plain sibling fields — the
    28px their collapsed margins give. The section body is `display: flex` by
-   default, and a flex container never collapses its children's margins: the
-   preceding field's 28px bottom and the next field's 28px top would then ADD to
-   56 across the boundary, while the identical pair inside one wrapper collapse
-   to 28. Restoring `display: block` here lets the margins collapse through the
-   invisible wrapper, so a NONE section costs exactly nothing in spacing terms. */
-[data-previewer] [data-section-type="NONE"] > [data-section-body] {
+   default, and a flex container never collapses its children's margins: Column's
+   28px bottom and the next field's 28px top would then ADD to 56 across the
+   boundary, while the identical pair of fields inside one wrapper collapse to 28.
+   Restoring `display: block` here lets the margins collapse through the invisible
+   wrapper, so a NONE section costs exactly nothing in spacing terms. */
+[data-previewer]
+  [data-section-type="NONE"]
+  > [data-section-body] {
   display: block;
 }
 
 /* ── Accordion section — kit component 30 « Drop-down M » ─────────────────────
    Figma 4346:29934, ported from the kit's own `css/dropdown-m.css`. NOT a card:
-   there is no border, fill or radius — a single black hairline that sits below
-   the item's LAST VISIBLE element, and a `+` drawn from two 1px lines that
-   rotates 45° into a `×` (black in both states; the blue elsewhere in the kit's
-   Figma belongs to the FAQ rail, not to this toggle).
+   items are separated by full-width BLACK hairlines, with no border, fill or
+   radius. The affordance is a `+` drawn from two 1px lines, rotating 45° into a
+   `×` when the item opens — black in both states (the kit is explicit that the
+   blue elsewhere in its Figma belongs to the FAQ rail, not to this toggle).
 
-   SMALL is the compact register and narrows the whole item; LARGE spans the
-   full width with the desktop 74px closed height. */
+   Closed height is 74 = hairline 1 + 26 + cap-height 22 + 26; the header's
+   padding carries it, so the numbers here are the kit's verbatim.
 
-[data-previewer] [data-section-type="ACCORDION"] {
+   LARGE takes the kit's mobile register: a fixed 150px closed item, a 24px
+   toggle in 2px strokes, and a body without the 576 cap. */
+
+[data-previewer]
+  [data-section-type="ACCORDION"] {
   border: none;
   border-radius: 0;
   background: none;
   /* SMALL narrows the WHOLE item — hairline, title and body — so the register
-     changes the block's footprint, not just its text measure. 62.5% is the
-     kit's reading measure (576 of its 922-wide list). */
+     changes the block's footprint in the popup, not just its text measure.
+     62.5% is the kit's reading measure (576 of its 922-wide list). LARGE below
+     takes the full width. */
   max-width: 62.5%;
 }
-[data-previewer] [data-section-type="ACCORDION"][data-size="large"] {
+[data-previewer]
+  [data-section-type="ACCORDION"][data-size="large"] {
   max-width: none;
 }
 
@@ -170,47 +185,18 @@
    the renderer puts around the mobile strip simply spans its container.
    (The wrapper still carries `data-size`, so a consumer that wants the desktop
    behaviour on mobile can opt back in.) */
-[data-previewer] [data-mobile-section="ACCORDION"] {
+[data-previewer]
+  [data-mobile-section="ACCORDION"] {
   max-width: none;
 }
-
-/* The hairlines ARE the separation, so stacked items sit flush. */
+/* The hairline sits below the item's LAST VISIBLE element: under the header
+   while closed, and under the body once open — so opening an item moves the
+   line down past its content rather than leaving it stranded under the title.
+   Carried by those elements rather than by the section, because the section has
+   no way to know which of the two is currently last. */
 [data-previewer]
   [data-section-type="ACCORDION"]
-  + [data-section-type="ACCORDION"] {
-  margin-top: 0;
-}
-[data-previewer] [data-section-type="ACCORDION"] + [data-type="SECTION"],
-[data-previewer] [data-type="SECTION"] + [data-section-type="ACCORDION"] {
-  margin-top: 28px;
-}
-
-[data-previewer] [data-section-header] {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 25px;
-  width: 100%;
-  /* Balanced, so the hairline sits the same distance from the title whether the
-     item is open or closed. NOT the kit's fixed 150 — that is a mobile tap
-     target measured on a 390px phone, and it leaves ~100px of dead space under
-     a one-line title in a desktop panel. */
-  padding: 25px 0 25px;
-  background: none;
-  border: 0;
-  border-radius: 0;
-  font: 700 30px/32px var(--font-titre);
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--noir);
-  text-align: left;
-  cursor: pointer;
-}
-/* The hairline sits below the item's last visible element: under the header
-   while closed, under the body once open — so opening an item moves the line
-   down past its content. Declared AFTER the header's own `border: 0` above,
-   which would otherwise wipe it out on source order. */
-[data-previewer] [data-section-type="ACCORDION"] > [data-section-header] {
+  > [data-section-header] {
   border-bottom: 1px solid var(--noir);
 }
 [data-previewer]
@@ -223,54 +209,100 @@
   > [data-section-body] {
   border-bottom: 1px solid var(--noir);
 }
-[data-previewer] [data-section-header]:focus-visible {
+/* The hairlines ARE the separation, so stacked items sit flush. */
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  + [data-section-type="ACCORDION"] {
+  margin-top: 0;
+}
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  + [data-type="SECTION"],
+[data-previewer]
+  [data-type="SECTION"]
+  + [data-section-type="ACCORDION"] {
+  margin-top: 28px;
+}
+
+/* `.ddm-btn` + `.ddm-title`: Yet Grotesk 700 at 30/32, trimmed to the cap
+   height so the box measures the Figma's 74 rather than the ~10px taller box a
+   normal line-box gives. */
+[data-previewer] [data-section-header] {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  /* SMALL is the kit's compact (`.k-m`) register: a closed item is a fixed 150
+     tall (hairline 1 + 25 + title zone + 26), with 25 between title and
+     toggle. LARGE below takes the desktop 74. */
+  gap: 25px;
+  width: 100%;
+  /* Balanced padding above and below the title, so the hairline sits the same
+     distance from it whether the item is open or closed.
+
+     NOT the kit's fixed 150: that is a mobile tap target measured on a 390px
+     phone screen, and in a dashboard popup it left ~100px of dead space under a
+     one-line title. The 25/26 rhythm is kept; only the forced height is gone. */
+  padding: 25px 0 25px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font: 700 30px/32px var(--font-titre);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--noir);
+  text-align: left;
+  cursor: pointer;
+}
+[data-previewer]
+  [data-section-header]:focus-visible {
   outline: 1px solid var(--noir);
   outline-offset: 4px;
   box-shadow: none;
 }
 [data-previewer] [data-section-header] > * {
   min-width: 0;
-  /* Figma trims its text to the cap height; without this each item is a little
-     taller. Progressive — never broken where unsupported. */
+  /* Progressive: without support each item is simply a little taller. */
   text-box: trim-both cap alphabetic;
 }
+/* The last item's bottom hairline is INSIDE its 74, so the padding gives up the
+   1px the border takes. */
+/* The hairline lives INSIDE the item's height, so every closed header gives up
+   the 1px its border takes (149 + 1 = the kit's 150). */
+/* Open: the title tightens up and the body owns the space below it. */
 /* Open: the title keeps its top padding and gives up the bottom one, because
-   the body below now carries the space before the hairline. */
+   the body below it now carries the space before the hairline. */
 [data-previewer]
   [data-section-type="ACCORDION"][data-open="true"]
   [data-section-header] {
   padding: 25px 0 0;
 }
-/* LARGE: only the gap differs — the closed item hugs its title either way. */
-[data-previewer]
-  [data-section-type="ACCORDION"][data-size="large"]
-  [data-section-header] {
-  gap: 10px;
-}
 
-/* The `+`: two 1px strokes in a 13.2px box, 4.4 below the cap line, drawn as
-   two gradients so one pseudo-element carries both. */
+/* `.ddm-toggle`: a `+` of two 1px strokes in a 13.2px box, 4.4 below the cap
+   line. Drawn as two gradients so one pseudo-element carries both strokes. */
 [data-previewer] [data-section-header]::after {
   content: "";
   position: relative;
   flex: 0 0 auto;
   order: 2;
-  margin-left: 0;
-  width: 13.2px;
-  height: 13.2px;
-  margin-top: 4.4px;
+  /* `Icons — Mobile — V7`: 24 box, strokes of 19 at 2px. The −2 bottom margin
+     is the kit's — the 24 box overhangs the 22 cap, and without it a one-line
+     title puts the body at 50 from the title instead of 48. */
+  width: 24px;
+  height: 24px;
+  margin-top: 0;
+  margin-bottom: -2px;
   border: 0;
   background:
-    linear-gradient(var(--noir), var(--noir)) center / 1px 100% no-repeat,
-    linear-gradient(var(--noir), var(--noir)) center / 100% 1px no-repeat;
+    linear-gradient(var(--noir), var(--noir)) 50% 2.5px / 2px 19px no-repeat,
+    linear-gradient(var(--noir), var(--noir)) 2.5px 50% / 19px 2px no-repeat;
   transform: none;
   transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-/* Kept flush with the item's right edge as it turns (the kit's +1.93). */
 [data-previewer]
   [data-section-type="ACCORDION"][data-open="true"]
   [data-section-header]::after {
-  transform: translateX(1.93px) rotate(45deg);
+  /* At this size the toggle turns in place — no right-edge nudge. */
+  transform: rotate(45deg);
 }
 @media (prefers-reduced-motion: reduce) {
   [data-previewer] [data-section-header]::after {
@@ -279,16 +311,25 @@
 }
 
 /* ── Open / close motion ──────────────────────────────────────────────────────
-   The body eases in on the toggle's curve and duration so the two read as one
-   gesture. Entry only: the renderer mounts the body on open and unmounts it on
-   close, so there is nothing left to animate on the way out.
-   `grid-template-rows: 0fr → 1fr` is what animates the height to `auto`. */
+   The toggle's 500ms rotate above is the kit's own animation. The kit does not
+   animate the body at all — its script just flips `hidden` — but ours snaps
+   open hard enough to be jarring in a popup, so the body eases in on the same
+   curve and duration, which keeps the two reading as one gesture.
+
+   Animated on ENTRY only, with a keyframe rather than a transition: the
+   renderer mounts the body when the section opens and unmounts it when it
+   closes (deliberately — hidden fields stay out of the tree), so there is no
+   element left to transition on the way out.
+
+   `grid-template-rows: 0fr → 1fr` is what makes the height animate to `auto`;
+   the inner wrapper needs `min-height: 0` so it can be clipped below its
+   content height. */
 [data-previewer]
   [data-section-type="ACCORDION"][data-open="true"]
   > [data-section-body] {
   display: grid;
   grid-template-rows: 1fr;
-  animation: ddm-open 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: oaksome-ddm-open 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 [data-previewer]
   [data-section-type="ACCORDION"][data-open="true"]
@@ -296,7 +337,7 @@
   > * {
   min-height: 0;
 }
-@keyframes ddm-open {
+@keyframes oaksome-ddm-open {
   from {
     grid-template-rows: 0fr;
     opacity: 0;
@@ -309,9 +350,9 @@
 
 /* Closing: the mirror of the open animation. The renderer keeps the body
    mounted while `data-closing="true"` and unmounts it once this animation
-   finishes, so the exit lasts exactly as long as this rule says — nothing has
-   to agree on a duration. `both` holds the collapsed state through the final
-   frame so it cannot flash back to full height before unmounting. */
+   finishes, so the exit is as long as the stylesheet says — nothing has to
+   agree on a duration. `both` holds the collapsed state through the final frame
+   so it cannot flash back to full height before unmounting. */
 [data-previewer]
   [data-section-type="ACCORDION"]
   > [data-section-body][data-closing="true"] {
@@ -322,7 +363,7 @@
   display: grid;
   grid-template-rows: 1fr;
   overflow: hidden;
-  animation: ddm-close 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: oaksome-ddm-close 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 [data-previewer]
   [data-section-type="ACCORDION"]
@@ -330,7 +371,7 @@
   > * {
   min-height: 0;
 }
-@keyframes ddm-close {
+@keyframes oaksome-ddm-close {
   from {
     grid-template-rows: 1fr;
     opacity: 1;
@@ -348,25 +389,95 @@
   }
 }
 
+/* ── Accordion · LARGE (the kit's DESKTOP register, Figma 4346:29934) ─────────
+   A closed item is 74 = hairline 1 + 26 + cap 22 + 26 — hugging its title
+   rather than holding the compact register's fixed 150. The toggle drops to the
+   desktop `+`: 13.2px in 1px strokes, 4.4 below the cap line. */
+[data-previewer]
+  [data-section-type="ACCORDION"][data-size="large"]
+  [data-section-header] {
+  gap: 10px;
+  /* Balanced, matching the open body's 25 below its content. */
+  padding: 25px 0 25px;
+  min-height: 0;
+}
+/* Closed at LARGE: 25 + the 1px border = the kit's 26, inside the 74. */
+[data-previewer]
+  [data-section-type="ACCORDION"][data-size="large"][data-open="true"]
+  [data-section-header] {
+  padding: 23px 0 0;
+  min-height: 0;
+}
+
+[data-previewer]
+  [data-section-type="ACCORDION"][data-size="large"]
+  [data-section-header]::after {
+  width: 13.2px;
+  height: 13.2px;
+  margin-top: 4.4px;
+  margin-bottom: 0;
+  background:
+    linear-gradient(var(--noir), var(--noir)) center / 1px 100% no-repeat,
+    linear-gradient(var(--noir), var(--noir)) center / 100% 1px no-repeat;
+}
+/* Kept flush with the list's right edge as it turns (the kit's +1.93). */
+[data-previewer]
+  [data-section-type="ACCORDION"][data-size="large"][data-open="true"]
+  [data-section-header]::after {
+  transform: translateX(1.93px) rotate(45deg);
+}
+
 [data-previewer] [data-section-body] {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-/* `.ddm-body`: 28 below the title's cap line (see the padding note), and more
-   room above the hairline than a closed header leaves — an open item usually
-   ends in a control rather than a line of text, which needs the air. Direct
-   child only, so a plain, row or tab section nested inside keeps its own flush
-   layout. */
-[data-previewer] [data-section-type="ACCORDION"] > [data-section-body] {
+/* `.ddm-body`: the kit's 48 below the title's cap line is deliberately reduced
+   to 28 here (see the padding note below); 24 at the bottom, capped at 576
+   (the Figma's columns 9-13). No separator — the item's hairlines bound it
+   already. Direct child only, so a plain/row/tab section nested inside keeps
+   its own flush layout. */
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  > [data-section-body] {
+  /* SMALL: 26 at the bottom.
+     Capped at the kit's reading measure — 576 of its 922-wide list, i.e. 62.5%
+     — rather than the full width the kit's mobile variant uses. That variant is
+     full width because a 390px phone has no room to spare; a dashboard popup
+     does, and a title-width line of text there reads badly. */
   /* 28 (not the kit's 48) below the title's cap line: the first field then sits
      on the SAME rhythm as every field-to-field gap, so an accordion introduces
-     no wider step than a plain run of fields. The bottom is left as it was —
-     it sits above the hairline and serves a different purpose. */
-  padding: 28px 0 40px;
+     no wider step than a plain run of fields. The bottom is left at the kit's
+     value — it sits above the hairline and serves a different purpose. */
+  padding: 28px 0 26px;
+  /* No cap here: the item itself is already narrowed on small, so the body
+     simply fills it. */
+  max-width: none;
   border-top: none;
 }
-/* The body already carries that padding, so the first and last field inside
+/* The open body carries the hairline, and gets a little more room above it than
+   a closed header does: an open item's last child is usually a control rather
+   than a line of text, and it needs the extra air to not sit on the line. */
+[data-previewer]
+  [data-section-type="ACCORDION"][data-open="true"]
+  > [data-section-body] {
+  padding-bottom: 40px;
+}
+/* LARGE: the desktop body — 24 at the bottom, and the full width of the item.
+   The register is the wider one, so its content gets the whole measure. */
+[data-previewer]
+  [data-section-type="ACCORDION"][data-size="large"]
+  > [data-section-body] {
+  /* Top matched to the 28px field rhythm, as on SMALL above. */
+  padding: 28px 0 24px;
+  max-width: none;
+}
+[data-previewer]
+  [data-section-type="ACCORDION"][data-size="large"][data-open="true"]
+  > [data-section-body] {
+  padding-bottom: 40px;
+}
+/* The body already carries the kit's 48/24, so the first and last field inside
    must not stack their own outer margin on top of it. */
 [data-previewer]
   [data-section-type="ACCORDION"]
@@ -387,7 +498,10 @@
    narrow. renderChildren wraps the fields in a plain <div>, so the flex row lives
    on that wrapper. Labels use the notched-outline "input top-left label" look
    (below) to match the edit-item / configurator-details inputs. */
-[data-previewer] [data-section-type="ROW"] > [data-section-body] > div {
+[data-previewer]
+  [data-section-type="ROW"]
+  > [data-section-body]
+  > div {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -405,7 +519,9 @@
 
 /* Notched-outline label: the label floats into the input's top border, top-left,
    with a paper-colored backdrop that "cuts" the border like MUI's outlined field. */
-[data-previewer] [data-section-type="ROW"] [data-type="FIELD"] {
+[data-previewer]
+  [data-section-type="ROW"]
+  [data-type="FIELD"] {
   position: relative;
   gap: 0;
   padding-top: 6px; /* room for the label to sit on the border line */
@@ -473,7 +589,8 @@
   scrollbar-width: none; /* Firefox */
   cursor: grab;
 }
-[data-previewer] [data-tab-bar]::-webkit-scrollbar {
+[data-previewer]
+  [data-tab-bar]::-webkit-scrollbar {
   display: none; /* Chrome / Safari */
 }
 [data-previewer] [data-tab-bar]:active {
@@ -530,28 +647,36 @@
 }
 /* With the pills on equal shares, a label longer than its share is ellipsised
    rather than allowed to widen its own pill and unbalance the row. */
-[data-previewer] [data-tab] [data-tab-label-text] {
+[data-previewer]
+  [data-tab]
+  [data-tab-label-text] {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 /* Info icon on a tab: inherit the tab's current text color so it stays legible
    on both the idle and active (filled) tab, and against uppercase letter-spacing */
-[data-previewer] [data-tab] [data-field-info-icon] {
+[data-previewer]
+  [data-tab]
+  [data-field-info-icon] {
   color: currentColor;
   border-color: currentColor;
   letter-spacing: 0;
   /* the tab uppercases its label — don't turn the italic "i" into "I" */
   text-transform: none;
 }
-[data-previewer] [data-tab] [data-field-info-icon]:hover {
+[data-previewer]
+  [data-tab]
+  [data-field-info-icon]:hover {
   color: var(--blanc);
   background: var(--noir);
   border-color: var(--noir);
 }
 /* On the selected (beige-filled) tab, invert against the fill instead of the
    idle white so the icon keeps its contrast. */
-[data-previewer] [data-tab][data-active="true"] [data-field-info-icon]:hover {
+[data-previewer]
+  [data-tab][data-active="true"]
+  [data-field-info-icon]:hover {
   color: var(--beige);
   background: var(--noir);
   border-color: var(--noir);
@@ -602,7 +727,8 @@
 [data-previewer] [data-tab-arrow="right"] {
   margin-left: 4px;
 }
-[data-previewer] [data-tab-arrow]:hover:not(:disabled) {
+[data-previewer]
+  [data-tab-arrow]:hover:not(:disabled) {
   color: var(--noir);
   background: var(--beige);
 }
@@ -616,7 +742,9 @@
    below it. The arrow row is pulled back by that much, which puts the tabs on
    the same left edge as everything else and lets the arrows hang in the root's
    own padding instead of displacing the content. */
-[data-previewer] [data-tab-group] > div:has(> [data-tab-arrow]) {
+[data-previewer]
+  [data-tab-group]
+  > div:has(> [data-tab-arrow]) {
   margin-left: -32px;
   margin-right: -32px;
 }
@@ -639,7 +767,8 @@
 }
 
 /* Slider fields: label stacked above the slider (kit `.k-slider-tete`) */
-[data-previewer] [data-type="FIELD"]:has([data-slider-wrapper]) {
+[data-previewer]
+  [data-type="FIELD"]:has([data-slider-wrapper]) {
   display: grid;
   /* The kit stacks the label above the slider (`.k-slider-tete` sits over
      `.k-slider-piste`) rather than beside it, so the control gets the field's
@@ -680,7 +809,8 @@
 }
 
 /* Checkbox fields: box and label share one row, box first then label */
-[data-previewer] [data-type="FIELD"]:has(input[type="checkbox"]) {
+[data-previewer]
+  [data-type="FIELD"]:has(input[type="checkbox"]) {
   flex-direction: row;
   align-items: center;
   gap: 10px;
@@ -701,18 +831,18 @@
 
 /* ── One gap between blocks ───────────────────────────────────────────────────
    Every field and every ACCORDION section is a block, and the space between any
-   two of them is the same 28px — field↔field, field↔accordion, accordion↔field
-   alike. Before this they were three different values (56, 25 and 25), so a
-   slider followed by another slider sat further apart than the same slider
-   followed by a section.
+   two of them is the same 28px — whether that is field↔field, field↔accordion
+   or accordion↔field. Before this they were three different values (56, 25 and
+   25), so a slider followed by another slider sat further apart than the same
+   slider followed by a section.
 
-   Carried as a margin above AND below each block so the first and last in a run
-   get the same air as the ones between; adjacent margins collapse to a single
-   28 rather than doubling.
+   Carried as a margin above AND below each block so the first and last in a
+   run get the same air as the ones between; adjacent margins collapse to a
+   single 28 rather than doubling.
 
    NONE and TAB sections are deliberately NOT included: a NONE section is a bare
    wrapper with no visual presence of its own, and a TAB section carries its own
-   strip spacing. Both stay exactly as they were. */
+   strip spacing. Both are left exactly as they were. */
 [data-previewer] [data-type="FIELD"] {
   margin-top: 28px;
   margin-bottom: 28px;
@@ -725,15 +855,21 @@
    grandchildren of the section body, not direct children: matching on `>` here
    silently missed every real configurator (it only worked in a hand-built
    fixture). Matched at any depth instead. */
-[data-previewer] [data-section-body]:has([data-type="FIELD"]),
-[data-previewer] [data-tab-panel]:has([data-type="FIELD"]) {
+[data-previewer]
+  [data-section-body]:has([data-type="FIELD"]),
+[data-previewer]
+  [data-tab-panel]:has([data-type="FIELD"]) {
   gap: 0;
 }
 
-/* A field meeting an ACCORDION section, in either order — the same 28. Scoped
-   to ACCORDION so NONE and TAB sections are untouched. */
-[data-previewer] [data-type="FIELD"] + [data-section-type="ACCORDION"],
-[data-previewer] [data-section-type="ACCORDION"] + [data-type="FIELD"] {
+/* A field meeting an ACCORDION section, in either order — the same 28 as
+   field↔field. Scoped to ACCORDION so a NONE or TAB section is untouched. */
+[data-previewer]
+  [data-type="FIELD"]
+  + [data-section-type="ACCORDION"],
+[data-previewer]
+  [data-section-type="ACCORDION"]
+  + [data-type="FIELD"] {
   margin-top: 28px;
 }
 
@@ -750,7 +886,8 @@
   color: var(--noir);
 }
 /* labelTop fields: label sits on its own line above the control */
-[data-previewer] [data-field-label][data-label-top="true"] {
+[data-previewer]
+  [data-field-label][data-label-top="true"] {
   display: flex;
 }
 
@@ -839,7 +976,9 @@
 }
 
 /* Track itself: limited to --_track-w so it stops short of the right edge */
-[data-previewer] [data-slider-wrapper] input[type="range"] {
+[data-previewer]
+  [data-slider-wrapper]
+  input[type="range"] {
   width: var(--_track-w) !important;
 }
 
@@ -894,7 +1033,8 @@
     color 150ms,
     opacity 150ms;
 }
-[data-previewer] [data-slider-step]:hover:not(:disabled) {
+[data-previewer]
+  [data-slider-step]:hover:not(:disabled) {
   color: var(--noir);
 }
 [data-previewer] [data-slider-step]:disabled {
@@ -940,7 +1080,8 @@
 /* Clicking the tag (a press that does not drag) turns it into a number field.
    The input inherits the tag's type and colour so the box does not change
    appearance — only the caret tells you it is editable. */
-[data-previewer] [data-slider-value-box][data-editing="true"] {
+[data-previewer]
+  [data-slider-value-box][data-editing="true"] {
   cursor: text;
 }
 [data-previewer] [data-slider-value-input] {
@@ -959,8 +1100,10 @@
   appearance: textfield;
   -moz-appearance: textfield;
 }
-[data-previewer] [data-slider-value-input]::-webkit-outer-spin-button,
-[data-previewer] [data-slider-value-input]::-webkit-inner-spin-button {
+[data-previewer]
+  [data-slider-value-input]::-webkit-outer-spin-button,
+[data-previewer]
+  [data-slider-value-input]::-webkit-inner-spin-button {
   appearance: none;
   margin: 0;
 }
@@ -993,7 +1136,8 @@
   box-shadow: none;
 }
 /* `.k-slider-curseur`: a 14px black disc with a 3px flash-green inset ring. */
-[data-previewer] input[type="range"]::-webkit-slider-thumb {
+[data-previewer]
+  input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 14px;
@@ -1004,10 +1148,12 @@
   box-shadow: inset 0 0 0 3px var(--vert-flash);
   cursor: grab;
 }
-[data-previewer] input[type="range"]:active::-webkit-slider-thumb {
+[data-previewer]
+  input[type="range"]:active::-webkit-slider-thumb {
   cursor: grabbing;
 }
-[data-previewer] input[type="range"]::-moz-range-thumb {
+[data-previewer]
+  input[type="range"]::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -1016,7 +1162,8 @@
   box-shadow: inset 0 0 0 3px var(--vert-flash);
   cursor: grab;
 }
-[data-previewer] input[type="range"]::-moz-range-track {
+[data-previewer]
+  input[type="range"]::-moz-range-track {
   height: 2px;
   background: var(--beige);
   border-radius: 0;
@@ -1072,15 +1219,10 @@
 }
 
 /* `.k-cran::before` — the dot itself, so the 14px button stays a comfortable
-   click target while the mark is 8px. */
+   click target while the mark is 8px. The previewer may size a notch through
+   `--_dot` (RangeSliderField); 8px when it does not. */
 [data-previewer] [data-slider-notch]::before {
   content: "";
-  /* 8px is the kit's mark, but never wider than the space each stop has: with
-     many stops a fixed 8px overlaps its neighbours and the track reads as one
-     solid bar instead of a scale. `--_dot` is measured by the renderer off the
-     live track width (capped at 8, floored at 3) — a percentage of the track
-     cannot be resolved here, since inside the dot a percentage means a share of
-     its own 14px button. */
   width: var(--_dot, 8px);
   height: var(--_dot, 8px);
   border-radius: 50%;
@@ -1091,11 +1233,13 @@
     background 150ms ease,
     box-shadow 150ms ease;
 }
-[data-previewer] [data-slider-notch][data-state="past"]::before {
+[data-previewer]
+  [data-slider-notch][data-state="past"]::before {
   background: var(--noir);
 }
 /* `.k-cran.is-courant` — grows to 14 and takes the thumb's ring. */
-[data-previewer] [data-slider-notch][data-state="current"]::before {
+[data-previewer]
+  [data-slider-notch][data-state="current"]::before {
   width: 14px;
   height: 14px;
   background: var(--noir);
@@ -1164,7 +1308,9 @@
 /* LARGE: the notched slider takes the same composition change as the plain one
    — the value tag rides the track and the head is gone — so the dots move to
    that size's track line. */
-[data-previewer] [data-slider-wrapper][data-size="large"] [data-slider-notches],
+[data-previewer]
+  [data-slider-wrapper][data-size="large"]
+  [data-slider-notches],
 [data-previewer]
   [data-slider-wrapper][data-size="medium"]
   [data-slider-notches] {
@@ -1260,11 +1406,13 @@
   background-position: center;
   background-size: 100% 100%;
 }
-[data-previewer] input[type="checkbox"]:focus-visible {
+[data-previewer]
+  input[type="checkbox"]:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--noir) 25%, transparent);
 }
-[data-previewer] input[type="checkbox"]:disabled {
+[data-previewer]
+  input[type="checkbox"]:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -1307,7 +1455,8 @@
 }
 
 /* .is-selected */
-[data-previewer] [data-option][data-selected="true"] {
+[data-previewer]
+  [data-option][data-selected="true"] {
   background: var(--beige);
   color: var(--noir);
 }
@@ -1338,8 +1487,10 @@
    variable rather than `gap` itself. */
 /* COMBO is an alias of SELECT — the same look under the old name, kept while
    that type is retired. */
-[data-previewer] [data-combo-options][data-combo-type="select"],
-[data-previewer] [data-combo-options][data-combo-type="combo"] {
+[data-previewer]
+  [data-combo-options][data-combo-type="select"],
+[data-previewer]
+  [data-combo-options][data-combo-type="combo"] {
   --combo-row-gap: 8px;
 }
 
@@ -1355,7 +1506,8 @@
    The kit's own component is a cycler showing only the current value; this
    renders every option inline instead, which is what the previewer's SWITCH
    does. The colours and the two shapes are the kit's. */
-[data-previewer] [data-combo-options][data-combo-type="switch"] {
+[data-previewer]
+  [data-combo-options][data-combo-type="switch"] {
   /* The kit's `.k-numswitch` is gap 0 because it holds exactly one pill and one
      circle, flush. With N options there are N−1 circles, which need a little
      air to read as separate controls rather than one lumpy bar. */
@@ -1373,7 +1525,9 @@
 /* UNSELECTED = the kit's `.k-numswitch-total`: a perfect circle at the pill's
    own height, fixed width so it never stretches, label hidden (the circle shows
    the value, not the name — as the kit's round total does). */
-[data-previewer] [data-combo-options][data-combo-type="switch"] [data-option] {
+[data-previewer]
+  [data-combo-options][data-combo-type="switch"]
+  [data-option] {
   /* Fixed square box → a true circle once the radius is 50%. `flex: 0 0 auto`
      keeps it from being stretched by the row. */
   flex: 0 0 auto;
@@ -1428,7 +1582,8 @@
    The icon URL is per option, resolved from the source data (`data.image` or
    `Attributes.image`); the field's `image` flag is forced on for this type
    since a vignette with no icon would be an empty box. */
-[data-previewer] [data-combo-options][data-combo-type="iconselect"] {
+[data-previewer]
+  [data-combo-options][data-combo-type="iconselect"] {
   /* `.k-vigs`: a single row that hugs its tiles and scrolls if the field is too
      narrow for them, rather than wrapping onto a second line. */
   --combo-row-gap: 8px;
@@ -1549,7 +1704,8 @@
 
    The image URL is per option, from the source data (`data.image` /
    `Attributes.image`); the field's `image` flag is forced on for this type. */
-[data-previewer] [data-combo-options][data-combo-type="imageselect"] {
+[data-previewer]
+  [data-combo-options][data-combo-type="imageselect"] {
   /* `.k-vigs-m`: one row, gap 8, scrolling rather than wrapping. */
   --combo-row-gap: 8px;
   flex-wrap: nowrap;
@@ -1668,7 +1824,8 @@
    plain pill in one respect: font-size 12 rather than 13, being a value + unit
    pair rather than a word. Everything else — height 30, padding 10, radius 5,
    the white/beige idle and selected fills — comes from the shared base. */
-[data-previewer] [data-combo-options][data-combo-type="optionselector"] {
+[data-previewer]
+  [data-combo-options][data-combo-type="optionselector"] {
   --combo-row-gap: 5px;
   /* Hugs its pills rather than filling the field: the tray is the control, and
      a tray stretched across the panel would read as a section background. */
@@ -1703,7 +1860,8 @@
    (`--ring`), since a 5px inset in a 30px dot would look like a different
    component. Marked [À CONFIRMER] in the kit — the shape is theirs, but the
    designers had not signed it off. */
-[data-previewer] [data-combo-options][data-combo-type="colorswitch"] {
+[data-previewer]
+  [data-combo-options][data-combo-type="colorswitch"] {
   --combo-row-gap: 16px;
   /* Wraps, unlike the tile rows: a palette is often 20+ dots, and the kit lays
      them out in rows of 8 rather than scrolling them sideways. */
@@ -1820,18 +1978,24 @@
   outline-offset: 1px;
 }
 /* Expanded: solid border, since "Show less" collapses rather than reveals. */
-[data-previewer] [data-show-more][data-expanded="true"] {
+[data-previewer]
+  [data-show-more][data-expanded="true"] {
   border-style: solid;
 }
 
 /* ── Column selector (ZF_MODULE field): selected = expanded "COLUMN n" bar, ──
    ── unselected = small round number chip — all on one aligned baseline ─── */
-[data-previewer] [data-name="ZF_MODULE"] [data-field-control] > div {
+[data-previewer]
+  [data-name="ZF_MODULE"]
+  [data-field-control]
+  > div {
   align-items: center;
   gap: 6px;
 }
 
-[data-previewer] [data-name="ZF_MODULE"] [data-option] {
+[data-previewer]
+  [data-name="ZF_MODULE"]
+  [data-option] {
   /* Shared box: same height for bar and chips so they sit on one line */
   height: 30px;
   box-sizing: border-box;
@@ -1848,7 +2012,9 @@
 }
 
 /* Selected → expanded blue bar reading "COLUMN n" */
-[data-previewer] [data-name="ZF_MODULE"] [data-option][data-selected="true"] {
+[data-previewer]
+  [data-name="ZF_MODULE"]
+  [data-option][data-selected="true"] {
   padding: 0 16px;
   color: var(--blanc);
   background: var(--noir);
@@ -1862,14 +2028,9 @@
   background: var(--noir);
   border-color: var(--noir);
 }
-/* No "COLUMN " prefix here any more.
-   It was written when the option's label was just the number, so CSS supplied
-   the word. The source now sends the full text in `label` ("Column 1") and the
-   digit alone in `data.short`, which the previewer shows on the unselected
-   circles — so a CSS prefix would render "COLUMN Column 1". Dropping it also
-   removes an English string hardcoded into a stylesheet and keyed to a field
-   NAME, which said "COLUMN" on any ZF_MODULE field whatever it contained.
-   The label still fades/slides in as the bar expands. */
+/* No "COLUMN " prefix here any more — the source's `label` already carries the
+   word ("Column 1") and `data.short` carries the digit for the circles, so a
+   CSS prefix would render "COLUMN Column 1". See previewer.module.css. */
 [data-previewer]
   [data-name="ZF_MODULE"]
   [data-option][data-selected="true"]
@@ -1900,7 +2061,9 @@
 }
 
 /* Match the column chips' fixed box so a capped ZF_MODULE keeps one baseline */
-[data-previewer] [data-name="ZF_MODULE"] [data-show-more] {
+[data-previewer]
+  [data-name="ZF_MODULE"]
+  [data-show-more] {
   height: 30px;
   box-sizing: border-box;
   margin: 0;
@@ -1928,15 +2091,19 @@
   border-radius: 5px;
   background: var(--beige);
 }
-[data-previewer] [data-combo-type="circle"]:hover {
+[data-previewer]
+  [data-combo-type="circle"]:hover {
   border-color: var(--noir-15);
   background: var(--beige);
 }
-[data-previewer] [data-combo-type="circle"][data-selected="true"] {
+[data-previewer]
+  [data-combo-type="circle"][data-selected="true"] {
   border-color: var(--noir);
   background: var(--blanc);
 }
-[data-previewer] [data-combo-type="circle"] [data-combo-image] {
+[data-previewer]
+  [data-combo-type="circle"]
+  [data-combo-image] {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1944,7 +2111,9 @@
 }
 /* CIRCLE options are tall image cards, so a default-height toggle beside them
    would float against their top edge. Match the card box and center the label. */
-[data-previewer] [data-combo-type="circle"] ~ [data-show-more],
+[data-previewer]
+  [data-combo-type="circle"]
+  ~ [data-show-more],
 [data-previewer]
   [data-field-control]:has([data-combo-type="circle"])
   [data-show-more] {
@@ -1975,12 +2144,15 @@
 
 /* The tab panel no longer insets its content, so a nested TAB section
    needs no bleed to stay aligned with it. */
-[data-previewer] [data-tab-panel] > [data-section-type="TAB"] {
+[data-previewer]
+  [data-tab-panel]
+  > [data-section-type="TAB"] {
   margin-left: 0;
   margin-right: 0;
 }
 
-[data-previewer][data-layout="mobile"] [data-tab-panel] {
+[data-previewer][data-layout="mobile"]
+  [data-tab-panel] {
   padding: 14px 0;
   display: flex;
   flex-direction: column;
@@ -1998,23 +2170,29 @@
   margin-top: 20px;
 }
 
-[data-previewer][data-layout="mobile"] [data-tab-panel] > [data-tab-group] {
+[data-previewer][data-layout="mobile"]
+  [data-tab-panel]
+  > [data-tab-group] {
   /* No bleed: the panel it sits in has no inset to cancel. */
   margin-left: 0;
   margin-right: 0;
 }
 
 /* Nested tab group (a child section's tab strip) spacing on mobile */
-[data-previewer][data-layout="mobile"] [data-tab-panel] [data-tab-group] {
+[data-previewer][data-layout="mobile"]
+  [data-tab-panel]
+  [data-tab-group] {
   padding-top: 10px;
   margin-bottom: 10px;
 }
 
 /* Field tab → control fills width (the tab is the label) */
-[data-previewer][data-layout="mobile"] [data-type="FIELD"] {
+[data-previewer][data-layout="mobile"]
+  [data-type="FIELD"] {
   gap: 0;
 }
-[data-previewer][data-layout="mobile"] [data-field-control] {
+[data-previewer][data-layout="mobile"]
+  [data-field-control] {
   width: 100%;
 }
 
@@ -2041,7 +2219,9 @@
 
 /* Info icon on a mobile tab: the tab strip scrolls horizontally, so keep the
    icon from shrinking and let the tooltip (position: fixed) sit above it */
-[data-previewer][data-layout="mobile"] [data-tab] [data-field-info-icon] {
+[data-previewer][data-layout="mobile"]
+  [data-tab]
+  [data-field-info-icon] {
   flex: none;
 }
 
@@ -2093,7 +2273,9 @@
 
    MEDIUM has no measures of its own in the kit; it keeps the small layout with
    the large tag size, which is the one sensible reading between the two. */
-[data-previewer] [data-slider-wrapper][data-size="large"] [data-slider-step] {
+[data-previewer]
+  [data-slider-wrapper][data-size="large"]
+  [data-slider-step] {
   /* The kit's mobile slider has no steppers — the tag itself is the handle. */
   display: none;
 }
@@ -2102,8 +2284,10 @@
    4346:24309) instead of sitting in a head above it — the head is hidden at this
    size. So the row goes back to absolute positioning, and the wrapper reserves
    the height the tag needs above the track. */
-[data-previewer] [data-slider-wrapper][data-size="large"],
-[data-previewer] [data-slider-wrapper][data-size="medium"] {
+[data-previewer]
+  [data-slider-wrapper][data-size="large"],
+[data-previewer]
+  [data-slider-wrapper][data-size="medium"] {
   /* The tag straddles the track rather than sitting above it, so the wrapper
      only reserves the half that overhangs (42/2 + a little air). */
   padding-top: 28px;
@@ -2112,7 +2296,9 @@
 /* The tag REPLACES the thumb — `.k-m .k-slider-curseur { display: none }` — so
    it is centred on the track's line rather than floating above it, and the
    native thumb is hidden. */
-[data-previewer] [data-slider-wrapper][data-size="large"] [data-slider-stepper],
+[data-previewer]
+  [data-slider-wrapper][data-size="large"]
+  [data-slider-stepper],
 [data-previewer]
   [data-slider-wrapper][data-size="medium"]
   [data-slider-stepper] {
@@ -2176,15 +2362,23 @@
    component whose pills must match (the same rule the tab strip follows).
 
    Set `size: large` on the FIELD. */
-[data-previewer] [data-combo-options][data-size="large"] [data-option],
-[data-previewer] [data-combo-options][data-size="medium"] [data-option] {
+[data-previewer]
+  [data-combo-options][data-size="large"]
+  [data-option],
+[data-previewer]
+  [data-combo-options][data-size="medium"]
+  [data-option] {
   height: 42px;
   font-size: 15px;
 }
 /* The option's image grows with the pill, the way the kit scales its icons in
    the mobile variants (`.k-outil-disc .ico` 18 → 24). */
-[data-previewer] [data-combo-options][data-size="large"] [data-combo-image],
-[data-previewer] [data-combo-options][data-size="medium"] [data-combo-image] {
+[data-previewer]
+  [data-combo-options][data-size="large"]
+  [data-combo-image],
+[data-previewer]
+  [data-combo-options][data-size="medium"]
+  [data-combo-image] {
   width: 32px;
   height: 32px;
 }
@@ -2310,4 +2504,27 @@
   /* The kit centres the label at this size (`.k-m .k-numswitch .k-pill`),
      where the pill is wide enough that a left-aligned label reads as adrift. */
   justify-content: center;
+}
+
+/* ── Floating section (float="true") ──────────────────────────────
+   A section lifted out of the flow into a panel. The previewer sets no
+   position inline, so WHERE it sits is decided here — change top/right (or
+   swap to left/bottom, or position: absolute) to move it. Still inside
+   [data-previewer], so the tokens above and every section rule apply to its
+   contents; this only places and draws the panel. */
+[data-previewer] [data-float-panel] {
+  position: fixed;
+  top: 96px;
+  right: 24px;
+  z-index: 1000;
+  width: min(360px, calc(100vw - 32px));
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+  background: var(--blanc);
+  border: 1px solid var(--beige-fonce-15);
+  border-radius: 5px;
+  box-shadow: 0 8px 28px var(--noir-15);
+  /* The configurator's own side padding (see the root rule), so contents sit
+     the same distance from the panel edge as they do in the configurator. */
+  padding: 16px 24px 16px 48px;
 }
