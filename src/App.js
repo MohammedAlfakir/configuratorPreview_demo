@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ConfiguratorPreviewDialog } from "@oak-some/configurator-previewer";
 import * as Prev from "@oak-some/configurator-previewer";
 import { CatalogTree } from "@oak-some/catalog-tree";
+import GoToZoneTester from "./GoToZoneTester";
 
 // Build fingerprint: confirms whether the running bundle is 1.10.3+ (with the
 // initialValues pin) or a stale older build. Check this in the browser console.
@@ -103,6 +104,8 @@ function App() {
   const [toast, setToast] = useState(null);
   // Diagnostic: warns when a loaded preset's section keys don't match the live config.
   const [seedMismatch, setSeedMismatch] = useState(null);
+  // The previewer's imperative handle — goToZone(...) is called through it.
+  const previewRef = useRef(null);
 
   useEffect(() => {
     if (selectedId == null) return;
@@ -465,7 +468,13 @@ function App() {
               </div>
             )}
 
+            <GoToZoneTester
+              previewRef={previewRef}
+              configurator={configurator}
+            />
+
             <ConfiguratorPreviewDialog
+              ref={previewRef}
               // Remount on config change OR after Load/Clear, so initialValues re-seeds.
               key={`${selectedId}-${seedNonce}`}
               configuratorJson={configurator}

@@ -2507,18 +2507,22 @@
 }
 
 /* ── Floating section (float="true") ──────────────────────────────
-   A section lifted out of the flow into a panel. The previewer sets no
-   position inline, so WHERE it sits is decided here — change top/right (or
-   swap to left/bottom, or position: absolute) to move it. Still inside
+   A section lifted out of the flow into a panel, centred by default. The
+   previewer only sets a position inline when a goToZone call passes
+   top/left/right/bottom; otherwise WHERE it sits is decided here. Still inside
    [data-previewer], so the tokens above and every section rule apply to its
    contents; this only places and draws the panel. */
 [data-previewer] [data-float-panel] {
   position: fixed;
-  top: 96px;
-  right: 24px;
+  /* Centred by default. A goToZone call that passes top/left/right/bottom sets
+     those edges inline and resets the rest (and the transform) to auto/none,
+     so its position wins over this one. */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1000;
   width: min(360px, calc(100vw - 32px));
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 48px);
   overflow: auto;
   background: var(--blanc);
   border: 1px solid var(--beige-fonce-15);
